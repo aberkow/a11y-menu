@@ -1,0 +1,41 @@
+{
+  "menu": [
+    {
+      "name": "Home",
+      "slug": "",
+      "link": "/",
+      "sub": null
+    },
+    {
+      "name": "About",
+      "slug": "about",
+      "link": "/about",
+      "sub": [
+        {
+          "name": "What we do",
+          "slug": "what-we-do",
+          "link": "/what-we-do",
+          "sub": [
+            {
+              "name": "Thing one",
+              "slug": "thing-one",
+              "link": "/what-we-do/thing-one",
+              "sub": null
+            },
+            {
+              "name": "Thing two",
+              "slug": "thing-two",
+              "link": "/what-we-do/thing-two",
+              "sub": null
+            }
+          ]
+        },
+        {
+          "name": "Our Team",
+          "link": "our-team",
+          "sub": null
+        }
+      ]
+    }
+  ]
+}

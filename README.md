@@ -1,0 +1,1 @@
+This is a work in progress. It will (hopefully) be the repo for an npm module.
