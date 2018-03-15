@@ -11,13 +11,18 @@ const displayMenu = (ul, json) => {
     // create a list item
     const li = document.createElement('li');
 
-    // generate the link inside the <li>
-    li.innerHTML = `<a href=${menuItem.link}>${menuItem.name}</a>`;
+    if (menuItem.hasOwnProperty('link') && menuItem.link.length) {
+      // generate the link inside the <li>
+      li.innerHTML = `<a href=${menuItem.link}>${menuItem.name}</a>`;
+    } else {
+      // it's not a link it's a button.
+      li.innerHTML = `<button>${menuItem.name}</button>`;
+    }
 
     // check if there are submenu items
     // if there are, create a submenu <ul>
     // then, recursively call this function
-    if (menuItem.sub !== null) {
+    if (menuItem.hasOwnProperty('sub') && menuItem.sub !== null && menuItem.sub.length) {
       // create a <ul> to hold the submenu
       const subMenu = document.createElement('ul');
       // this is super temporary. just to get things rolling...
