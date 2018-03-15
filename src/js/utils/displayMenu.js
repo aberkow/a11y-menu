@@ -1,27 +1,57 @@
 /*
 *
+* This function takes in a json menu item and returns the appropriate markup
+*
+*/
+
+const generateMenuItemMarkup = (menuItem) => {
+  // set a state for having a submenu and/or link
+  let hasSubmenu = false;
+  let hasLink = false;
+
+  if (menuItem.hasOwnProperty('sub') && menuItem.sub !== null && menuItem.sub.length) {
+    hasSubmenu = true;
+  }
+
+  if (menuItem.hasOwnProperty('link') && menuItem.link.length) {
+    hasLink = true;
+  }
+  if (hasLink && hasSubmenu) {
+    return `<a class='submenu-link' aria-label='${menuItem.name}, tab to the next button to expand the sub-menu' href=${menuItem.link}>${menuItem.name}</a>
+      <button class='submenu-button submenu-toggle' aria-haspopup='true' aria-expanded='false' aria-label='show submenu'>
+        <span class='submenu-icon' aria-hidden='true' data-before='∨'></span>
+      </button>
+      `
+  } else if (!hasLink && hasSubmenu) {
+    return `<button aria-haspopup='true' aria-expanded='false' class='submenu-toggle'>
+        ${menuItem.name}
+          <span class='submenu-icon' aria-hidden='true' data-before='∨'></span>
+        </button>`;
+  } else {
+    // just a link
+    return `<a href=${menuItem.link}>${menuItem.name}</a>`;
+  }
+}
+
+/*
+*
 * This function will generate the markup for the menu.
 * The two arguments are the <ul> to attach the menu to and the json data to read from.
 *
 */ 
-
 
 const displayMenu = (ul, json) => {
   const menuMap = json.map((menuItem, index) => {
     // create a list item
     const li = document.createElement('li');
 
-    if (menuItem.hasOwnProperty('link') && menuItem.link.length) {
-      // generate the link inside the <li>
-      li.innerHTML = `<a href=${menuItem.link}>${menuItem.name}</a>`;
-    } else {
-      // it's not a link it's a button.
-      li.innerHTML = `<button>${menuItem.name}</button>`;
-    }
+    li.innerHTML = generateMenuItemMarkup(menuItem);
 
     // check if there are submenu items
     // if there are, create a submenu <ul>
     // then, recursively call this function
+
+    // this if statement is clearly ridiculous and needs to be refactored
     if (menuItem.hasOwnProperty('sub') && menuItem.sub !== null && menuItem.sub.length) {
       // create a <ul> to hold the submenu
       const subMenu = document.createElement('ul');
