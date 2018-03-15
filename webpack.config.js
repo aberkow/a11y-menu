@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   entry: ["./src/js/index.js"],
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'public/build'),
     filename: 'bundle.js'
   },
   devtool: 'source-map',
@@ -18,8 +18,10 @@ module.exports = {
             presets: ['babel-preset-env']
           }
         }
-      }
+      },
     ]
   },
-  resolve: ['.js', '.scss']
+  resolve: {
+    extensions: ['.js', '.json', '.scss']
+  }
 }
