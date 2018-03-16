@@ -22,7 +22,7 @@ const generateMenuItemMarkup = (menuItem) => {
         <span class='submenu-icon' aria-hidden='true' data-before='∨'></span>
       </button>
       `
-  } else if (!hasLink && hasSubmenu) {
+  } else if (!hasLink || !hasLink && hasSubmenu) {
     return `<button aria-haspopup='true' aria-expanded='false' class='submenu-toggle'>
         ${menuItem.name}
           <span class='submenu-icon' aria-hidden='true' data-before='∨'></span>
