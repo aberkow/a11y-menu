@@ -47,6 +47,13 @@ const displayMenu = (ul, json) => {
 
     li.innerHTML = generateMenuItemMarkup(menuItem);
 
+
+    // need to think about how best to handle classes.
+    // in the json?
+    const classes = ['no-js'];
+    li.classList.add(...classes);
+
+
     // check if there are submenu items
     // if there are, create a submenu <ul>
     // then, recursively call this function

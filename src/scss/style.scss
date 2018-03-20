@@ -98,25 +98,25 @@ nav {
   }
 }
 
-// nav .no-js {
-//   ul {
-//     height: 0;
-//     opacity: 0;
-//     transition: all ease-out 0.5s;
-//     visibility: hidden;
-//   }
-//   &:focus-within {
-//     > ul {
-//       height: 100%;
-//       opacity: 1;
-//       visibility: visible;
-//     }
-//     span:before {
-//       content: '∧';
-//       font-weight: bold;
-//     }
-//   }
-// }
+nav .no-js {
+  ul {
+    height: 0;
+    opacity: 0;
+    transition: all ease-out 0.5s;
+    visibility: hidden;
+  }
+  &:focus-within {
+    > ul {
+      height: 100%;
+      opacity: 1;
+      visibility: visible;
+    }
+    span:before {
+      content: '∧';
+      font-weight: bold;
+    }
+  }
+}
 
 // header .fl-page-nav-wrap .navbar-nav .no-js button:focus,
 // header .fl-page-nav-wrap .navbar-nav .no-js button a:focus {
