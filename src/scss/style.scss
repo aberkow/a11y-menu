@@ -80,107 +80,23 @@ nav {
           outline: 1px solid blue;
         }
       }
+      a + button {
+        background: transparent;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        // give a visual cue to carets that are next to links
+        &:hover,
+        &:focus {
+          > span {
+            background-color: #000000;
+            color: #ffffff;
+          }
+        }
+      }
     }
   }
 }
-
-
-
-
-// styles in progress
-// nav {
-//   ul {
-//     list-style-type: none;
-//   }
-//   > ul {
-//     // display: flex;
-//     // flex-direction: row;
-//     li {
-//         display: inline-block;
-//         position: relative;
-//         a {
-//           color: black;
-//           display: block;
-//           padding: 1em;
-//         } 
-//         // visually hide the ul.
-//         // give it a delay before closing
-//         ul {
-//           height: 0;
-//           opacity: 0;
-//           transition: all ease-in 0.5s;
-//           visibility: hidden;
-//           li {
-//             display: block;
-//             // &:hover {
-//             //   height: 100%;
-//             //   padding: 1rem;
-//             // }
-//           }
-//           a {
-//             height: 0;
-//             padding: 0 1rem;
-//           }
-//         } // when you hover on the parent li, open the child ul with a slight fade in
-//         &:hover {
-//           > ul {
-//             height: 100%;
-//             opacity: 1;
-//             transition-delay: 0s, 0s, 0.25s;
-//             visibility: visible;
-//           } // change the symbol from downward caret to upward caret
-//           span:before {
-//             content: '∧';
-//             font-weight: bold;
-//           }
-//         }
-//         ul.submenu-list-open {
-//           height: 100%;
-//           opacity: 1;
-//           transition-delay: 0s, 0s, 0s;
-//           visibility: visible;
-//         }
-//       }
-//     }
-//     button {
-//       background-color: transparent;
-//       border: transparent;
-//       color: black;
-//       font-size: 0.95em;
-//       padding: 15px;
-//       text-decoration: underline;
-//       &:hover,
-//       &:focus {
-//         color: inherit;
-//         outline: 1px solid blue;
-//       }
-//     }
-//     a + button {
-//       background: transparent;
-//       margin: 0;
-//       padding: 0;
-//       border: 0;
-//       position: absolute;
-//       top: 1em;
-//       left: 75%;
-//       &:focus {
-//         top: 1em;
-//         >span {
-//           background-color: black;
-//           color: white;
-//         }
-//       }
-//     }
-//     span {
-//       @extend %submenu-icon;
-//       margin-left: 0.5em;
-//       &:before {
-//         // remove the dependency on font awesome
-//         content: attr(data-before);
-//       }
-//     }
-//   }
-
 
 // nav .no-js {
 //   ul {
