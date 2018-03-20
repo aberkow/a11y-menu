@@ -40,7 +40,7 @@ nav {
           }
         }
       }
-      // when you hover on the li, show the child ul
+      // when you hover/focus on the li, show the child ul
       &:hover,
       &:focus {
         > ul,
@@ -50,30 +50,34 @@ nav {
           transition-delay: 0s, 0s, 0.25s;
           visibility: visible;
         }
-        span:before {
-          content: '∧';
-          font-weight: bold;
-        }
-        span {
-          @extend %submenu-icon;
-          margin-left: 0.5em;
-          &:before {
-            // remove the dependency on font awesome
-            content: attr(data-before);
+        // change the direction of the caret
+        > button {
+          span:before {
+            content: '∧';
+            font-weight: bold;
           }
         }
-        button {
-          background-color: transparent;
-          border: transparent;
-          color: black;
-          font-size: 0.95em;
-          padding: 15px;
-          // text-decoration: underline;
-          &:hover,
-          &:focus {
-            color: inherit;
-            outline: 1px solid blue;
-          }
+      }
+
+      span {
+        @extend %submenu-icon;
+        margin-left: 0.5em;
+        &:before {
+          // remove the dependency on font awesome
+          content: attr(data-before);
+        }
+      }
+
+      button {
+        background-color: transparent;
+        border: transparent;
+        color: black;
+        font-size: 0.95em;
+        padding: 0 15px; // text-decoration: underline;
+        &:hover,
+        &:focus {
+          color: inherit;
+          outline: 1px solid blue;
         }
       }
     }
