@@ -14,7 +14,7 @@ class Navigation {
   clickHandler(evt) {
     const target = evt.target;
     const submenuList = target.nextSibling;
-
+    console.log(submenuList);
     // find out if there is a nested submenu inside a top level item
     submenuList.getElementsByTagName('ul').length ? this.hasNestedSubmenu = true : this.hasNestedSubmenu = false;
     // if something weird happens, don't allow any further event handling.
