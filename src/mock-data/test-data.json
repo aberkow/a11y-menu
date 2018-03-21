@@ -7,6 +7,13 @@
       "sub": null
     },
     {
+      "name": "Item with classes",
+      "slug": "item-with-classes",
+      "link": "/item-with-classes",
+      "sub": null,
+      "classes": ["test-class", "another-class", "last-class"]
+    },
+    {
       "name": "Link with complete submenu",
       "slug": "link-with-complete-submenu",
       "link": "/link-with-complete-submenu",

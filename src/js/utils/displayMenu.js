@@ -35,15 +35,19 @@ const generateMenuItemMarkup = (menuItem) => {
 
 const displayMenu = (ul, json) => {
   const menuMap = json.map((menuItem, index) => {
+    let classes = [];
     // create a list item
     const li = document.createElement('li');
 
     li.innerHTML = generateMenuItemMarkup(menuItem);
 
+    if (menuItem.hasOwnProperty('classes') && menuItem.classes !== null && menuItem.classes.length) {
+      classes = menuItem.classes;
+      classes.push('no-js');
+    } else {
+      classes.push('no-js');
+    }
 
-    // need to think about how best to handle classes.
-    // in the json?
-    const classes = ['no-js'];
     li.classList.add(...classes);
 
 
