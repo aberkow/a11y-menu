@@ -6,6 +6,13 @@
   padding: 0.1em 0.2em;
 }
 
+%submenu-open {
+  height: 100%;
+  opacity: 1;
+  transition-delay: 0s, 0s,  0.25s;
+  visibility: visible;
+}
+
 // styles to line up the top level nav elements
 nav {
   // select the first ul
@@ -40,15 +47,15 @@ nav {
           }
         }
       }
+      // open the menu when the class is applied via js
+      ul.submenu-list-open {
+        @extend %submenu-open;
+      }
       // when you hover/focus on the li, show the child ul
       &:hover,
       &:focus {
-        > ul,
-        ul.submenu-list-open {
-          height: 100%;
-          opacity: 1;
-          transition-delay: 0s, 0s, 0.25s;
-          visibility: visible;
+        > ul {
+          @extend %submenu-open;
         }
         // change the direction of the caret
         > button {

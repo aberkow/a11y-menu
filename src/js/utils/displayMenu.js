@@ -34,7 +34,6 @@ const generateMenuItemMarkup = (menuItem) => {
 */ 
 
 const displayMenu = (ul, json) => {
-  let parentItemCount = 0;
   const menuMap = json.map((menuItem, index) => {
     // create a list item
     const li = document.createElement('li');
@@ -54,7 +53,7 @@ const displayMenu = (ul, json) => {
 
     // this if statement is clearly ridiculous and needs to be refactored
     if (menuItem.hasOwnProperty('sub') && menuItem.sub !== null && menuItem.sub.length) {
-      li.setAttribute('data-count', parentItemCount);
+      li.setAttribute('data-count', index);
       li.setAttribute('data-has-children', 'true');
       // create a <ul> to hold the submenu
       const subMenu = document.createElement('ul');
@@ -63,7 +62,6 @@ const displayMenu = (ul, json) => {
       subMenu.id = `submenu-${menuItem.slug}`;
       // create the submenu structure by recursively calling this same function
       // it will recieve the subMenu created above and the array of items from the json object
-      parentItemCount++;
       displayMenu(subMenu, menuItem.sub);
       // append it to the correct list element
       li.appendChild(subMenu);
