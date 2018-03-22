@@ -9,8 +9,73 @@
 </head>
 <body>
   <h1>A11Y Menu</h1>
+  <p>This version is built in javascript using a json file. If you turn off javascript it won't work correctly...</p>
   <nav role="navigation">
     <ul id="main-menu"></ul>
+  </nav>
+  <hr />
+  <p>This version will keep working even if javascript is off. If you're using a recent version of chrome, firefox, or safari, you will still be able to tab through the menu even without js.</p>
+  <nav role="navigation">
+    <ul id="menu">
+      <li class="no-js">
+        <a href="/">Basic Link</a>
+      </li>
+      <li class="test-class another-class last-class">
+        <a href="/item-with-classes">Item with classes</a>
+      </li>
+      <li class="no-js" data-count="2" data-has-children="true">
+        <a class="submenu-link" aria-label="Link with complete submenu, tab to the next button to expand the sub-menu" href="/link-with-complete-submenu">Link with complete submenu</a>
+        <button class="submenu-button submenu-toggle" aria-haspopup="true" aria-expanded="false"
+          aria-label="show submenu">
+          <span class="submenu-icon" aria-hidden="true" data-before="∨"></span>
+        </button>
+        <ul id="submenu-1" class="submenu-list">
+          <li class="no-js" data-count="0" data-has-children="true">
+            <a class="submenu-link" aria-label="Submenu Item 1, tab to the next button to expand the sub-menu" href="/submenu-item-1">Submenu Item 1</a>
+            <button class="submenu-button submenu-toggle" aria-haspopup="true" aria-expanded="false" aria-label="show submenu">
+              <span class="submenu-icon" aria-hidden="true" data-before="∨"></span>
+            </button>
+            <ul id="sub-submenu-1">
+              <li class="no-js">
+                <a href="/submenu-item-1/grandchild-1">Grandchild 1</a>
+              </li>
+              <li class="no-js">
+                <a href="/submenu-item-1/grandchild-2">Grandchild 2</a>
+              </li>
+            </ul>
+          </li>
+          <li class="no-js">
+            <a href="/submenu-item-2">Submenu Item 2</a>
+          </li>
+        </ul>
+      </li>
+      <li class="no-js">
+        <a href="/link-with-non-null-submenu">Link with non-null submenu</a>
+      </li>
+      <li class="no-js">
+        <button aria-haspopup="true" aria-expanded="false" class="submenu-toggle">Non-linked Item
+          <span class="submenu-icon" aria-hidden="true" data-before="∨"></span>
+        </button>
+      </li>
+      <li class="no-js">
+        <button aria-haspopup="true" aria-expanded="false" class="submenu-toggle">Non-linked Item with empty link
+          <span class="submenu-icon" aria-hidden="true" data-before="∨"></span>
+        </button>
+      </li>
+      <li class="no-js" data-count="6" data-has-children="true">
+        <button aria-haspopup="true" aria-expanded="false" class="submenu-toggle">Non-linked Item with Submenu
+          <span class="submenu-icon" aria-hidden="true" data-before="∨"></span>
+        </button>
+        <ul id="submenu-2">
+          <li class="no-js">
+            <a href="/child-1">Child 1</a>
+          </li>
+          <li class="no-js">
+            <a href="/child-2">Child 2</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
   </nav>
   <script src="build/bundle.js" type="text/javascript"></script>
 </body>

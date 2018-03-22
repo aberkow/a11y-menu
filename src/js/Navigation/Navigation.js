@@ -14,7 +14,6 @@ class Navigation {
   clickHandler(evt) {
     const target = evt.target;
     const submenuList = target.nextSibling;
-    console.log(submenuList);
     // find out if there is a nested submenu inside a top level item
     submenuList.getElementsByTagName('ul').length ? this.hasNestedSubmenu = true : this.hasNestedSubmenu = false;
     // if something weird happens, don't allow any further event handling.
@@ -34,10 +33,11 @@ class Navigation {
     }
   }
   focusInHandler(evt) {
-    // the element about to receive focus
-    const target = evt.target;
-    // the element which has just lost focus
-    const relatedTarget = evt.relatedTarget;
+    // target - the element about to receive focus
+    // relatedTarget - the element which has just lost focus
+
+    const { target, relatedTarget } = evt;
+
     // if the parent doesn't have the attribute return so that we never get undefined as a choice
     if (!target.parentNode.getAttribute('data-count')) return;
 
@@ -50,8 +50,11 @@ class Navigation {
       const openElementCollection = topLevelElement.getElementsByClassName('submenu-list-open');
       const buttonCollection = topLevelElement.getElementsByClassName('submenu-toggle');
 
+      console.log(topLevelElement, this.previousItemCount)
+      console.log(expandedElementCollection)
       this.previousItemCount = parentItemCount;
 
+      
       // handling multi-level submenus.
       // target.offsetParent is the wrapper.
       // if it is the same as the top level li and there's a expanded element, control the other elements.
@@ -59,6 +62,9 @@ class Navigation {
       // if there's a expanded elemenent and a nested submenu, control the elements.
       // checking to see if there's a nested submenu prevents the submenu from automatically closing by accident
       if ((target.offsetParent === topLevelElement && expandedElementCollection.length) || (expandedElementCollection.length && !this.hasNestedSubmenu)) {
+        console.log(expandedElementCollection, 'expandedElColl')
+        console.log(target.offsetParent, topLevelElement);
+        console.log(openElementCollection);
         expandedElementCollection[0].setAttribute('aria-expanded', 'false');
         openElementCollection[0].classList.remove('submenu-list-open');
         this.chevronSwitcher(buttonCollection[0]);
