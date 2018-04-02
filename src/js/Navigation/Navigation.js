@@ -33,6 +33,29 @@ class Navigation {
     }
   }
   focusInHandler(evt) {
+    const { target, relatedTarget } = evt;
+
+    const { parentNode, offsetParent } = target;
+
+    // console.log(relatedTarget, 'target', offsetParent, 'offsetParent')
+
+    // if (!target.parentNode.getAttribute('data-count')) return;
+
+    // console.log(evt)
+    // console.dir(target)
+
+    // console.log(target.compareDocumentPosition(offsetParent));
+
+
+
+    const parentItemCount = parseInt(parentNode.getAttribute('data-count'));
+
+    console.log(offsetParent.contains(relatedTarget), target.contains(relatedTarget));
+    // console.log(relatedTarget.contains(target))
+
+
+  }
+  focusInHandlerOld(evt) {
     // target - the element about to receive focus
     // relatedTarget - the element which has just lost focus
 
@@ -51,9 +74,11 @@ class Navigation {
       const buttonCollection = topLevelElement.getElementsByClassName('submenu-toggle');
 
       console.log(topLevelElement, this.previousItemCount)
-      console.log(expandedElementCollection)
       this.previousItemCount = parentItemCount;
-
+      
+      
+      if (expandedElementCollection.length) { console.log(expandedElementCollection, 'expanded') }
+      if (target.offsetParent === topLevelElement) { console.log(target.offsetParent, 'offset')}
       
       // handling multi-level submenus.
       // target.offsetParent is the wrapper.
@@ -61,7 +86,8 @@ class Navigation {
       // OR...
       // if there's a expanded elemenent and a nested submenu, control the elements.
       // checking to see if there's a nested submenu prevents the submenu from automatically closing by accident
-      if ((target.offsetParent === topLevelElement && expandedElementCollection.length) || (expandedElementCollection.length && !this.hasNestedSubmenu)) {
+      // if (target.offsetParent === topLevelElement) {
+      if ((target.offsetParent === topLevelElement && expandedElementCollection.length) || (!this.hasNestedSubmenu && expandedElementCollection.length  )) {
         console.log(expandedElementCollection, 'expandedElColl')
         console.log(target.offsetParent, topLevelElement);
         console.log(openElementCollection);
@@ -72,11 +98,10 @@ class Navigation {
     }
   }
   hoverHandler(evt) {
-    const evtType = evt.type;
-    const target = evt.target;
-    if (evtType === 'mouseout' && target.getAttribute('aria-haspopup') === "true") {
+    const { type, target } = evt;
+    if (type === 'mouseout' && target.getAttribute('aria-haspopup') === "true") {
       target.setAttribute('aria-expanded', 'false');
-    } else if (evtType === 'mousein' && target.getAttribute('aria-haspopup') === "false") {
+    } else if (type === 'mousein' && target.getAttribute('aria-haspopup') === "false") {
       target.setAttribute('aria-expanded', 'true');
     }
 
