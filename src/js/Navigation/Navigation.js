@@ -3,7 +3,6 @@ class Navigation {
     this.menu = null;
     this.hasNestedSubmenu = false;
     this.opts = {}
-
   }
   chevronSwitcher(element) {
     if (element.localName !== "button") return;
@@ -103,11 +102,23 @@ class Navigation {
   }
   setSubmenuIcon() {
     const icons = this.menu.querySelectorAll('.submenu-icon');
+    const hoverCss = `
+      nav ul li:hover > button span::before,
+      nav ul li:focus > button span::before { 
+        content: '${this.opts.chevronUp}'; 
+      }`;
+    const style = document.createElement('style');
+    if (style.styleSheet) {
+      style.styleSheet.cssText = hoverCss;
+    } else {
+      style.appendChild(document.createTextNode(hoverCss));
+    }
+    document.getElementsByTagName('head')[0].appendChild(style);
     icons.forEach((icon) => {
       icon.setAttribute('data-before', this.opts.chevronDown);
     })
   }
-  init(menuElement, opts = {}) {
+  init(menuElement, opts = { chevronDown: '∨', chevronUp: '∧' }) {
     this.menu = menuElement;
     this.opts = opts;
     this.setEventListeners();
