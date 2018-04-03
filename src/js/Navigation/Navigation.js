@@ -52,6 +52,20 @@ class Navigation {
     } else {
       // close the submenu when you leave?
       console.log('get ready to close...')
+      const expandedElementCollection = parentUL.querySelectorAll('[aria-expanded="true"]');
+      const openElementCollection = parentUL.getElementsByClassName('submenu-list-open');
+      // const buttonCollection = parentUL.getElementsByClassName('submenu-toggle');
+
+      console.log(expandedElementCollection, 'expanded', openElementCollection, 'open')
+
+      if (expandedElementCollection.length) {
+        expandedElementCollection[0].setAttribute('aria-expanded', 'false');
+        openElementCollection[0].classList.remove('submenu-list-open');
+        this.chevronSwitcher(expandedElementCollection[0]);
+      }
+
+
+
     }
 
 
