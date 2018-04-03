@@ -8,5 +8,9 @@ const navigation = new Navigation();
 displayMenu(mainMenu, testData.menu);
 
 document.addEventListener('DOMContentLoaded', () => {
-  navigation.init(mainMenu);
+  const menuOpts = {
+    chevronDown: '+',
+    chevronUp: '-'
+  }
+  navigation.init(mainMenu, menuOpts);
 });

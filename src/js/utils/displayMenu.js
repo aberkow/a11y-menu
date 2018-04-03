@@ -57,7 +57,7 @@ const displayMenu = (ul, json) => {
 
     // this if statement is clearly ridiculous and needs to be refactored
     if (menuItem.hasOwnProperty('sub') && menuItem.sub !== null && menuItem.sub.length) {
-      li.setAttribute('data-count', index);
+      // li.setAttribute('data-count', index);
       li.setAttribute('data-has-children', 'true');
       // create a <ul> to hold the submenu
       const subMenu = document.createElement('ul');
