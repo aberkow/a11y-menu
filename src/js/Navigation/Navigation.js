@@ -1,7 +1,7 @@
 class Navigation {
   constructor() {
     this.menu = null;
-    this.previousItemCount = 0;
+    this.previousItemCount = null;
     this.hasNestedSubmenu = false;
   }
   chevronSwitcher(element) {
@@ -37,20 +37,60 @@ class Navigation {
 
     const { parentNode, offsetParent } = target;
 
+    const parentUL = offsetParent.parentNode;
+    console.log(parentUL, this.menu);
+
+
+    // maybe check to see if the parents are different?
+    // then also if the elements are open?
+
+
+    // if the parentUL isn't the menu and it contains the target return
+    if (parentUL !== this.menu && parentUL.contains(target)) {
+      // console.log('something...')
+      return
+    } else {
+      // close the submenu when you leave?
+      console.log('get ready to close...')
+    }
+
+
+
+    // let parentCount = null;
+
+
+    // if (offsetParent.getAttribute('data-count')) {
+    //   parentCount = offsetParent.getAttribute('data-count')
+    // }
+
+    // const test = this.menu.getElementsByTagName('a');
+    // console.log(test)
+
+
+
+    // console.log(parentCount)
+    // console.dir(parentNode.children);
+
+    // console.dir(offsetParent.children)
+
+    // if (offsetParent.children && offsetParent.children.length > 1) {
+    // }
+
+
     // console.log(relatedTarget, 'target', offsetParent, 'offsetParent')
 
     // if (!target.parentNode.getAttribute('data-count')) return;
 
     // console.log(evt)
-    // console.dir(target)
+    // console.log(target.nextSibling)
 
     // console.log(target.compareDocumentPosition(offsetParent));
 
 
 
-    const parentItemCount = parseInt(parentNode.getAttribute('data-count'));
+    // const parentItemCount = parseInt(parentNode.getAttribute('data-count'));
 
-    console.log(offsetParent.contains(relatedTarget), target.contains(relatedTarget));
+    // console.log(offsetParent.contains(target));
     // console.log(relatedTarget.contains(target))
 
 
