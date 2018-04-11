@@ -1,8 +1,8 @@
 class Navigation {
-  constructor() {
+  constructor(opts = {}) {
     this.menu = null;
     this.hasNestedSubmenu = false;
-    this.opts = {}
+    this.opts = opts
   }
   chevronSwitcher(element) {
     if (element.localName !== "button") return;
@@ -45,8 +45,6 @@ class Navigation {
       const expandedElementCollection = parentUL.querySelectorAll('[aria-expanded="true"]');
       const openElementCollection = parentUL.getElementsByClassName('submenu-list-open');
 
-      console.log(expandedElementCollection, 'expanded', openElementCollection, 'open')
-
       if (expandedElementCollection.length) {
         expandedElementCollection[0].setAttribute('aria-expanded', 'false');
         openElementCollection[0].classList.remove('submenu-list-open');
@@ -58,7 +56,7 @@ class Navigation {
     const { type, target } = evt;
     if (type === 'mouseout' && target.getAttribute('aria-haspopup') === "true") {
       target.setAttribute('aria-expanded', 'false');
-    } else if (type === 'mousein' && target.getAttribute('aria-haspopup') === "false") {
+    } else if (type === 'mouseover' && target.getAttribute('aria-haspopup') === "false") {
       target.setAttribute('aria-expanded', 'true');
     }
 
@@ -103,9 +101,16 @@ class Navigation {
   setSubmenuIcon() {
     const icons = this.menu.querySelectorAll('.submenu-icon');
     const hoverCss = `
+      nav ul li span::before {
+        content: '${this.opts.chevronDown}';
+        font-family: 'Font Awesome\ 5 Free';
+        font-weight: bold;
+      }
       nav ul li:hover > button span::before,
       nav ul li:focus > button span::before { 
-        content: '${this.opts.chevronUp}'; 
+        content: '${this.opts.chevronUp}';
+        font-family: 'Font Awesome\ 5 Free'; 
+        font-weight: bold;
       }`;
     const style = document.createElement('style');
     if (style.styleSheet) {
@@ -118,9 +123,8 @@ class Navigation {
       icon.setAttribute('data-before', this.opts.chevronDown);
     })
   }
-  init(menuElement, opts = { chevronDown: '∨', chevronUp: '∧' }) {
+  init(menuElement) {
     this.menu = menuElement;
-    this.opts = opts;
     this.setEventListeners();
     this.setSubmenuIcon();
   }
