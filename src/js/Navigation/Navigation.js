@@ -1,12 +1,12 @@
 class Navigation {
-  constructor() {
+  constructor(opts = {}) {
     this.menu = null;
     this.hasNestedSubmenu = false;
-    this.opts = {}
+    this.opts = opts
   }
   chevronSwitcher(element) {
     if (element.localName !== "button") return;
-
+    
     const icon = element.children[0];
     const { chevronDown, chevronUp } = this.opts;
     element.getAttribute('aria-expanded') === 'true' ? icon.setAttribute('data-before', chevronUp) : icon.setAttribute('data-before', chevronDown);
@@ -45,8 +45,6 @@ class Navigation {
       const expandedElementCollection = parentUL.querySelectorAll('[aria-expanded="true"]');
       const openElementCollection = parentUL.getElementsByClassName('submenu-list-open');
 
-      console.log(expandedElementCollection, 'expanded', openElementCollection, 'open')
-
       if (expandedElementCollection.length) {
         expandedElementCollection[0].setAttribute('aria-expanded', 'false');
         openElementCollection[0].classList.remove('submenu-list-open');
@@ -58,7 +56,7 @@ class Navigation {
     const { type, target } = evt;
     if (type === 'mouseout' && target.getAttribute('aria-haspopup') === "true") {
       target.setAttribute('aria-expanded', 'false');
-    } else if (type === 'mousein' && target.getAttribute('aria-haspopup') === "false") {
+    } else if (type === 'mouseover' && target.getAttribute('aria-haspopup') === "false") {
       target.setAttribute('aria-expanded', 'true');
     }
 
@@ -68,6 +66,7 @@ class Navigation {
     }
   }
   eventDispatcher(evt) {
+    // dispatch event listeners to the correct functions.
     switch (evt.type) {
       case 'click':
         this.clickHandler(evt);
@@ -101,26 +100,39 @@ class Navigation {
     }
   }
   setSubmenuIcon() {
+    // the list of all the submenu icons
     const icons = this.menu.querySelectorAll('.submenu-icon');
+    // the css to inject into the page
     const hoverCss = `
+      nav ul li span::before {
+        content: '${this.opts.chevronDown}';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: bold;
+      }
       nav ul li:hover > button span::before,
       nav ul li:focus > button span::before { 
-        content: '${this.opts.chevronUp}'; 
+        content: '${this.opts.chevronUp}';
+        font-family: 'Font Awesome 5 Free'; 
+        font-weight: bold;
       }`;
+    
+    // create a style tag
     const style = document.createElement('style');
+    // add the styles to the tag (or a stylesheet if it exists)
     if (style.styleSheet) {
       style.styleSheet.cssText = hoverCss;
     } else {
       style.appendChild(document.createTextNode(hoverCss));
     }
+    // add the tag to the <head>
     document.getElementsByTagName('head')[0].appendChild(style);
+    // set the data-before attribute to the values passed in the constructor.
     icons.forEach((icon) => {
       icon.setAttribute('data-before', this.opts.chevronDown);
     })
   }
-  init(menuElement, opts = { chevronDown: '∨', chevronUp: '∧' }) {
+  init(menuElement) {
     this.menu = menuElement;
-    this.opts = opts;
     this.setEventListeners();
     this.setSubmenuIcon();
   }
