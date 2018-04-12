@@ -80,11 +80,10 @@ nav {
         border: transparent;
         color: black;
         font-size: 0.95em;
-        padding: 0 15px; // text-decoration: underline;
+        padding: 0 15px;
         &:hover,
         &:focus {
           color: inherit;
-          outline: 1px solid blue;
         }
       }
       a + button {

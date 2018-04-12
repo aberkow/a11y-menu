@@ -6,7 +6,7 @@ class Navigation {
   }
   chevronSwitcher(element) {
     if (element.localName !== "button") return;
-
+    
     const icon = element.children[0];
     const { chevronDown, chevronUp } = this.opts;
     element.getAttribute('aria-expanded') === 'true' ? icon.setAttribute('data-before', chevronUp) : icon.setAttribute('data-before', chevronDown);
@@ -66,6 +66,7 @@ class Navigation {
     }
   }
   eventDispatcher(evt) {
+    // dispatch event listeners to the correct functions.
     switch (evt.type) {
       case 'click':
         this.clickHandler(evt);
@@ -99,26 +100,33 @@ class Navigation {
     }
   }
   setSubmenuIcon() {
+    // the list of all the submenu icons
     const icons = this.menu.querySelectorAll('.submenu-icon');
+    // the css to inject into the page
     const hoverCss = `
       nav ul li span::before {
         content: '${this.opts.chevronDown}';
-        font-family: 'Font Awesome\ 5 Free';
+        font-family: 'Font Awesome 5 Free';
         font-weight: bold;
       }
       nav ul li:hover > button span::before,
       nav ul li:focus > button span::before { 
         content: '${this.opts.chevronUp}';
-        font-family: 'Font Awesome\ 5 Free'; 
+        font-family: 'Font Awesome 5 Free'; 
         font-weight: bold;
       }`;
+    
+    // create a style tag
     const style = document.createElement('style');
+    // add the styles to the tag (or a stylesheet if it exists)
     if (style.styleSheet) {
       style.styleSheet.cssText = hoverCss;
     } else {
       style.appendChild(document.createTextNode(hoverCss));
     }
+    // add the tag to the <head>
     document.getElementsByTagName('head')[0].appendChild(style);
+    // set the data-before attribute to the values passed in the constructor.
     icons.forEach((icon) => {
       icon.setAttribute('data-before', this.opts.chevronDown);
     })
