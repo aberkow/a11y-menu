@@ -1,0 +1,38 @@
+nav {
+  background-color: rgba(177,2,0,0.8);
+  font-family: sans-serif;
+  margin: 2em 0;
+  padding: 2em;
+}
+
+nav li {
+  padding: 1em;
+}
+
+nav li a:hover,
+nav li a:focus,
+nav li button:hover,
+nav li button:focus {
+  background-color: red;
+}
+
+nav a {
+  text-decoration: none;
+}
+
+nav a,
+nav ul li button,
+nav ul li button:hover,
+nav ul li button:focus,
+nav ul li span {
+  color: white;
+}
+
+.submenu-button:hover .submenu-icon,
+.submenu-button:focus .submenu-icon {
+  background-color: darkgrey;
+}
+/* nav ul li a + button:hover span,
+nav ul li a + button:focus span {
+  background-color: darkgrey;
+} */
