@@ -2,9 +2,10 @@
 This is still a work in progress and not ready for production yet.
 
 This project aims to create a re-useable and accessible main navigation module. There are a few goals...
-- 
-- 
--
+- Be able to include this package as a standalone or in a WordPress plugin/theme
+- Allow for quick implementation of accessible menus
+- Menus should allow for developer customization particularly with respect to style
+- Menu functionality should take into account different modes of user input (e.g. mouse, keyboard)
 
 ## Usage
 To begin developing
