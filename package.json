@@ -5,6 +5,10 @@
   "main": "./src/js/Navigation/Navigation.js",
   "author": "Adam Berkowitz <adam@adamjberkowitz.com> (https://www.adamjberkowitz.com)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aberkow/a11y-menu"
+  },
   "scripts": {
     "develop": "webpack --watch",
     "build": "webpack -p"
