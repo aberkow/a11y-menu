@@ -1,8 +1,15 @@
 {
   "name": "a11y-menu",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Assets to build an accessible navigation menu",
+  "keywords": [
+    "a11y",
+    "accessibility",
+    "menu",
+    "navigation"
+  ],
   "main": "./src/js/Navigation/Navigation.js",
+  "sass": "src/scss/style.scss",
   "author": "Adam Berkowitz <adam@adamjberkowitz.com> (https://www.adamjberkowitz.com)",
   "license": "MIT",
   "repository": {
