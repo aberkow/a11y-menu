@@ -13,6 +13,8 @@ const mainMenu = document.getElementById('main-menu');
 
 // the fontawesome icons need to be in the escaped html format. 
 const menuOpts = {
+  // the current font-family choices
+  // ['FontAwesome', 'Font Awesome 5 Free', 'Glyphicons Halflings']
   fontFamily: 'Font Awesome 5 Free',
   chevronDown: '\\f078',
   chevronUp: '\\f077'
