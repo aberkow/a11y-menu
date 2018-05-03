@@ -23,5 +23,5 @@ const navigation = new Navigation(menuOpts);
 displayMenu(mainMenu, testData.menu);
 
 document.addEventListener('DOMContentLoaded', () => {
-  navigation.init(mainMenu, menuOpts);
+  navigation.init(mainMenu);
 });
