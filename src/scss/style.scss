@@ -32,6 +32,9 @@ nav {
     li {
       display: block;
       position: relative;
+      a {
+        display: inline-block;
+      }
       ul {
         height: 0;
         opacity: 0;
