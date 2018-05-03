@@ -13,7 +13,7 @@ const mainMenu = document.getElementById('main-menu');
 
 // the fontawesome icons need to be in the escaped html format. 
 const menuOpts = {
-  fontAwesome: true,
+  fontFamily: 'Font Awesome 5 Free',
   chevronDown: '\\f078',
   chevronUp: '\\f077'
 }

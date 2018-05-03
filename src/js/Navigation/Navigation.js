@@ -3,6 +3,7 @@ class Navigation {
     this.menu = null;
     this.hasNestedSubmenu = false;
     this.opts = opts
+    this.fontFamilies = ['FontAwesome', 'Font Awesome 5 Free', 'Glyphicons Halflings'];
   }
   chevronSwitcher(element) {
     if (element.localName !== "button") return;
@@ -100,22 +101,29 @@ class Navigation {
     }
   }
   setSubmenuIcon() {
+    // possible font-family for the icons
+    let fontFamily = this.opts.fontFamily;
+
+    if (!this.fontFamilies.includes(fontFamily)) {
+      fontFamily = '';
+    }
+
     // the list of all the submenu icons
     const icons = this.menu.querySelectorAll('.submenu-icon');
     // the css to inject into the page
     const hoverCss = `
       nav ul li span::before {
         content: '${this.opts.chevronDown}';
-        font-family: 'Font Awesome 5 Free';
+        font-family: '${fontFamily}';
         font-weight: bold;
       }
       nav ul li:hover > button span::before,
       nav ul li:focus > button span::before { 
         content: '${this.opts.chevronUp}';
-        font-family: 'Font Awesome 5 Free'; 
+        font-family: '${fontFamily}'; 
         font-weight: bold;
       }`;
-    
+
     // create a style tag
     const style = document.createElement('style');
     // add the styles to the tag (or a stylesheet if it exists)
