@@ -1,7 +1,7 @@
 nav {
   background-color: rgba(177,2,0,0.8);
   font-family: sans-serif;
-  margin: 2em 0;
+  margin: 2em 0 10em;
   padding: 2em;
 }
 
@@ -25,7 +25,7 @@ nav ul li button,
 nav ul li button:hover,
 nav ul li button:focus,
 nav ul li span {
-  color: white;
+  color: black;
 }
 
 .submenu-button:hover .submenu-icon,
