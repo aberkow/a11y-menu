@@ -8,6 +8,38 @@ This project aims to create a re-useable and accessible main navigation module. 
 - Menu functionality should take into account different modes of user input (e.g. mouse, keyboard)
 
 ## Usage
+### Defaults
+The constructor comes with the following defaults. These can be overridden as needed
+- `menuId` - the default is `'main-menu'`
+- `fontFamily` - the default is `'Font Awesome 5 Free'`. Note that currently the other supported font families are 
+  - `'FontAwesome'`
+  - `'Glyphicons Halflings'` (for Bootstrap)
+- `chevronDown` - the default is '\\f078',
+- `chevronUp` - the default is '\\f077'
+
+**NB - When using FontAwesome, Bootstrap icons, or similar, you must use the HTML escaped versions.**
+
+### Most basic case
+The `Navigation` class is designed to be as simple to use as possible. In order to use it, create a new `Navigation` constructor and assign it to a variable. Inside of an event listener, use the `init` method on the the instance.
+```javascript
+const navigation = new Navigation();
+document.addEventListener('DOMContentLoaded', () => {
+  navigation.init();
+})
+```
+
+### Overridding defaults
+Defaults can be overridden individually. For instance, to change the icon used, pass the constructor a configuration object with the appropriate keys and values. 
+```javascript
+const menuOpts = {
+  chevronDown: '\\f13a',
+  chevronUp: '\\f139'
+}
+const navigation = new Navigation(menuOpts);
+```
+This will use the `chevron-circle-down` and `chevron-circle-up` FontAwesome icons.
+
+## Development
 To begin developing
 - `yarn install`
 - `npm run develop`
