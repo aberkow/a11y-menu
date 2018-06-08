@@ -1,9 +1,4 @@
 {
-  "env": {
-    "production": {
-      "minified": true
-    }  
-  },
   "presets": [
     "env"
   ]

@@ -155,5 +155,6 @@ class Navigation {
     this.setSubmenuIcon();
   }
 }
-
+/* start-remove */
 module.exports = Navigation;
+/* end-remove */
