@@ -1,0 +1,54 @@
+{
+    "name": "uconn/a11y-menu",
+    "description": "A package to generate accessible main navigation menus. It includes: a js script for the browser as an npm package, WordPress walker for theme development, and WordPress plugin.",
+    "type": "library",
+    "minimum-stability": "dev",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Adam Berkowitz",
+            "email": "adam@adamjberkowitz.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://wpackagist.org"
+        },
+        {
+            "type": "composer",
+            "url": "https://packages.ucdev.net/"
+        }
+    ],
+    "extra": {
+        "installer-paths": {
+            "./www/content/plugins/{$name}": [
+                "type:wordpress-plugin"
+            ],
+            "./www/content/themes/{$name}": [
+                "type:wordpress-theme"
+            ]
+        },
+        "wordpress-install-dir": "./www/wordpress"
+    },
+    "config": {
+        "secure-http": true
+    },
+    "autoload": {
+        "files": [
+            "src/A11yMenu/A11yMenu.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "A11yMenu\\Tests\\": [
+                "tests/"
+            ]
+        }
+    },
+    "require-dev": {
+        "johnpbloch/wordpress": "@stable",
+        "wpackagist-plugin/wordpress-importer": "dev-trunk",
+        "wpackagist-theme/twentyseventeen": "^1.6"
+    }
+}

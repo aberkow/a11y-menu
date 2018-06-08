@@ -6,14 +6,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var Navigation = function () {
   function Navigation() {
-    var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+        _ref$menuId = _ref.menuId,
+        menuId = _ref$menuId === undefined ? 'main-menu' : _ref$menuId,
+        _ref$fontFamily = _ref.fontFamily,
+        fontFamily = _ref$fontFamily === undefined ? 'Font Awesome 5 Free' : _ref$fontFamily,
+        _ref$chevronDown = _ref.chevronDown,
+        chevronDown = _ref$chevronDown === undefined ? '\\f078' : _ref$chevronDown,
+        _ref$chevronUp = _ref.chevronUp,
+        chevronUp = _ref$chevronUp === undefined ? '\\f077' : _ref$chevronUp;
 
     _classCallCheck(this, Navigation);
 
-    this.menu = null;
-    this.hasNestedSubmenu = false;
-    this.opts = opts;
+    this.chevronDown = chevronDown;
+    this.chevronUp = chevronUp;
     this.fontFamilies = ['FontAwesome', 'Font Awesome 5 Free', 'Glyphicons Halflings'];
+    this.fontFamily = fontFamily;
+    this.hasNestedSubmenu = false;
+    this.menu = null;
+    this.menuId = menuId;
   }
 
   _createClass(Navigation, [{
@@ -22,11 +33,8 @@ var Navigation = function () {
       if (element.localName !== "button") return;
 
       var icon = element.children[0];
-      var _opts = this.opts,
-          chevronDown = _opts.chevronDown,
-          chevronUp = _opts.chevronUp;
 
-      element.getAttribute('aria-expanded') === 'true' ? icon.setAttribute('data-before', chevronUp) : icon.setAttribute('data-before', chevronDown);
+      element.getAttribute('aria-expanded') === 'true' ? icon.setAttribute('data-before', this.chevronUp) : icon.setAttribute('data-before', this.chevronDown);
     }
   }, {
     key: 'clickHandler',
@@ -139,7 +147,7 @@ var Navigation = function () {
       var _this2 = this;
 
       // possible font-family for the icons
-      var fontFamily = this.opts.fontFamily;
+      var fontFamily = this.fontFamily;
 
       if (!this.fontFamilies.includes(fontFamily)) {
         fontFamily = '';
@@ -148,7 +156,7 @@ var Navigation = function () {
       // the list of all the submenu icons
       var icons = this.menu.querySelectorAll('.submenu-icon');
       // the css to inject into the page
-      var hoverCss = '\n      nav ul li span::before {\n        content: \'' + this.opts.chevronDown + '\';\n        font-family: \'' + fontFamily + '\';\n        font-weight: bold;\n      }\n      nav ul li:hover > button span::before,\n      nav ul li:focus > button span::before { \n        content: \'' + this.opts.chevronUp + '\';\n        font-family: \'' + fontFamily + '\'; \n        font-weight: bold;\n      }';
+      var hoverCss = '\n      nav ul li span::before {\n        content: \'' + this.chevronDown + '\';\n        font-family: \'' + fontFamily + '\';\n        font-weight: bold;\n      }\n      nav ul li:hover > button span::before,\n      nav ul li:focus > button span::before { \n        content: \'' + this.chevronUp + '\';\n        font-family: \'' + fontFamily + '\'; \n        font-weight: bold;\n      }';
 
       // create a style tag
       var style = document.createElement('style');
@@ -162,13 +170,13 @@ var Navigation = function () {
       document.getElementsByTagName('head')[0].appendChild(style);
       // set the data-before attribute to the values passed in the constructor.
       icons.forEach(function (icon) {
-        icon.setAttribute('data-before', _this2.opts.chevronDown);
+        icon.setAttribute('data-before', _this2.chevronDown);
       });
     }
   }, {
     key: 'init',
-    value: function init(menuElement) {
-      this.menu = menuElement;
+    value: function init() {
+      this.menu = document.getElementById(this.menuId);
       this.setEventListeners();
       this.setSubmenuIcon();
     }
