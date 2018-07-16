@@ -216,5 +216,5 @@ class Menu_Settings {
   }
 }
 
-$settings = new A11y_Menu_Settings();
+$settings = new Menu_Settings();
 $settings->init();

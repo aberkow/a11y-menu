@@ -14,6 +14,6 @@ require_once A11y_MENU_PATH . '/src/classes/class-a11y-menu-public.php';
 require_once A11y_MENU_PATH . '/src/classes/class-a11y-menu-settings.php';
 require_once A11y_MENU_PATH . '/src/classes/class-a11y-menu-walker.php';
 
-add_filter('wp_nav_menu_args', 'A11y_Menu_Public::modify_nav_args');
+add_filter('wp_nav_menu_args', array('A11y\Menu_Public', 'modify_nav_args'));
 
-add_action('wp_enqueue_scripts', 'A11y_Menu_Public::enqueue_scripts');
+add_action('wp_enqueue_scripts', array('A11y\Menu_Public', 'enqueue_scripts'));
