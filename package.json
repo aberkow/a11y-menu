@@ -1,6 +1,6 @@
 {
   "name": "a11y-menu",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "description": "Assets to build an accessible navigation menu",
   "keywords": [
     "a11y",
@@ -18,18 +18,36 @@
   },
   "scripts": {
     "develop": "webpack --watch",
-    "build": "webpack -p"
+    "build:public": "webpack ",
+    "build:dist": "babel src/js/Navigation --out-dir dist --source-maps"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
+    "browser-sync": "^2.24.4",
     "css-loader": "^0.28.10",
+    "del": "^3.0.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^5.0.0",
+    "gulp-babel": "^7.0.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-jshint": "^2.1.0",
+    "gulp-load-plugins": "^1.5.0",
+    "gulp-plumber": "^1.2.0",
+    "gulp-sass": "^4.0.1",
+    "gulp-size": "^3.0.0",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-uglify": "^3.0.0",
+    "jshint": "^2.9.5",
+    "jshint-stylish": "^2.2.1",
     "node-sass": "^4.7.2",
     "sass-loader": "^6.0.7",
     "style-loader": "^0.20.3",
     "webpack": "^4.1.1",
-    "webpack-cli": "^2.0.12"
+    "webpack-cli": "^2.0.12",
+    "webpack-stream": "^4.0.3"
   }
 }

@@ -1,0 +1,64 @@
+version: "3"
+services:
+  web:
+    image: uconn/comm0-ssl:latest
+    environment:
+      SITE_ENV: local
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # mount files/directories necessary for wordpress
+      - ./www:/var/www/html
+      - ./.entrypoint/server-entrypoint:/entrypoint
+      # the project should be mounted like this...
+      # ./:/var/www/html/content/plugins/{plugin-name}
+      - ./:/var/www/html/content/plugins/a11y-menu-plugin
+      # explicitly connect the shared local dev build directory e.g.
+      # - build:/var/www/html/content/plugins/{plugin-name}/build
+      - build:/var/www/html/content/plugins/a11y-menu-plugin/build
+      # if the plugin needs access to something in the vendor directory...
+      - ./vendor:/var/www/html/content/themes/lobo/vendor
+      - ./vendor:/var/www/html/content/plugins/castor/vendor
+    depends_on:
+      - mysql
+    restart: always
+  mysql:
+    image: uconn/comm0db:latest
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+      MYSQL_DATABASE: wordpress
+  local:
+    image: uconn/local:latest
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    restart: always
+    volumes:
+      # the working directory inside the container is /project.
+      # anything you want inside that container (except the entrypoint script) should be mounted to that directory.
+      - ./package.json:/project/package.json
+      - ./gulpfile.js:/project/gulpfile.js
+      - ./webpack.config.js:/project/webpack.config.js
+      # mount the source files
+      - ./src:/project/src
+      # this entrypoint file will override the container's default entrypoint command.
+      # make sure to run chmod +x on the host's entrypoint file.
+      - ./.entrypoint/local-dev-entrypoint.sh:/entrypoint.sh
+      # explicitly connect the shared volume so the web server can share it.
+      - build:/project/build
+
+
+# define a volume to be shared between the local and server containers
+# changes made in the local dev container will be passed to the matching directory on the server.
+volumes:
+  build:

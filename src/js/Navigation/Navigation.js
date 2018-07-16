@@ -1,16 +1,26 @@
 class Navigation {
-  constructor(opts = {}) {
-    this.menu = null;
-    this.hasNestedSubmenu = false;
-    this.opts = opts
+  constructor(
+    {
+      menuId = 'main-menu',
+      fontFamily = 'Font Awesome 5 Free',
+      chevronDown = '\\f078',
+      chevronUp = '\\f077'
+    } = {}
+  ) {
+    this.chevronDown = chevronDown;
+    this.chevronUp = chevronUp;
     this.fontFamilies = ['FontAwesome', 'Font Awesome 5 Free', 'Glyphicons Halflings'];
+    this.fontFamily = fontFamily;
+    this.hasNestedSubmenu = false;
+    this.menu = null;
+    this.menuId = menuId;
   }
   chevronSwitcher(element) {
     if (element.localName !== "button") return;
     
     const icon = element.children[0];
-    const { chevronDown, chevronUp } = this.opts;
-    element.getAttribute('aria-expanded') === 'true' ? icon.setAttribute('data-before', chevronUp) : icon.setAttribute('data-before', chevronDown);
+
+    element.getAttribute('aria-expanded') === 'true' ? icon.setAttribute('data-before', this.chevronUp) : icon.setAttribute('data-before', this.chevronDown);
   }
   clickHandler(evt) {
     const target = evt.target;
@@ -102,7 +112,7 @@ class Navigation {
   }
   setSubmenuIcon() {
     // possible font-family for the icons
-    let fontFamily = this.opts.fontFamily;
+    let fontFamily = this.fontFamily;
 
     if (!this.fontFamilies.includes(fontFamily)) {
       fontFamily = '';
@@ -113,13 +123,13 @@ class Navigation {
     // the css to inject into the page
     const hoverCss = `
       nav ul li span::before {
-        content: '${this.opts.chevronDown}';
+        content: '${this.chevronDown}';
         font-family: '${fontFamily}';
         font-weight: bold;
       }
       nav ul li:hover > button span::before,
       nav ul li:focus > button span::before { 
-        content: '${this.opts.chevronUp}';
+        content: '${this.chevronUp}';
         font-family: '${fontFamily}'; 
         font-weight: bold;
       }`;
@@ -136,14 +146,15 @@ class Navigation {
     document.getElementsByTagName('head')[0].appendChild(style);
     // set the data-before attribute to the values passed in the constructor.
     icons.forEach((icon) => {
-      icon.setAttribute('data-before', this.opts.chevronDown);
+      icon.setAttribute('data-before', this.chevronDown);
     })
   }
-  init(menuElement) {
-    this.menu = menuElement;
+  init() {
+    this.menu = document.getElementById(this.menuId);
     this.setEventListeners();
     this.setSubmenuIcon();
   }
 }
-
+/* start-remove */
 module.exports = Navigation;
+/* end-remove */
