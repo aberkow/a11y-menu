@@ -1,6 +1,8 @@
 <?php
 
-class A11y_Menu_Settings {
+namespace A11y;
+
+class Menu_Settings {
   public function __construct() {
     $this->slug = 'a11y-menu-plugin';
     $this->icon_font_families = array(

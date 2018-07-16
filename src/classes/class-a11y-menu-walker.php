@@ -1,6 +1,8 @@
 <?php
 
-class A11y_Menu_Walker extends Walker_Nav_Menu {
+namespace A11y;
+
+class Menu_Walker extends \Walker_Nav_Menu {
   public function __construct() {
     $this->parentItemCount = 0;
   }

@@ -1,6 +1,8 @@
 <?php
 
-class A11y_Menu_Public {
+namespace A11y;
+
+class Menu_Public {
   public function enqueue_scripts() {
 
     wp_register_script('test', A11y_MENU_URL . '/dist/Navigation.js', array(), null, true);

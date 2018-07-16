@@ -35,9 +35,9 @@
         "secure-http": true
     },
     "autoload": {
-        "files": [
-            "src/A11yMenu/A11yMenu.php"
-        ]
+        "ps4-4": {
+            "A11y\\": "src/classes/"
+        }
     },
     "autoload-dev": {
         "psr-4": {
