@@ -5,10 +5,10 @@ namespace A11y;
 class Menu_Public {
   public function enqueue_scripts() {
 
-    wp_register_script('test', A11y_MENU_URL . '/dist/Navigation.js', array(), null, true);
+    wp_register_script('a11y-nav', A11y_MENU_URL . '/dist/Navigation.js', array(), null, true);
     // register the main script for the plugin
     // wp_register_script('a11y-menu', A11y_MENU_URL . '/build/index.js', array('test'), null, true);
-    wp_register_script('a11y-menu', A11y_MENU_URL . '/dist/test.js', array('test'), null, true);
+    wp_register_script('a11y-menu', A11y_MENU_URL . '/dist/a11y-menu.js', array('a11y-nav'), null, true);
 
     // get a value from the options table
     $value = get_option('a11y_menu_options');
@@ -20,8 +20,7 @@ class Menu_Public {
     wp_enqueue_script('test');
     wp_enqueue_script('a11y-menu');
 
-    // wp_enqueue_style('a11y-menu', A11y_MENU_URL . '/build/main.css');
-    wp_enqueue_style('a11y-menu', A11y_MENU_URL . '/public/build/style.css');
+    wp_enqueue_style('a11y-menu', A11y_MENU_URL . '/dist/main.css');
   }
   public function modify_nav_args($args) {
 

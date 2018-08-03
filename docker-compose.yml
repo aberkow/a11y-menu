@@ -1,7 +1,7 @@
 version: "3"
 services:
   web:
-    image: uconn/comm0-ssl:latest
+    image: uconn/php72-official:latest
     environment:
       SITE_ENV: local
       WORDPRESS_DB_HOST: db:3306
@@ -15,13 +15,8 @@ services:
       # mount files/directories necessary for wordpress
       - ./www:/var/www/html
       - ./.entrypoint/server-entrypoint:/entrypoint
-      # the project should be mounted like this...
-      # ./:/var/www/html/content/plugins/{plugin-name}
       - ./:/var/www/html/content/plugins/a11y-menu-plugin
-      # explicitly connect the shared local dev build directory e.g.
-      # - build:/var/www/html/content/plugins/{plugin-name}/build
       - build:/var/www/html/content/plugins/a11y-menu-plugin/build
-      # if the plugin needs access to something in the vendor directory...
       - ./vendor:/var/www/html/content/themes/lobo/vendor
       - ./vendor:/var/www/html/content/plugins/castor/vendor
     depends_on:
@@ -48,7 +43,8 @@ services:
       # anything you want inside that container (except the entrypoint script) should be mounted to that directory.
       - ./package.json:/project/package.json
       - ./gulpfile.js:/project/gulpfile.js
-      - ./webpack.config.js:/project/webpack.config.js
+      - ./dist:/project/dist
+      # - ./webpack.config.js:/project/webpack.config.js
       # mount the source files
       - ./src:/project/src
       # this entrypoint file will override the container's default entrypoint command.

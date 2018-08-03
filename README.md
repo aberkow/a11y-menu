@@ -8,7 +8,61 @@ This project aims to create a re-useable and accessible main navigation module. 
 - Menu functionality should take into account different modes of user input (e.g. mouse, keyboard)
 
 ## Usage
-### Defaults
+### Installing via Composer.
+This package can be installed as a dependency via [Composer](https://getcomposer.org/). To check if you have Composer installed, run the `composer` command in the terminal. If Composer's not available, install it. Then within your project run `composer require ucomm/a11y-menu`.
+### Creating a WordPress menu in a theme.
+In order to use the custom Walker within your theme, you'll need to do the following
+```php
+// functions.php
+require_once('vendor/autoload.php');
+
+// register a menu location. 
+// this is optional if you're using a child theme with pre-registered locations
+function register_nav() {
+  register_nav_menu('menu-name', __('Menu Name', 'text-domain'));
+}
+add_action('after_setup_theme', 'register_nav');
+
+
+function load_scripts() {
+  // register/enqueue the JS Navigation script
+  wp_register_script('a11y-menu', get_stylesheet_directory_uri() . '/vendor/ucomm/a11y-menu/dist/Navigation.js', array(), false, true);
+
+  wp_enqueue_script('a11y-menu');
+
+  // the Navigation script is a dependency of the script where you wish to instantiate the class.
+  wp_enqueue_script('theme-script', get_stylesheet_directory_uri() . '/index.js', array('a11y-menu', false, true));
+}
+add_action('wp_enqueue_scripts', 'load_scripts');
+```
+
+```php
+// header.php (or whichever file you want to use for displaying the menu)
+// the theme location is the same as the one declared above
+$args = array(
+  'theme_location' => 'menu-name',
+  'walker' => new A11y\Menu_Walker()
+);
+wp_nav_menu($args);
+```
+
+```js
+/**
+* 
+* the main index.js file or wherever you wish to instantiate the Navigation class.
+* see below for overriding the constructor defaults.
+* NB - this is written in ES6. To use ES5 syntax, convert the arrow function to a regular function like this.
+* () => {} becomes function() {}
+*/
+
+document.addEventListener('DOMContentLoaded', () => {
+  const navigation = new Navigation();
+  navigation.init();
+})
+```
+
+
+### Javascript Defaults
 The constructor comes with the following defaults. These can be overridden as needed
 - `menuId` - the default is `'main-menu'`
 - `fontFamily` - the default is `'Font Awesome 5 Free'`. Note that currently the other supported font families are 
