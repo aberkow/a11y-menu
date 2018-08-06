@@ -17,7 +17,7 @@ class Menu_Walker extends \Walker_Nav_Menu {
     $id = $this->parentItemCount - 1;
 
 
-    $output .= "<ul id='list-$id' class='submenu-list'>";
+    $output .= "<ul id='list-$id' class='am-submenu-list submenu-list'>";
   }
   public function end_lvl(&$output, $depth = 0, $args = array()) {
     $output .= "</ul>";
@@ -36,7 +36,7 @@ class Menu_Walker extends \Walker_Nav_Menu {
     }
     $class_names = join(' ', apply_filters('nav_menu_css_class', array_filter($classes), $item, $args, $depth));
     // a list of class names plus the html class attribute
-    $class_names = $class_names ? " class='no-js " . esc_attr($class_names) . "'" : "";
+    $class_names = $class_names ? " class='no-js am-list-item" . esc_attr($class_names) . "'" : "";
 
     // check that items with children have links
     if (in_array('menu-item-has-children', $classes) && strlen($item->url) > 0) {
@@ -45,21 +45,21 @@ class Menu_Walker extends \Walker_Nav_Menu {
 
     if (!in_array('menu-item-has-children', $classes)) {
       // if there are no children, just output a link with the href and title
-      $output .= "<li $class_names><a href='$item->url'>$item->title</a>";
+      $output .= "<li $class_names><a class='am-link' href='$item->url'>$item->title</a>";
 
     } else {
       // trying to use a data attribute to keep track of the list items with children.
       $output .= "<li data-count='$this->parentItemCount' data-has-children='true' $class_names>";
       if (!$has_top_level_page) {
         // if the thing at the top of the list doesn't go to a top level page, make it into a button.
-        $output .= "<button aria-haspopup='true' aria-expanded='false' aria-owns='list-$this->parentItemCount' class='submenu-toggle'>$item->title";
+        $output .= "<button aria-haspopup='true' aria-expanded='false' aria-owns='list-$this->parentItemCount' class='am-submenu-toggle submenu-toggle'>$item->title";
         // the data-before attribute let's you change the value via js like with an event handler.
-        $output .= "<span class='submenu-icon' aria-hidden='true' data-before='∨'></span></button>";
+        $output .= "<span class='am-submenu-icon submenu-icon' aria-hidden='true' data-before='∨'></span></button>";
       } else {
-        $output .= "<a class='submenu-link' aria-label='$item->title, tab to the next button to expand the sub-menu' href='$item->url'>$item->title";
+        $output .= "<a class='am-submenu-link submenu-link' aria-label='$item->title, tab to the next button to expand the sub-menu' href='$item->url'>$item->title";
         $output .= "</a>
-        <button class='submenu-button submenu-toggle' aria-haspopup='true' aria-expanded='false' aria-label='show submenu' aria-owns='list-$this->parentItemCount'>
-        <span aria-hidden='true' class='submenu-icon' data-before='∨'></span>
+        <button class='am-submenu-button submenu-button submenu-toggle' aria-haspopup='true' aria-expanded='false' aria-label='show submenu' aria-owns='list-$this->parentItemCount'>
+        <span aria-hidden='true' class='am-submenu-icon submenu-icon' data-before='∨'></span>
         </button>";
       }
       // build the list items then increment the count of how many contain children
