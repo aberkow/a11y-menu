@@ -36,7 +36,7 @@
     },
     "autoload": {
         "psr-4": {
-            "A11y\\": "src/classes/"
+            "A11y\\": "src/A11y/"
         }
     },
     "autoload-dev": {
