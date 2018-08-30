@@ -36,7 +36,7 @@ class Menu_Walker extends \Walker_Nav_Menu {
     }
     $class_names = join(' ', apply_filters('nav_menu_css_class', array_filter($classes), $item, $args, $depth));
     // a list of class names plus the html class attribute
-    $class_names = $class_names ? " class='no-js am-list-item" . esc_attr($class_names) . "'" : "";
+    $class_names = $class_names ? " class='no-js am-list-item " . esc_attr($class_names) . "'" : "";
 
     // check that items with children have links
     if (in_array('menu-item-has-children', $classes) && strlen($item->url) > 0) {
