@@ -23,6 +23,12 @@ class Menu_Walker extends \Walker_Nav_Menu {
     $output .= "</ul>";
   }
   public function start_el(&$output, $item, $depth = 0, $args = array(), $id = 0) {
+
+    // prevent errors from being thrown if a menu hasn't been set yet.
+    if (!$item->db_id) {
+      return;
+    }
+
     $classes = null;
     
     // this function handles each item in the list
