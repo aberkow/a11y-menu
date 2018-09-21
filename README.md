@@ -39,8 +39,6 @@ add_action('wp_enqueue_scripts', 'load_scripts');
 ```
 
 ```php
-// header.php (or whichever file you want to use for displaying the menu)
-// the theme location is the same as the one declared above
 /**
  * header.php (or whichever file you want to use for displaying the menu)
  * container -> this should be set to 'nav' to make sure the CSS works.
