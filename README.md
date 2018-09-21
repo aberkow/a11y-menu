@@ -25,6 +25,8 @@ add_action('after_setup_theme', 'register_nav');
 
 
 function load_scripts() {
+  // enqueue the base nav styles
+  wp_enqueue_style('a11y-menu', get_stylesheet_directory_uri() . '/vendor/ucomm/a11y-menu/dist/main.css');
   // register/enqueue the JS Navigation script
   wp_register_script('a11y-menu', get_stylesheet_directory_uri() . '/vendor/ucomm/a11y-menu/dist/Navigation.js', array(), false, true);
 
@@ -39,7 +41,18 @@ add_action('wp_enqueue_scripts', 'load_scripts');
 ```php
 // header.php (or whichever file you want to use for displaying the menu)
 // the theme location is the same as the one declared above
+/**
+ * header.php (or whichever file you want to use for displaying the menu)
+ * container -> this should be set to 'nav' to make sure the CSS works.
+ * items_wrap -> ensures that you can use a custom ID for the <ul> element
+ * menu_id -> 'main-menu' is the default ID used by the Navigation JS class.
+ *  However this can be overridden if you like
+ * walker -> the instance of the walker class
+ */
 $args = array(
+  'container' => 'nav',
+  'items_wrap' => '<ul id="%1$s" class="nav navbar-nav %2$s">%3$s</ul>',
+  'menu_id' => 'main-menu',
   'theme_location' => 'menu-name',
   'walker' => new A11y\Menu_Walker()
 );
