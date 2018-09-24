@@ -1,136 +1,160 @@
 // import .scss files here.
 %submenu-icon {
-  background: transparent;
-  border: transparent;
-  color: black;
-  padding: 0.1em 0.2em;
+    background: transparent;
+    border: transparent;
+    color: black;
+    padding: 0.1em 0.2em;
 }
 
 %submenu-open {
-  height: auto;
-  left: 0%;
-  opacity: 1;
-  padding: 0;
-  transition-delay: 0s, 0s, 0.25s;
-  visibility: visible;
-  z-index: 8;
+    height: auto;
+    left: 0%;
+    opacity: 1;
+    padding: 0;
+    visibility: visible;
+    z-index: 8;
 }
 
 // styles that apply more generally to the menu
 nav {
-  // select the first ul
-  > ul {
-    display: flex;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-    li {
-      display: block;
-      position: relative;
-      // needed to override bootstrap's insistence on making these block elements.
-      .submenu-link {
-        display: inline;
-      }
-      ul {
-        height: 0;
-        opacity: 0;
-        position: absolute;
-        top: 100%;
-        transition: all ease-in 0.5s;
-        visibility: hidden;
-        li {
-          display: block;
-          margin: 0.5em 0;
-          a {
-            display: inline-block;
-            height: 100%;
-            padding: 0.5em 0;
-          }
-        }
-      }
-      // open the menu when the class is applied via js
-      ul.submenu-list-open {
-        @extend %submenu-open;
-        ul.submenu-list-open {
-          @extend %submenu-open;
-          padding: 0 2em;
-          position: relative;
-        }
-      }
-      // when you hover/focus on the li, show the child ul
-      &:hover,
-      &:focus {
-        > ul {
-          @extend %submenu-open;
-          ul {
-            padding: 0 2em;
-            position: relative;
-          }
-        }
-        // change the direction of the caret
-        > button {
-          span:before {
-            content: '∧';
-            font-weight: bold;
-          }
-        }
-      }
-
-      span {
-        @extend %submenu-icon;
-        margin-left: 0.5em;
-        &:before {
-          // remove the dependency on font awesome
-          content: attr(data-before);
-        }
-      }
-
-      button {
-        background-color: transparent;
-        border: transparent;
-        color: black;
-        font-size: 0.95em;
-        padding: 0 15px;
-        &:hover,
-        &:focus {
-          color: inherit;
-        }
-      }
-      a + button {
-        background: transparent;
-        margin: 0;
-        padding: 0;
-        border: 0;
-        // give a visual cue to carets that are next to links
-        &:hover,
-        &:focus {
-          > span {
-            background-color: #000000;
-            color: #ffffff;
-          }
-        }
-      }
+    // select the first ul
+    >ul {
+        display: flex;
     }
-  }
+    ul.hover-menu {
+        li {
+            &:hover {
+                >ul {
+                    @extend %submenu-open;
+                    ul {
+                        padding: 0 2em;
+                        position: relative;
+                    }
+                }
+                // change the direction of the caret
+                >button {
+                    span:before {
+                        content: '∧';
+                        font-weight: bold;
+                    }
+                }
+            }
+            a+button {
+                // give a visual cue to carets that are next to links
+                &:hover {
+                    >span {
+                        background-color: #000000;
+                        color: #ffffff;
+                    }
+                }
+            }
+        }
+    }
+    ul {
+        list-style-type: none;
+        padding: 0;
+        li {
+            display: block;
+            position: relative;
+            // needed to override bootstrap's insistence on making these block elements.
+            .submenu-link {
+                display: inline;
+            }
+            ul {
+                height: 0;
+                opacity: 0;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                visibility: hidden;
+                background-color: #fff;
+                li {
+                    display: block;
+                    margin: 0.5em 0;
+                    a {
+                        display: inline-block;
+                        height: 100%;
+                        padding: 0.5em 0;
+                    }
+                }
+            }
+            // open the menu when the class is applied via js
+            ul.submenu-list-open {
+                @extend %submenu-open;
+                ul.submenu-list-open {
+                    @extend %submenu-open;
+                    padding: 0 2em;
+                    position: relative;
+                }
+            }
+            // when you hover/focus on the li, show the child ul
+            &:focus {
+                >ul {
+                    @extend %submenu-open;
+                    ul {
+                        padding: 0 2em;
+                        position: relative;
+                    }
+                }
+                // change the direction of the caret
+                >button {
+                    span:before {
+                        content: '∧';
+                        font-weight: bold;
+                    }
+                }
+            }
+            span {
+                @extend %submenu-icon;
+                margin-left: 0.5em;
+                &:before {
+                    // remove the dependency on font awesome
+                    content: attr(data-before);
+                }
+            }
+            button {
+                background-color: transparent;
+                border: transparent;
+                color: black;
+                font-size: 0.95em;
+                padding: 0 15px;
+                &:hover,
+                &:focus {
+                    color: inherit;
+                }
+            }
+            a+button {
+                background: transparent;
+                margin: 0;
+                padding: 0;
+                border: 0;
+                // give a visual cue to carets that are next to links
+                &:focus {
+                    >span {
+                        background-color: #000000;
+                        color: #ffffff;
+                    }
+                }
+            }
+        }
+    }
 }
 
 nav .no-js {
-  ul {
-    height: 0;
-    opacity: 0;
-    transition: all ease-out 0.5s;
-    visibility: hidden;
-  }
-  &:focus-within {
-    > ul {
-      height: 100%;
-      opacity: 1;
-      visibility: visible;
+    ul {
+        height: 0;
+        opacity: 0;
+        visibility: hidden;
     }
-    span:before {
-      content: '∧';
-      font-weight: bold;
+    &:focus-within {
+        >ul {
+            height: 100%;
+            opacity: 1;
+            visibility: visible;
+        }
+        span:before {
+            content: '∧';
+            font-weight: bold;
+        }
     }
-  }
 }
