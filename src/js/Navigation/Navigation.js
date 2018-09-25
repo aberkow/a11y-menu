@@ -13,18 +13,6 @@ class Navigation {
         this.menu = null;
         this.menuId = menuId;
     }
-    chevronSwitcher(element) {
-        if (element.localName !== "button") return;
-        const icon = element.children[0];
-
-        if (element.getAttribute('aria-expanded') == 'true') {
-            icon.setAttribute('data-before', this.chevronDown);
-            element.setAttribute('aria-expanded', 'false');
-        } else {
-            icon.setAttribute('data-before', this.chevronUp);
-            element.setAttribute('aria-expanded', 'true');
-        }
-    }
     clickHandler(evt) {
         let target = evt.target;
         if (target.localName == "span") {
@@ -59,8 +47,7 @@ class Navigation {
 
             if (expandedElementCollection.length) {
                 // expandedElementCollection[0].setAttribute('aria-expanded', 'false');
-                openElementCollection[0].classList.remove('submenu-list-open');
-                this.chevronSwitcher(expandedElementCollection[0]);
+                // openElementCollection[0].classList.remove('submenu-list-open');
             }
         }
     }
@@ -71,7 +58,7 @@ class Navigation {
         const openSubmenu = parentNode.getElementsByClassName('submenu-list-open')[0];
 
         if (keyCode === 27 && openSubmenu) {
-            this.chevronSwitcher(expandedElementCollection);
+            expandedElementCollection.setAttribute('aria-expanded', 'false');
             openSubmenu.classList.remove('submenu-list-open');
         }
 
@@ -167,3 +154,5 @@ class Navigation {
         this.setSubmenuIcon();
     }
 }
+
+module.exports = Navigation;
