@@ -61,7 +61,7 @@ const displayMenu = (ul, json) => {
             li.setAttribute('data-has-children', 'true');
             // create a <ul> to hold the submenu
             const subMenu = document.createElement('ul');
-            ul.classList.add('submenu-list', 'click-menu');
+            ul.classList.add('submenu-list');
             // this is super temporary. just to get things rolling...
             subMenu.id = `submenu-${menuItem.slug}`;
             // create the submenu structure by recursively calling this same function

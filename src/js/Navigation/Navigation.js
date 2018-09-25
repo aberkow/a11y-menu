@@ -3,7 +3,8 @@ class Navigation {
         menuId = 'main-menu',
         fontFamily = 'Font Awesome 5 Free',
         chevronDown = '\\f078',
-        chevronUp = '\\f077'
+        chevronUp = '\\f077',
+        click = false
     } = {}) {
         this.chevronDown = chevronDown;
         this.chevronUp = chevronUp;
@@ -12,18 +13,7 @@ class Navigation {
         this.hasNestedSubmenu = false;
         this.menu = null;
         this.menuId = menuId;
-    }
-    chevronSwitcher(element) {
-        if (element.localName !== "button") return;
-        const icon = element.children[0];
-
-        if (element.getAttribute('aria-expanded') == 'true') {
-            icon.setAttribute('data-before', this.chevronDown);
-            element.setAttribute('aria-expanded', 'false');
-        } else {
-            icon.setAttribute('data-before', this.chevronUp);
-            element.setAttribute('aria-expanded', 'true');
-        }
+        this.click = click;
     }
     clickHandler(evt) {
         let target = evt.target;
@@ -59,8 +49,7 @@ class Navigation {
 
             if (expandedElementCollection.length) {
                 // expandedElementCollection[0].setAttribute('aria-expanded', 'false');
-                openElementCollection[0].classList.remove('submenu-list-open');
-                this.chevronSwitcher(expandedElementCollection[0]);
+                // openElementCollection[0].classList.remove('submenu-list-open');
             }
         }
     }
@@ -71,7 +60,7 @@ class Navigation {
         const openSubmenu = parentNode.getElementsByClassName('submenu-list-open')[0];
 
         if (keyCode === 27 && openSubmenu) {
-            this.chevronSwitcher(expandedElementCollection);
+            expandedElementCollection.setAttribute('aria-expanded', 'false');
             openSubmenu.classList.remove('submenu-list-open');
         }
 
@@ -112,7 +101,13 @@ class Navigation {
             element.classList.remove('no-js');
         });
         // define a list of possible event listeners
-        const listeners = ['click', 'focusin', 'keydown', 'mouseout', 'mouseover'];
+        let listeners = ['focusin', 'keydown', 'mouseover'];
+        console.log(this.click);
+        if (this.click) {
+            listeners.push('click');
+        } else {
+            listeners.push('mouseout');
+        }
         // attach them to the menu.
         for (let i = 0; i < listeners.length; i++) {
             this.menu.addEventListener(listeners[i], (evt) => {
@@ -139,7 +134,7 @@ class Navigation {
         font-weight: bold;
       }
       nav ul.click-menu li > button[aria-expanded="true"] span::before,
-      nav ul.hover-menu li:hover > button span::before,
+      nav ul:not(.click-menu) li:hover > button span::before,
       nav ul li:focus > button span::before { 
         content: '${this.chevronUp}';
         font-family: '${fontFamily}'; 
@@ -167,3 +162,5 @@ class Navigation {
         this.setSubmenuIcon();
     }
 }
+
+module.exports = Navigation;
