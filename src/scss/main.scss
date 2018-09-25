@@ -21,7 +21,7 @@ nav {
     >ul {
         display: flex;
     }
-    ul.hover-menu {
+    ul:not(.click-menu) {
         li {
             &:hover {
                 >ul {

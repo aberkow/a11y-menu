@@ -3,7 +3,8 @@ class Navigation {
         menuId = 'main-menu',
         fontFamily = 'Font Awesome 5 Free',
         chevronDown = '\\f078',
-        chevronUp = '\\f077'
+        chevronUp = '\\f077',
+        click = false
     } = {}) {
         this.chevronDown = chevronDown;
         this.chevronUp = chevronUp;
@@ -12,6 +13,7 @@ class Navigation {
         this.hasNestedSubmenu = false;
         this.menu = null;
         this.menuId = menuId;
+        this.click = click;
     }
     clickHandler(evt) {
         let target = evt.target;
@@ -99,7 +101,13 @@ class Navigation {
             element.classList.remove('no-js');
         });
         // define a list of possible event listeners
-        const listeners = ['click', 'focusin', 'keydown', 'mouseout', 'mouseover'];
+        let listeners = ['focusin', 'keydown', 'mouseover'];
+        console.log(this.click);
+        if (this.click) {
+            listeners.push('click');
+        } else {
+            listeners.push('mouseout');
+        }
         // attach them to the menu.
         for (let i = 0; i < listeners.length; i++) {
             this.menu.addEventListener(listeners[i], (evt) => {
@@ -126,7 +134,7 @@ class Navigation {
         font-weight: bold;
       }
       nav ul.click-menu li > button[aria-expanded="true"] span::before,
-      nav ul.hover-menu li:hover > button span::before,
+      nav ul:not(.click-menu) li:hover > button span::before,
       nav ul li:focus > button span::before { 
         content: '${this.chevronUp}';
         font-family: '${fontFamily}'; 

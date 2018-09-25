@@ -6,9 +6,8 @@ class Menu_Walker extends \Walker_Nav_Menu {
   private $parentItemCount;
   private $click;
 
-  public function __construct($click = false) {
+  public function __construct() {
     $this->parentItemCount = 0;
-    $this->click = $click;
   }
   public function start_lvl(&$output, $depth = 0, $args = array()) {
     // the levels are only the interior <ul> tags. they don't include the exterior wrapping tag.
@@ -20,17 +19,6 @@ class Menu_Walker extends \Walker_Nav_Menu {
 
     $id = $this->parentItemCount - 1;
     $classlist = array('am-submenu-list', 'submenu-list');
-    if ( $this->click ) {
-<<<<<<< HEAD
-      array_push( $classlist, 'click-menu' );
-    } else {
-      array_push( $classlist, 'hover-menu' );
-=======
-      array_push($classlist, 'click-menu');
-    } else {
-      array_push($classlist, 'hover-menu');
->>>>>>> 52fed06d9cdf12f372d4ef42fd9ae192556a30a1
-    }
     $classlist_string = implode(" ", $classlist);
 
 
