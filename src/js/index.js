@@ -1,5 +1,4 @@
 import { displayMenu } from './utils/displayMenu';
-import Navigation from './Navigation/Navigation';
 
 const testData = require('../mock-data/test-data.json');
 const mainMenu = document.getElementById('main-menu');
