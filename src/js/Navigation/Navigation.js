@@ -162,5 +162,3 @@ class Navigation {
         this.setSubmenuIcon();
     }
 }
-
-module.exports = Navigation;

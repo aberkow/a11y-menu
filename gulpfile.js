@@ -67,7 +67,7 @@ gulp.task('sass:other', () => {
       browsers: ['last 2 versions']
     }))
     .pipe(plugins.sourcemaps.write('.'))
-    .pipe(gulp.dest('public/build', {
+    .pipe(gulp.dest('public/css', {
       overwrite: true
     }))
 });
