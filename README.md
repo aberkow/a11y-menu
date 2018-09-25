@@ -145,3 +145,12 @@ The `sub` and `classes` keys are optional.
 Base styles for the menu.
 ### webpack.config.js
 Handles webpack and asset management.
+
+## TODO
+
+- better handling of js transpilation and asset management. this is a mess... for now, to create a production build, use
+  ```
+  export BABEL_ENV=production
+  ./node_modules/.bin/babel ./src/js/Navigation --out-dir dist --presets env --source-maps
+  ```
+- separate out the main WordPress walker and dependencies from any other implementation. Ideas for a plugin should be handled in a different package.
