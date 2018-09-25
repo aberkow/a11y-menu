@@ -106,8 +106,14 @@ This will use the `chevron-circle-down` and `chevron-circle-up` FontAwesome icon
 
 ## Development
 To begin developing
+
 - `yarn install`
-- `npm run develop`
+- `gulp watch`
+
+This will begin watching the js and scss files and place them in the appropriate directories. `Navigation.js` and `main.scss` will be transpiled and sent to `/dist`. Serving `/public/index.html` will read those files from the `/dist` directory.
+
+## Production
+To create a new production version run `gulp` from the root.
 
 ## Structure
 
@@ -143,15 +149,11 @@ json files to create menus. The structure of items in the test file needs to be
 The `sub` and `classes` keys are optional.
 #### /scss
 Base styles for the menu.
+### gulp.js
+Watches and builds js/scss files as appropriate.
 ### webpack.config.js
-Handles webpack and asset management.
+Handles bundling for local testing.
 
 ## TODO
 
-- better handling of js/sass transpilation and asset management. this is a mess... for now, to create a production build, use
-  ```
-  export BABEL_ENV=production
-  ./node_modules/.bin/babel ./src/js/Navigation --out-dir dist --presets env --source-maps
-  sass -t compressed ./src/scss/main.scss ./dist/main.css
-  ```
 - separate out the main WordPress walker and dependencies from any other implementation. Ideas for a plugin should be handled in a different package.
