@@ -21,9 +21,15 @@ class Menu_Walker extends \Walker_Nav_Menu {
     $id = $this->parentItemCount - 1;
     $classlist = array('am-submenu-list', 'submenu-list');
     if ( $this->click ) {
+<<<<<<< HEAD
       array_push( $classlist, 'click-menu' );
     } else {
       array_push( $classlist, 'hover-menu' );
+=======
+      array_push($classlist, 'click-menu');
+    } else {
+      array_push($classlist, 'hover-menu');
+>>>>>>> 52fed06d9cdf12f372d4ef42fd9ae192556a30a1
     }
     $classlist_string = implode(" ", $classlist);
 
