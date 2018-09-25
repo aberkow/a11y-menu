@@ -148,9 +148,10 @@ Handles webpack and asset management.
 
 ## TODO
 
-- better handling of js transpilation and asset management. this is a mess... for now, to create a production build, use
+- better handling of js/sass transpilation and asset management. this is a mess... for now, to create a production build, use
   ```
   export BABEL_ENV=production
   ./node_modules/.bin/babel ./src/js/Navigation --out-dir dist --presets env --source-maps
+  sass -t compressed ./src/scss/main.scss ./dist/main.css
   ```
 - separate out the main WordPress walker and dependencies from any other implementation. Ideas for a plugin should be handled in a different package.
