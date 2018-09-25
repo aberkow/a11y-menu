@@ -16,7 +16,14 @@ class Navigation {
     chevronSwitcher(element) {
         if (element.localName !== "button") return;
         const icon = element.children[0];
-        element.getAttribute('aria-expanded') == 'true' ? icon.setAttribute('data-before', this.chevronUp) : icon.setAttribute('data-before', this.chevronDown);
+
+        if (element.getAttribute('aria-expanded') == 'true') {
+            icon.setAttribute('data-before', this.chevronDown);
+            element.setAttribute('aria-expanded', 'false');
+        } else {
+            icon.setAttribute('data-before', this.chevronUp);
+            element.setAttribute('aria-expanded', 'true');
+        }
     }
     clickHandler(evt) {
         let target = evt.target;
@@ -39,17 +46,16 @@ class Navigation {
         submenuList.classList.contains('submenu-list-open') ? null : target.setAttribute('aria-expanded', 'false');
     }
     focusInHandler(evt) {
-        const { target, relatedTarget } = evt;
-        const { parentNode, offsetParent } = target;
-        const parentUL = offsetParent.parentNode;
-        console.log(parentUL);
+        const { target } = evt;
+        const { offsetParent: { parentNode } } = target;
+
         // if the parentUL isn't the menu and it contains the target return
-        if (parentUL !== this.menu && parentUL.contains(target)) {
+        if (parentNode !== this.menu && parentNode.contains(target)) {
             return
         } else {
             // close the submenu when you leave
-            const expandedElementCollection = parentUL.querySelectorAll('[aria-expanded="true"]');
-            const openElementCollection = parentUL.getElementsByClassName('submenu-list-open');
+            const expandedElementCollection = parentNode.querySelectorAll('[aria-expanded="true"]');
+            const openElementCollection = parentNode.getElementsByClassName('submenu-list-open');
 
             if (expandedElementCollection.length) {
                 // expandedElementCollection[0].setAttribute('aria-expanded', 'false');
@@ -58,6 +64,18 @@ class Navigation {
             }
         }
     }
+    keyDownHandler(evt) {
+        const { keyCode, target } = evt;
+        const { offsetParent: { parentNode } } = target;
+        const expandedElementCollection = parentNode.querySelectorAll('[aria-expanded="true"]')[0];
+        const openSubmenu = parentNode.getElementsByClassName('submenu-list-open')[0];
+
+        if (keyCode === 27 && openSubmenu) {
+            this.chevronSwitcher(expandedElementCollection);
+            openSubmenu.classList.remove('submenu-list-open');
+        }
+
+    }
     hoverHandler(evt) {
         const { type, target } = evt;
         if (type === 'mouseout' && target.getAttribute('aria-haspopup') === "true") {
@@ -65,11 +83,6 @@ class Navigation {
         } else if (type === 'mouseover' && target.getAttribute('aria-haspopup') === "false") {
             target.setAttribute('aria-expanded', 'true');
         }
-
-        // if you hover and the htmlcollection length is greater than 0
-        // if (target.children.length > 0) {
-        //     this.chevronSwitcher(target);
-        // }
     }
     eventDispatcher(evt) {
         // dispatch event listeners to the correct functions.
@@ -79,6 +92,9 @@ class Navigation {
                 break;
             case 'focusin':
                 this.focusInHandler(evt);
+                break;
+            case 'keydown':
+                this.keyDownHandler(evt);
                 break;
             case 'mouseover':
             case 'mouseout':
@@ -96,7 +112,7 @@ class Navigation {
             element.classList.remove('no-js');
         });
         // define a list of possible event listeners
-        const listeners = ['click', 'focusin', 'mouseout', 'mouseover'];
+        const listeners = ['click', 'focusin', 'keydown', 'mouseout', 'mouseover'];
         // attach them to the menu.
         for (let i = 0; i < listeners.length; i++) {
             this.menu.addEventListener(listeners[i], (evt) => {
@@ -151,6 +167,3 @@ class Navigation {
         this.setSubmenuIcon();
     }
 }
-/* start-remove */
-module.exports = Navigation;
-/* end-remove */

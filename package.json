@@ -25,6 +25,7 @@
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
+    "babel-preset-minify": "^0.5.0",
     "browser-sync": "^2.24.4",
     "css-loader": "^0.28.10",
     "del": "^3.0.0",

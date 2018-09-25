@@ -1,16 +1,32 @@
 {
   "presets": [
     [
-      "env", {
+      "env",
+      {
         "targets": {
-          "browsers": ["last 3 versions"]
+          "browsers": [
+            "last 3 versions"
+          ]
         }
       }
     ]
   ],
   "env": {
     "production": {
-      "presets": ["minify"]
+      "presets": [
+        "minify",
+        [
+          "env",
+          {
+            "targets": {
+              "browsers": [
+                "last 3 versions"
+              ]
+            }
+          }
+        ]
+      ],
+      "comments": false
     }
   }
 }
