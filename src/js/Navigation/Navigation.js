@@ -16,11 +16,27 @@ class Navigation {
         this.click = click;
     }
     clickHandler(evt) {
-        let target = evt.target;
+        let { target } = evt;
+        let submenuList = null;
         if (target.localName == "span") {
             target = target.parentElement;
         }
-        const submenuList = target.nextSibling;
+        // if the target is the body
+        // if (target.nextSibling === null) {
+        //     // target = document;
+        //     console.log(document);
+        // }
+        
+        if (target.nextSibling === null || target.nextSibling.localName !== 'ul') {
+            console.log('not a ul')
+            submenuList = document.getElementsByClassName('submenu-list-open')
+        } else {
+            submenuList = target.nextSibling;
+        }
+
+
+
+        console.log(target.nextSibling)
         // find out if there is a nested submenu inside a top level item
         submenuList.getElementsByTagName('ul').length ? this.hasNestedSubmenu = true : this.hasNestedSubmenu = false;
         // if something weird happens, don't allow any further event handling.
@@ -55,10 +71,12 @@ class Navigation {
     }
     keyDownHandler(evt) {
         const { keyCode, target } = evt;
-        const { offsetParent: { parentNode } } = target;
-        const expandedElementCollection = parentNode.querySelectorAll('[aria-expanded="true"]')[0];
-        const openSubmenu = parentNode.getElementsByClassName('submenu-list-open')[0];
-
+        // const { offsetParent: { parentNode } } = target;
+        // const expandedElementCollection = parentNode.querySelectorAll('[aria-expanded="true"]')[0];
+        // const openSubmenu = parentNode.getElementsByClassName('submenu-list-open')[0];
+        const expandedElementCollection = document.querySelectorAll('[aria-expanded="true"]')[0];
+        const openSubmenu = document.getElementsByClassName('submenu-list-open')[0];
+        console.log(openSubmenu)
         if (keyCode === 27 && openSubmenu) {
             expandedElementCollection.setAttribute('aria-expanded', 'false');
             openSubmenu.classList.remove('submenu-list-open');
@@ -102,15 +120,15 @@ class Navigation {
         });
         // define a list of possible event listeners
         let listeners = ['focusin', 'keydown', 'mouseover'];
-        console.log(this.click);
+
         if (this.click) {
             listeners.push('click');
         } else {
             listeners.push('mouseout');
         }
-        // attach them to the menu.
+        // attach them to the document.
         for (let i = 0; i < listeners.length; i++) {
-            this.menu.addEventListener(listeners[i], (evt) => {
+            document.addEventListener(listeners[i], (evt) => {
                 // dispatch the events to the class methods.
                 this.eventDispatcher(evt);
             });

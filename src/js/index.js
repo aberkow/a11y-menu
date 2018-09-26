@@ -3,7 +3,7 @@ import { displayMenu } from './utils/displayMenu';
 const testData = require('../mock-data/test-data.json');
 const mainMenu = document.getElementById('main-menu');
 
-const navigation = new Navigation({ click: false });
+const navigation = new Navigation({ click: true });
 
 displayMenu(mainMenu, testData.menu);
 
