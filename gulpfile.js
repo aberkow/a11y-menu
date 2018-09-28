@@ -16,6 +16,10 @@ gulp.task('js:navigation', () => {
       errorHandler: onError
     }))
     .pipe(plugins.sourcemaps.init())
+      .pipe(plugins.stripCode({
+        start_comment: 'strip-code',
+        end_comment: 'end-strip-code'
+      }))
       .pipe(plugins.babel())
       .pipe(plugins.uglifyEs.default())
     .pipe(plugins.sourcemaps.write('.'))
