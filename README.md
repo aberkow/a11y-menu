@@ -8,6 +8,68 @@ This project aims to create a re-useable and accessible main navigation module. 
 - Menu functionality should take into account different modes of user input (e.g. mouse, keyboard)
 
 ## Usage
+### Installing via NPM
+This package can be installed via npm using `npm install a11y-menu`. This will provide access to the JS and sass files, but _not_ the WordPress menu walker. The intention is to give javascript developers access to the JS menu walker, navigation script, and styles in a way that can be used with webpack or other bundlers.
+
+### Creating a menu via JS
+There are three files that can be used together to create an accessible menu.
+
+- displayMenu.js
+- Navigation.js
+- main.scss
+
+`displayMenu.js` takes a json file (see /mock-data below for the format). It can be imported and used as follows
+```js
+import { displayMenu } from 'a11y-menu';
+// testData is an arbitrary json file.
+const testData = require('./test-data.json');
+const mainMenu = document.getElementById('main-menu');
+
+displayMenu(mainMenu, testData.menu); 
+```
+This can be combined with the `Navigation` class to create a working menu with submenus that display on either click or hover events.
+
+```js
+// clickable menu
+import { displayMenu } from 'a11y-menu';
+import Navigation from 'a11y-menu';
+// testData is an arbitrary json file.
+const testData = require('./test-data.json');
+const mainMenu = document.getElementById('main-menu');
+
+mainMenu.classList.add('click-menu');
+
+displayMenu(mainMenu, testData.menu);
+
+const navigation = new Navigation({ click: true });
+
+document.addEventListener('DOMContentLoaded', () => {
+    navigation.init();
+});
+
+```
+```js
+// hoverable menu
+import { displayMenu } from 'a11y-menu';
+import Navigation from 'a11y-menu';
+// testData is an arbitrary json file.
+const testData = require('./test-data.json');
+const mainMenu = document.getElementById('main-menu');
+
+mainMenu.classList.remove('click-menu');
+
+displayMenu(mainMenu, testData.menu);
+
+const navigation = new Navigation();
+
+document.addEventListener('DOMContentLoaded', () => {
+    navigation.init();
+});
+
+```
+
+`main.scss` can be required using webpack or similar.
+
 ### Installing via Composer.
 This package can be installed as a dependency via [Composer](https://getcomposer.org/). To check if you have Composer installed, run the `composer` command in the terminal. If Composer's not available, install it. Then within your project run `composer require ucomm/a11y-menu`.
 ### Creating a WordPress menu in a theme.

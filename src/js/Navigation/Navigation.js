@@ -180,3 +180,7 @@ class Navigation {
         this.setSubmenuIcon();
     }
 }
+
+/* strip-code */
+module.exports = Navigation;
+/* end-strip-code */

@@ -46,5 +46,11 @@
     "webpack": "^4.1.1",
     "webpack-cli": "^2.0.12",
     "webpack-stream": "^4.0.3"
-  }
+  },
+  "files": [
+    "src/js/Navigation/",
+    "src/js/utils/",
+    "src/mock-data/",
+    "src/scss/"
+  ]
 }
