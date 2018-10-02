@@ -80,7 +80,7 @@ class Menu_Walker extends \Walker_Nav_Menu {
   public function end_el(&$output, $item, $depth = 0, $args = array()) {
     $output .= "</li>";
   }
-  static public function display_menu($args) {
+  static public function display_menu($args = array()) {
     // a wrapper around wp_nav_menu
     // all arguments should have the same values as the wp_nav_menu function args.
     // extra arguments will be merged.
