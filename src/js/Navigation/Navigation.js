@@ -46,19 +46,24 @@ class Navigation {
         const { target } = evt;
         const { offsetParent: { parentNode } } = target;
 
-        // if the parentUL isn't the menu and it contains the target return
-        if (parentNode !== this.menu && parentNode.contains(target)) {
-            return
+        let expandedElementCollection = this.menu.querySelectorAll('[aria-expanded="true"]');
+        let openElementCollection = this.menu.getElementsByClassName('submenu-list-open')
+
+        if (!this.menu.contains(target) && expandedElementCollection.length) {
+            // if the menu doesn't contain the target, close all the submenus.
+            expandedElementCollection[0].setAttribute('aria-expanded', 'false');
+            openElementCollection[0].classList.remove('submenu-list-open')
         } else {
             // close the submenu when you leave by checking if focus has returned to the parentNode
-            const expandedElementCollection = parentNode.querySelectorAll('[aria-expanded="true"]');
-            const openElementCollection = parentNode.getElementsByClassName('submenu-list-open');
+            expandedElementCollection = parentNode.querySelectorAll('[aria-expanded="true"]');
+            openElementCollection = parentNode.getElementsByClassName('submenu-list-open');
 
             if ((parentNode.id === this.menuId) && expandedElementCollection.length) {
                 expandedElementCollection[0].setAttribute('aria-expanded', 'false');
                 openElementCollection[0].classList.remove('submenu-list-open');
             }
         }
+        return;
     }
     keyDownHandler(evt) {
         const { keyCode } = evt;
