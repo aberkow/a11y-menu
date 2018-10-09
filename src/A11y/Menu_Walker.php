@@ -50,7 +50,8 @@ class Menu_Walker extends \Walker_Nav_Menu {
     $class_names = $class_names ? " class='no-js am-list-item " . esc_attr($class_names) . "'" : "";
 
     // check that items with children have links
-    if (in_array('menu-item-has-children', $classes) && strlen($item->url) > 0) {
+    // make sure that links with http(s)://# are rendered as buttons.
+    if (in_array('menu-item-has-children', $classes) && strlen($item->url) > 0 && !preg_match('/^https?:\/\/#/', $item->url)) {
       $has_top_level_page = true;
     }
 
