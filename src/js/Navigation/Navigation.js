@@ -21,22 +21,13 @@ class Navigation {
         if (target.localName == "span") {
             target = target.parentElement;
         }
-        // if the target is the body
-        // if (target.nextSibling === null) {
-        //     // target = document;
-        //     console.log(document);
-        // }
         
         if (target.nextSibling === null || target.nextSibling.localName !== 'ul') {
-            console.log('not a ul')
             submenuList = document.getElementsByClassName('submenu-list-open')
         } else {
             submenuList = target.nextSibling;
         }
 
-
-
-        console.log(target.nextSibling)
         // find out if there is a nested submenu inside a top level item
         submenuList.getElementsByTagName('ul').length ? this.hasNestedSubmenu = true : this.hasNestedSubmenu = false;
         // if something weird happens, don't allow any further event handling.
@@ -55,28 +46,31 @@ class Navigation {
         const { target } = evt;
         const { offsetParent: { parentNode } } = target;
 
-        // if the parentUL isn't the menu and it contains the target return
-        if (parentNode !== this.menu && parentNode.contains(target)) {
-            return
-        } else {
-            // close the submenu when you leave
-            const expandedElementCollection = parentNode.querySelectorAll('[aria-expanded="true"]');
-            const openElementCollection = parentNode.getElementsByClassName('submenu-list-open');
+        let expandedElementCollection = this.menu.querySelectorAll('[aria-expanded="true"]');
+        let openElementCollection = this.menu.getElementsByClassName('submenu-list-open')
 
-            if (expandedElementCollection.length) {
-                // expandedElementCollection[0].setAttribute('aria-expanded', 'false');
-                // openElementCollection[0].classList.remove('submenu-list-open');
+        if (!this.menu.contains(target) && expandedElementCollection.length) {
+            // if the menu doesn't contain the target, close all the submenus.
+            expandedElementCollection[0].setAttribute('aria-expanded', 'false');
+            openElementCollection[0].classList.remove('submenu-list-open')
+        } else {
+            // close the submenu when you leave by checking if focus has returned to the parentNode
+            expandedElementCollection = parentNode.querySelectorAll('[aria-expanded="true"]');
+            openElementCollection = parentNode.getElementsByClassName('submenu-list-open');
+
+            if ((parentNode.id === this.menuId) && expandedElementCollection.length) {
+                expandedElementCollection[0].setAttribute('aria-expanded', 'false');
+                openElementCollection[0].classList.remove('submenu-list-open');
             }
         }
+        return;
     }
     keyDownHandler(evt) {
-        const { keyCode, target } = evt;
-        // const { offsetParent: { parentNode } } = target;
-        // const expandedElementCollection = parentNode.querySelectorAll('[aria-expanded="true"]')[0];
-        // const openSubmenu = parentNode.getElementsByClassName('submenu-list-open')[0];
+        const { keyCode } = evt;
+
         const expandedElementCollection = document.querySelectorAll('[aria-expanded="true"]')[0];
         const openSubmenu = document.getElementsByClassName('submenu-list-open')[0];
-        console.log(openSubmenu)
+
         if (keyCode === 27 && openSubmenu) {
             expandedElementCollection.setAttribute('aria-expanded', 'false');
             openSubmenu.classList.remove('submenu-list-open');
