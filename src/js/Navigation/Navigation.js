@@ -21,22 +21,13 @@ class Navigation {
         if (target.localName == "span") {
             target = target.parentElement;
         }
-        // if the target is the body
-        // if (target.nextSibling === null) {
-        //     // target = document;
-        //     console.log(document);
-        // }
         
         if (target.nextSibling === null || target.nextSibling.localName !== 'ul') {
-            console.log('not a ul')
             submenuList = document.getElementsByClassName('submenu-list-open')
         } else {
             submenuList = target.nextSibling;
         }
 
-
-
-        console.log(target.nextSibling)
         // find out if there is a nested submenu inside a top level item
         submenuList.getElementsByTagName('ul').length ? this.hasNestedSubmenu = true : this.hasNestedSubmenu = false;
         // if something weird happens, don't allow any further event handling.
@@ -59,24 +50,22 @@ class Navigation {
         if (parentNode !== this.menu && parentNode.contains(target)) {
             return
         } else {
-            // close the submenu when you leave
+            // close the submenu when you leave by checking if focus has returned to the parentNode
             const expandedElementCollection = parentNode.querySelectorAll('[aria-expanded="true"]');
             const openElementCollection = parentNode.getElementsByClassName('submenu-list-open');
 
-            if (expandedElementCollection.length) {
-                // expandedElementCollection[0].setAttribute('aria-expanded', 'false');
-                // openElementCollection[0].classList.remove('submenu-list-open');
+            if ((parentNode.id === this.menuId) && expandedElementCollection.length) {
+                expandedElementCollection[0].setAttribute('aria-expanded', 'false');
+                openElementCollection[0].classList.remove('submenu-list-open');
             }
         }
     }
     keyDownHandler(evt) {
-        const { keyCode, target } = evt;
-        // const { offsetParent: { parentNode } } = target;
-        // const expandedElementCollection = parentNode.querySelectorAll('[aria-expanded="true"]')[0];
-        // const openSubmenu = parentNode.getElementsByClassName('submenu-list-open')[0];
+        const { keyCode } = evt;
+
         const expandedElementCollection = document.querySelectorAll('[aria-expanded="true"]')[0];
         const openSubmenu = document.getElementsByClassName('submenu-list-open')[0];
-        console.log(openSubmenu)
+
         if (keyCode === 27 && openSubmenu) {
             expandedElementCollection.setAttribute('aria-expanded', 'false');
             openSubmenu.classList.remove('submenu-list-open');
