@@ -35,7 +35,10 @@ gulp.task('js:other', () => {
       errorHandler: onError
     }))
     .pipe(webpack(require('./webpack.config.js')))
-    .pipe(gulp.dest('public/js'), {
+    // .pipe(gulp.dest('public/js'), {
+    //   overwrite: true
+    // })
+    .pipe(gulp.dest('dist'), {
       overwrite: true
     })
 })

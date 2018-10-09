@@ -8,12 +8,12 @@ const generateMenuItemMarkup = (menuItem) => {
     // set a state for having a submenu and/or link
     let hasSubmenu = false;
     let hasLink = false;
-
+    
     if (menuItem.hasOwnProperty('sub') && menuItem.sub !== null && menuItem.sub.length) {
         hasSubmenu = true;
     }
 
-    if (menuItem.hasOwnProperty('link') && menuItem.link.length) {
+    if (menuItem.hasOwnProperty('link') && menuItem.link.length && menuItem.link !== '#') {
         hasLink = true;
     }
     if (hasLink && hasSubmenu) {
@@ -50,7 +50,6 @@ const displayMenu = (ul, json) => {
 
         li.classList.add(...classes);
 
-
         // check if there are submenu items
         // if there are, create a submenu <ul>
         // then, recursively call this function
@@ -79,7 +78,6 @@ const displayMenu = (ul, json) => {
     menuMap.forEach((item, index) => {
         ul.appendChild(menuMap[index]);
     });
-
     // return the generated menu
     return menuMap;
 }
