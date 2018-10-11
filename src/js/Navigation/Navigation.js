@@ -17,19 +17,41 @@ class Navigation {
     }
     clickHandler(evt) {
         let { target } = evt;
+        console.log(target.localName)
+
+        if (target.localName === 'span') {
+            target = target.parentElement;
+        }
+
+        console.log(document.getElementsByClassName('submenu-list-open'))
+
+
+
+    }
+    clickHandlerOld(evt) {
+        let { target } = evt;
+        console.log(target, 'click target')
         let submenuList = null;
         if (target.localName == "span") {
             target = target.parentElement;
         }
         
+        // if (submenuList !== null || submenuList.getElementsByTagName === 'function') {
+        //     console.log('function')
+        // } else {
+        //     console.log('not a function');
+        // }
+
+
         if (target.nextSibling === null || target.nextSibling.localName !== 'ul') {
             submenuList = document.getElementsByClassName('submenu-list-open')
         } else {
             submenuList = target.nextSibling;
         }
 
+
         // find out if there is a nested submenu inside a top level item
-        submenuList.getElementsByTagName('ul').length ? this.hasNestedSubmenu = true : this.hasNestedSubmenu = false;
+        submenuList.getElementsByTagName('ul').length > 0 ? this.hasNestedSubmenu = true : this.hasNestedSubmenu = false;
         // if something weird happens, don't allow any further event handling.
         if (!target.getAttribute('aria-haspopup')) return;
 
