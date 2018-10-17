@@ -50,8 +50,17 @@ class Navigation {
 
         } else {
 
+
+
             // we're near a submenu by clicking on a button
             submenuList = target.nextSibling;
+
+            // check if there's a nested submenu
+            submenuList.getElementsByTagName('ul').length 
+                ? this.hasNestedSubmenu = true 
+                : this.hasNestedSubmenu = false;
+            console.log(this.hasNestedSubmenu, 'nested')
+
 
             // toggle the submenu display class
             submenuList.classList.toggle('submenu-list-open');
@@ -60,6 +69,10 @@ class Navigation {
             submenuList.classList.contains('submenu-list-open') 
                 ? target.setAttribute('aria-expanded', 'true') 
                 : target.setAttribute('aria-expanded', 'false');
+
+
+
+            
             return;
         }
     }
@@ -138,6 +151,11 @@ class Navigation {
 
         if (this.click) {
             listeners.push('click');
+            
+            const subMenuList = this.menu.querySelectorAll('.submenu-list');
+            
+            subMenuList.forEach(menu => menu.classList.add('click-menu'));
+
         } else {
             listeners.push('mouseout');
         }
