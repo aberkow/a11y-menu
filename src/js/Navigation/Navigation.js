@@ -18,29 +18,56 @@ class Navigation {
     clickHandler(evt) {
         let { target } = evt;
         let submenuList = null;
-        if (target.localName == "span") {
+
+        // people might click on the icon instead of the button.
+        // if so, set the target to the parent (button)
+        if (target.localName === 'span') {
             target = target.parentElement;
         }
-        
+
+        // let's open and close the menu
+
+        // if we're not clicking 'near' a submenu close any open submenus
         if (target.nextSibling === null || target.nextSibling.localName !== 'ul') {
-            submenuList = document.getElementsByClassName('submenu-list-open')
+
+            // if the submenu is open and we click on something else like the body
+            // close it and set aria-expanded to false
+            if (document.getElementsByClassName('submenu-list-open').length > 0) {
+
+                // there's an open submenu somewhere... we need to close it
+
+                // the submenu <ul>
+                submenuList = document.getElementsByClassName('submenu-list-open')[0];
+
+                // remove the class that displays the submenu
+                submenuList.classList.remove('submenu-list-open');
+
+                // set aria-expanded to false to switch the icon
+                submenuList.previousSibling.setAttribute('aria-expanded', 'false')
+            } else {
+                return;
+            }
+
         } else {
+
+            // we're near a submenu by clicking on a button
             submenuList = target.nextSibling;
+
+            // check if there's a nested submenu
+            submenuList.getElementsByTagName('ul').length 
+                ? this.hasNestedSubmenu = true 
+                : this.hasNestedSubmenu = false;
+
+            // toggle the submenu display class
+            submenuList.classList.toggle('submenu-list-open');
+
+            // toggle the aria-expanded attribute
+            submenuList.classList.contains('submenu-list-open') 
+                ? target.setAttribute('aria-expanded', 'true') 
+                : target.setAttribute('aria-expanded', 'false');
+
+            return;
         }
-
-        // find out if there is a nested submenu inside a top level item
-        submenuList.getElementsByTagName('ul').length ? this.hasNestedSubmenu = true : this.hasNestedSubmenu = false;
-        // if something weird happens, don't allow any further event handling.
-        if (!target.getAttribute('aria-haspopup')) return;
-
-        // if we're on a list item that is really just a toggle, 
-        // that is it doesn't have a page that it goes to, prevent the page from reloading.
-        target.classList.contains('submenu-toggle') ? evt.preventDefault() : null;
-
-        submenuList.classList.toggle('submenu-list-open');
-        target.setAttribute('aria-expanded', 'true');
-
-        submenuList.classList.contains('submenu-list-open') ? null : target.setAttribute('aria-expanded', 'false');
     }
     focusInHandler(evt) {
         const { target } = evt;
@@ -117,6 +144,11 @@ class Navigation {
 
         if (this.click) {
             listeners.push('click');
+            
+            const subMenuList = this.menu.querySelectorAll('.submenu-list');
+            
+            subMenuList.forEach(menu => menu.classList.add('click-menu'));
+
         } else {
             listeners.push('mouseout');
         }
