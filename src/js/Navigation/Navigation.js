@@ -18,12 +18,21 @@ class Navigation {
     clickHandler(evt) {
         let { target } = evt;
         let submenuList = null;
-
+        let activeElement = null;
         // people might click on the icon instead of the button.
         // if so, set the target to the parent (button)
         if (target.localName === 'span') {
             target = target.parentElement;
         }
+
+        if (document.hasFocus()) {
+            activeElement = document.activeElement;
+        }
+
+        if (target = activeElement) {
+            console.log('yes?')
+        }
+        console.log(document.activeElement, 'focus?')
 
         // let's open and close the menu
 
@@ -76,16 +85,21 @@ class Navigation {
         let expandedElementCollection = this.menu.querySelectorAll('[aria-expanded="true"]');
         let openElementCollection = this.menu.getElementsByClassName('submenu-list-open')
 
+
         if (!this.menu.contains(target) && expandedElementCollection.length) {
             // if the menu doesn't contain the target, close all the submenus.
+            // this is only needed for tabbing out of open submenus into something out of the nav.
             expandedElementCollection[0].setAttribute('aria-expanded', 'false');
             openElementCollection[0].classList.remove('submenu-list-open')
+
         } else {
             // close the submenu when you leave by checking if focus has returned to the parentNode
             expandedElementCollection = parentNode.querySelectorAll('[aria-expanded="true"]');
             openElementCollection = parentNode.getElementsByClassName('submenu-list-open');
 
-            if ((parentNode.id === this.menuId) && expandedElementCollection.length) {
+            if (
+                (parentNode.id === this.menuId || parentNode.localName === 'ul') 
+                && expandedElementCollection.length) {
                 expandedElementCollection[0].setAttribute('aria-expanded', 'false');
                 openElementCollection[0].classList.remove('submenu-list-open');
             }
@@ -172,33 +186,36 @@ class Navigation {
         const icons = this.menu.querySelectorAll('.submenu-icon');
         // the css to inject into the page
         const hoverCss = `
-      nav ul li span::before {
-        content: '${this.chevronDown}';
-        font-family: '${fontFamily}';
-        font-weight: bold;
-      }
-      nav ul.click-menu li > button[aria-expanded="true"] span::before,
-      nav ul:not(.click-menu) li:hover > button span::before,
-      nav ul li:focus > button span::before { 
-        content: '${this.chevronUp}';
-        font-family: '${fontFamily}'; 
-        font-weight: bold;
-      }`;
+            nav ul li span::before {
+                content: '${this.chevronDown}';
+                font-family: '${fontFamily}';
+                font-weight: bold;
+            }
+            nav ul.click-menu li > button[aria-expanded="true"] span::before,
+            nav ul:not(.click-menu) li:hover > button span::before,
+            nav ul li:focus > button span::before { 
+                content: '${this.chevronUp}';
+                font-family: '${fontFamily}'; 
+                font-weight: bold;
+            }`;
 
         // create a style tag
         const style = document.createElement('style');
+
         // add the styles to the tag (or a stylesheet if it exists)
         if (style.styleSheet) {
             style.styleSheet.cssText = hoverCss;
         } else {
             style.appendChild(document.createTextNode(hoverCss));
         }
+
         // add the tag to the <head>
         document.getElementsByTagName('head')[0].appendChild(style);
+
         // set the data-before attribute to the values passed in the constructor.
-        icons.forEach((icon) => {
-            icon.setAttribute('data-before', this.chevronDown);
-        })
+        icons.forEach((icon) => icon.setAttribute('data-before', this.chevronDown));
+
+        return;
     }
     init() {
         this.menu = document.getElementById(this.menuId);
