@@ -50,8 +50,6 @@ class Navigation {
 
         } else {
 
-
-
             // we're near a submenu by clicking on a button
             submenuList = target.nextSibling;
 
@@ -59,8 +57,6 @@ class Navigation {
             submenuList.getElementsByTagName('ul').length 
                 ? this.hasNestedSubmenu = true 
                 : this.hasNestedSubmenu = false;
-            console.log(this.hasNestedSubmenu, 'nested')
-
 
             // toggle the submenu display class
             submenuList.classList.toggle('submenu-list-open');
@@ -70,9 +66,6 @@ class Navigation {
                 ? target.setAttribute('aria-expanded', 'true') 
                 : target.setAttribute('aria-expanded', 'false');
 
-
-
-            
             return;
         }
     }
