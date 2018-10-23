@@ -25,15 +25,6 @@ class Navigation {
             target = target.parentElement;
         }
 
-        if (document.hasFocus()) {
-            activeElement = document.activeElement;
-        }
-
-        if (target = activeElement) {
-            console.log('yes?')
-        }
-        console.log(document.activeElement, 'focus?')
-
         // let's open and close the menu
 
         // if we're not clicking 'near' a submenu close any open submenus
@@ -80,8 +71,34 @@ class Navigation {
     }
     focusInHandler(evt) {
         const { target } = evt;
-        const { offsetParent: { parentNode } } = target;
+        this.toggleMenu(target);
+    }
+    keyDownHandler(evt) {
+        const { keyCode } = evt;
+        const expandedElementCollection = document.querySelectorAll('[aria-expanded="true"]')[0];
+        const openSubmenu = document.getElementsByClassName('submenu-list-open')[0];
 
+        if (keyCode === 27 && openSubmenu) {
+            expandedElementCollection.setAttribute('aria-expanded', 'false');
+            openSubmenu.classList.remove('submenu-list-open');
+        }
+    }
+    mouseDownHandler(evt) {
+        const { target } = evt;
+        this.toggleMenu(target);
+        evt.preventDefault();
+    }
+    hoverHandler(evt) {
+        const { type, target } = evt;
+        if (type === 'mouseout' && target.getAttribute('aria-haspopup') === "true") {
+            target.setAttribute('aria-expanded', 'false');
+        } else if (type === 'mouseover' && target.getAttribute('aria-haspopup') === "false") {
+            target.setAttribute('aria-expanded', 'true');
+        }
+    }
+    toggleMenu(target) {
+        
+        const { offsetParent: { parentNode } } = target;
         let expandedElementCollection = this.menu.querySelectorAll('[aria-expanded="true"]');
         let openElementCollection = this.menu.getElementsByClassName('submenu-list-open')
 
@@ -97,40 +114,23 @@ class Navigation {
             expandedElementCollection = parentNode.querySelectorAll('[aria-expanded="true"]');
             openElementCollection = parentNode.getElementsByClassName('submenu-list-open');
 
-            if (
-                (parentNode.id === this.menuId || parentNode.localName === 'ul') 
-                && expandedElementCollection.length) {
+            if ((parentNode.id === this.menuId || parentNode.localName === 'ul') &&
+                expandedElementCollection.length) {
                 expandedElementCollection[0].setAttribute('aria-expanded', 'false');
                 openElementCollection[0].classList.remove('submenu-list-open');
             }
         }
+        console.log({ target, expandedElementCollection, openElementCollection })
         return;
-    }
-    keyDownHandler(evt) {
-        const { keyCode } = evt;
-
-        const expandedElementCollection = document.querySelectorAll('[aria-expanded="true"]')[0];
-        const openSubmenu = document.getElementsByClassName('submenu-list-open')[0];
-
-        if (keyCode === 27 && openSubmenu) {
-            expandedElementCollection.setAttribute('aria-expanded', 'false');
-            openSubmenu.classList.remove('submenu-list-open');
-        }
-
-    }
-    hoverHandler(evt) {
-        const { type, target } = evt;
-        if (type === 'mouseout' && target.getAttribute('aria-haspopup') === "true") {
-            target.setAttribute('aria-expanded', 'false');
-        } else if (type === 'mouseover' && target.getAttribute('aria-haspopup') === "false") {
-            target.setAttribute('aria-expanded', 'true');
-        }
     }
     eventDispatcher(evt) {
         // dispatch event listeners to the correct functions.
         switch (evt.type) {
             case 'click':
                 this.clickHandler(evt);
+                break;
+            case 'mousedown':
+                this.mouseDownHandler(evt);
                 break;
             case 'focusin':
                 this.focusInHandler(evt);
@@ -157,7 +157,7 @@ class Navigation {
         let listeners = ['focusin', 'keydown', 'mouseover'];
 
         if (this.click) {
-            listeners.push('click');
+            listeners.push('click', 'mousedown');
             
             const subMenuList = this.menu.querySelectorAll('.submenu-list');
             
