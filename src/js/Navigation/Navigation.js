@@ -16,9 +16,10 @@ class Navigation {
         this.click = click;
     }
     clickHandler(evt) {
+        console.log(evt.type, 'click')
+        
         let { target } = evt;
         let submenuList = null;
-        let activeElement = null;
         // people might click on the icon instead of the button.
         // if so, set the target to the parent (button)
         if (target.localName === 'span') {
@@ -27,27 +28,27 @@ class Navigation {
 
         // let's open and close the menu
 
-        // if we're not clicking 'near' a submenu close any open submenus
-        if (target.nextSibling === null || target.nextSibling.localName !== 'ul') {
 
             // if the submenu is open and we click on something else like the body
             // close it and set aria-expanded to false
-            if (document.getElementsByClassName('submenu-list-open').length > 0) {
+        if (document.getElementsByClassName('submenu-list-open').length > 0 && !document.getElementsByClassName('submenu-list-open')[0].contains(target)) {
 
-                // there's an open submenu somewhere... we need to close it
+            // there's an open submenu somewhere... we need to close it
 
-                // the submenu <ul>
-                submenuList = document.getElementsByClassName('submenu-list-open')[0];
+            // the submenu <ul>
+            submenuList = document.getElementsByClassName('submenu-list-open')[0];
 
-                // remove the class that displays the submenu
-                submenuList.classList.remove('submenu-list-open');
+            // open the next menu immediately.
+            const nextMenu = target.nextSibling;
+            nextMenu.classList.add('submenu-list-open');
+            target.setAttribute('aria-expanded', 'true');
 
-                // set aria-expanded to false to switch the icon
-                submenuList.previousSibling.setAttribute('aria-expanded', 'false')
-            } else {
-                return;
-            }
+            // remove the class that displays the submenu
+            submenuList.classList.remove('submenu-list-open');
 
+            // set aria-expanded to false to switch the icon
+            submenuList.previousSibling.setAttribute('aria-expanded', 'false')
+            return;
         } else {
 
             // we're near a submenu by clicking on a button
@@ -72,6 +73,7 @@ class Navigation {
     focusInHandler(evt) {
         const { target } = evt;
         this.toggleMenu(target);
+        evt.preventDefault();
     }
     keyDownHandler(evt) {
         const { keyCode } = evt;
@@ -84,8 +86,6 @@ class Navigation {
         }
     }
     mouseDownHandler(evt) {
-        const { target } = evt;
-        this.toggleMenu(target);
         evt.preventDefault();
     }
     hoverHandler(evt) {
