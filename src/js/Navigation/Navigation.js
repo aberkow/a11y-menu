@@ -16,8 +16,8 @@ class Navigation {
         this.click = click;
     }
     clickHandler(evt) {
-        console.log(evt.type, 'click')
-        
+        // let openSubmenuCollection = document.getElementsByClassName('submenu-list-open');
+        let openSubmenuCollection = document.querySelectorAll('.submenu-list-open');
         let { target } = evt;
         let submenuList = null;
         // people might click on the icon instead of the button.
@@ -25,35 +25,49 @@ class Navigation {
         if (target.localName === 'span') {
             target = target.parentElement;
         }
-
+        
         // let's open and close the menu
 
+        // openSubmenuCollection = document.querySelectorAll('submenu-list-open');
 
-            // if the submenu is open and we click on something else like the body
-            // close it and set aria-expanded to false
-        if (document.getElementsByClassName('submenu-list-open').length > 0 && !document.getElementsByClassName('submenu-list-open')[0].contains(target)) {
-
+        // if the submenu is open and we click on something else like the body
+        // close it and set aria-expanded to false
+        if (openSubmenuCollection.length > 0 && !openSubmenuCollection[0].contains(target)) {
             // there's an open submenu somewhere... we need to close it
 
             // the submenu <ul>
-            submenuList = document.getElementsByClassName('submenu-list-open')[0];
+            submenuList = openSubmenuCollection[0];
 
-            // open the next menu immediately.
-            const nextMenu = target.nextSibling;
-            nextMenu.classList.add('submenu-list-open');
-            target.setAttribute('aria-expanded', 'true');
+            console.log(target.nextSibling)
 
-            // remove the class that displays the submenu
-            submenuList.classList.remove('submenu-list-open');
+            if (target.nextSibling && target.nextSibling.localName === 'ul') {
+                
+                // open the next menu immediately.
+                const nextMenu = target.nextSibling;
+                nextMenu.classList.add('submenu-list-open');
+                target.setAttribute('aria-expanded', 'true');
+    
+                // remove the class that displays the submenu
+                submenuList.classList.remove('submenu-list-open');
+    
+                // set aria-expanded to false to switch the icon
+                submenuList.previousSibling.setAttribute('aria-expanded', 'false')
+            } else {
+                // this needs to be refactored into a single function... see the next else statement
+                // toggle the submenu display class
+                submenuList.classList.toggle('submenu-list-open');
 
-            // set aria-expanded to false to switch the icon
-            submenuList.previousSibling.setAttribute('aria-expanded', 'false')
-            return;
+                // toggle the aria-expanded attribute
+                // submenuList.classList.contains('submenu-list-open')
+                //     ? target.setAttribute('aria-expanded', 'true')
+                //     : target.setAttribute('aria-expanded', 'false');
+            }
+            // return;
         } else {
-
+            // openSubmenuCollection = document.querySelectorAll('submenu-list-open');
             // we're near a submenu by clicking on a button
             submenuList = target.nextSibling;
-
+            console.log(submenuList)
             // check if there's a nested submenu
             submenuList.getElementsByTagName('ul').length 
                 ? this.hasNestedSubmenu = true 
@@ -63,12 +77,23 @@ class Navigation {
             submenuList.classList.toggle('submenu-list-open');
 
             // toggle the aria-expanded attribute
-            submenuList.classList.contains('submenu-list-open') 
-                ? target.setAttribute('aria-expanded', 'true') 
-                : target.setAttribute('aria-expanded', 'false');
+            // submenuList.classList.contains('submenu-list-open') 
+            //     ? target.setAttribute('aria-expanded', 'true') 
+            //     : target.setAttribute('aria-expanded', 'false');
 
-            return;
+            // return;
         }
+
+        
+        console.log(openSubmenuCollection);
+        // Array.from(openSubmenuCollection).forEach(item => {
+        //     console.log(item, 'item')
+        //     // item.classList.toggle('submenu-list-open');
+        //     item.classList.contains('submenu-list-open')
+        //         ? target.setAttribute('aria-expanded', 'true')
+        //         : target.setAttribute('aria-expanded', 'false');
+        // })
+
     }
     focusInHandler(evt) {
         const { target } = evt;
@@ -85,6 +110,13 @@ class Navigation {
             openSubmenu.classList.remove('submenu-list-open');
         }
     }
+    /**
+     *  When people click on a button, prevent it from gaining focus.
+     *  If the button has focus, it will not allow the submenu to close correctly.
+     *
+     * @param {object} evt
+     * @memberof Navigation
+     */
     mouseDownHandler(evt) {
         evt.preventDefault();
     }
