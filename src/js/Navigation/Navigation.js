@@ -136,98 +136,82 @@ class Navigation {
         
         // if there's an open submenu with sub-submenus...
         if (document.querySelectorAll('.submenu-list-open').length > 0 && !document.querySelectorAll('.submenu-list-open')[0].contains(target)) {
-            // console.log(document.querySelectorAll('.submenu-list-open')[0].contains(target))
             
             const submenuNodeList = document.querySelectorAll('.submenu-list-open');
+            console.log(submenuNodeList, 'if')
+
+            if (target.nextSibling && target.nextSibling.localName === 'ul') {
+                // if you click from one menu item to another, open the next menu and close the previous one immediately.
+                const nextMenu = target.nextSibling;
+                nextMenu.classList.add('submenu-list-open');    
+            }
+            
             submenuNodeList.forEach((el) => {
                 // toggle all the menus in the NodeList
-                this.toggleMenuTest(el);
+                this.toggleSubmenuMenuClass(el);
+                this.toggleButtonAria(target);
             })
-            
-            // open the next menu immediately.
-            // const nextMenu = target.nextSibling;
-            // const nextButton = nextMenu.previousSibling;
-
-            // nextMenu.classList.add('submenu-list-open');
-            // nextButton.setAttribute('aria-expanded', 'true');
 
 
-            // this.toggleMenuTest(nextMenu, nextButton);
-
-
-            // console.log(nextMenu, target, 'next')
-            
-
+    
         } else {
             // we're near a submenu by clicking on a button but the menu isn't initially open.
-            submenuList = target.nextSibling;
-            console.log(submenuList, 'else...')
-            // check if there's a nested submenu
-            submenuList.getElementsByTagName('ul').length ?
-                this.hasNestedSubmenu = true :
-                this.hasNestedSubmenu = false;
-    
-            console.log(this.hasNestedSubmenu, 'nested?')
-    
-            this.toggleMenuTest(submenuList);
-            
+            if (target.nextSibling !== null) {
+                submenuList = target.nextSibling;
+                console.log(submenuList, 'else...')
+                // check if there's a nested submenu
+                submenuList.getElementsByTagName('ul').length ?
+                    this.hasNestedSubmenu = true :
+                    this.hasNestedSubmenu = false;
+        
+                this.toggleSubmenuMenuClass(submenuList);
+                this.toggleButtonAria(target);
+            } 
         }
-
-        console.log(target, 'click!')
     }
-
-
-
-
 
     escapeHandler(evt) {
         const { keyCode } = evt;
         console.log(keyCode, 'escape')
         const submenuNodeList = document.querySelectorAll('.submenu-list-open');
+        // const buttonNodeList = document.querySelectorAll('[aria-expanded="true"]')
         submenuNodeList.forEach((el) => {
             // toggle all the menus in the NodeList
-            this.toggleMenuTest(el);
+            this.toggleSubmenuMenuClass(el);
         })
+        // buttonNodeList.forEach((el) => {
+        //     this.toggleButtonAria(el);
+        // })
     }
 
     focusInHandler(evt) {
         console.log(evt.target, 'focus!')
     }
 
+    toggleButtonAria(target) {
 
-    toggleMenuTest(el) {
-
-        let expandedNodeList = null
-
-
-        // toggle the submenu display class
-        el.classList.toggle('submenu-list-open');
-
-        if (el.classList.contains('submenu-list-open')) {
-            expandedNodeList = document.querySelectorAll('[aria-expanded="false"]');
-            expandedNodeList[0].setAttribute('aria-expanded', 'true')
-            // expandedNodeList.forEach(node => {
-            //     console.log(node, 'node')
-            //     node.setAttribute('aria-expanded', 'true')
-            // });
+        // const buttonNodeList = document.querySelectorAll('[aria-expanded="true"]');
+        // console.log(buttonNodeList);
+    
+        console.log('expanded?', target.getAttribute('aria-expanded'), target);
+        if (target.getAttribute('aria-expanded') === 'false') {
+            target.setAttribute('aria-expanded', 'true');
         } else {
-            expandedNodeList = document.querySelectorAll('[aria-expanded="true"]');
-            expandedNodeList[0].setAttribute('aria-expanded', 'false')
-            // expandedNodeList.forEach(node => {
-            //     console.log(node, 'node else')
-            //     node.setAttribute('aria-expanded', 'false')
-            // });
+            target.setAttribute('aria-expanded', 'false');
         }
-
-        console.log(expandedNodeList, 'expandedNodeList')
-
-        // toggle the aria-expanded attribute
-        // el.classList.contains('submenu-list-open')
-        //     ? target.setAttribute('aria-expanded', 'true')
-        //     : target.setAttribute('aria-expanded', 'false');
     }
 
-
+    toggleSubmenuMenuClass(el) {
+        if (el !== null) {
+            el.classList.toggle('submenu-list-open');
+            console.log(el)
+        } else {
+            const elNode = document.querySelectorAll('.submenu-list-open');
+            elNode.forEach(el => {
+                el.classList.toggle('submenu-list-open');
+            })
+        }
+    }
 
     eventDispatcher(evt) {
         // dispatch event listeners to the correct functions.
@@ -235,13 +219,14 @@ class Navigation {
         // mousedown focusin click
         // keydown focusin keydown click
 
-        switch(evt.type) {
+        switch (evt.type) {
             case 'keydown':
                 if (evt.keyCode === 9) {
                     // if the keydown is caused by the tab key, it should be a focusIn
                     this.focusInHandler(evt);
                 } else if (evt.keyCode === 13) {
                     // if the keydown is caused by the return key, it should be a click
+                    // evt.preventDefault();
                     this.clickHandler(evt);
                 } else if (evt.keyCode === 27) {
                     // if the keydown is caused by the escape key, close the menus
