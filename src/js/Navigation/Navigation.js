@@ -149,10 +149,10 @@ class Navigation {
             submenuNodeList.forEach((el) => {
                 // toggle all the menus in the NodeList
                 this.toggleSubmenuMenuClass(el);
-                this.toggleButtonAria(target);
             })
-
-
+            
+            
+            this.toggleButtonAria(target);
     
         } else {
             // we're near a submenu by clicking on a button but the menu isn't initially open.
@@ -190,9 +190,25 @@ class Navigation {
 
     toggleButtonAria(target) {
 
-        // const buttonNodeList = document.querySelectorAll('[aria-expanded="true"]');
-        // console.log(buttonNodeList);
-    
+
+        console.log(target.nextElementSibling);
+
+        const submenuChildren = target.nextElementSibling.childNodes;
+        submenuChildren.forEach((child) => {
+            if (child.getAttribute('data-has-children')) {
+                const target = child.querySelector('button');
+                this.toggleButtonAria(target);
+                console.log(target);
+                console.log('sub-submenu found')
+            } else {
+                console.log('nothing here....')
+            }
+        })
+
+        
+
+
+
         console.log('expanded?', target.getAttribute('aria-expanded'), target);
         if (target.getAttribute('aria-expanded') === 'false') {
             target.setAttribute('aria-expanded', 'true');
