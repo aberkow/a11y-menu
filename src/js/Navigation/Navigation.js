@@ -220,13 +220,8 @@ class Navigation {
                 this.focusInHandler(evt);
                 break;
             case 'keydown':
-                // if (evt.keyCode === 9) {
-                //     // if the keydown is caused by the tab key, it should be a focusIn
-                //     this.focusInHandler(evt);
-                // } else 
                 if (evt.keyCode === 13) {
                     // if the keydown is caused by the return key, it should be a click
-                    // evt.preventDefault();
                     this.clickHandler(evt);
                 } else if (evt.keyCode === 27) {
                     // if the keydown is caused by the escape key, close the menus
@@ -247,6 +242,13 @@ class Navigation {
                 return;
         }
     }
+
+    /**
+     *
+     * Remove the no-js class and attach event listeners
+     * 
+     * @memberof Navigation
+     */
     setEventListeners() {
         // if this script is running, remove the 'no-js' class from the elements.
         const listElements = Array.prototype.slice.call(this.menu.getElementsByClassName('no-js'));
@@ -274,6 +276,14 @@ class Navigation {
             });
         }
     }
+
+    /**
+     *
+     * Inline styles to the <head> for the visual indicators
+     * 
+     * @returns void
+     * @memberof Navigation
+     */
     setSubmenuIcon() {
         // possible font-family for the icons
         let fontFamily = this.fontFamily;
@@ -317,6 +327,15 @@ class Navigation {
 
         return;
     }
+
+    /**
+     * 
+     * Initialize the menu by
+     * - attaching event listeners
+     * - adding styles to the <head>
+     *
+     * @memberof Navigation
+     */
     init() {
         this.menu = document.getElementById(this.menuId);
         this.setEventListeners();
