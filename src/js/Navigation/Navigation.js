@@ -73,7 +73,6 @@ class Navigation {
         } else {
             // we're near a submenu by clicking on a button but the menu isn't initially open.
             if (target.nextSibling !== null) {
-                console.log(target)
                 submenuList = target.nextSibling;
 
                 // check if there's a nested submenu
