@@ -24,9 +24,26 @@ class Navigation {
             target.setAttribute('aria-expanded', 'true');
         }
     }
+    /**
+     *
+     * Handle incoming clicks
+     *
+     * @param {object} evt object
+     * @returns void
+     * @memberof Navigation
+     */
     clickHandler(evt) {
-        let { target } = evt;
+        let target = evt.target;
         let submenuList = null;
+
+
+        // if the mouse click is inside the menu, prevent the target from gaining focus and continue.
+        // otherwise do nothing.
+        if (this.menu.contains(target)) {
+            evt.preventDefault();
+        } else {
+            return;
+        }
 
         // people might click on the icon instead of the button.
         // if so, set the target to the parent (button)
@@ -233,8 +250,6 @@ class Navigation {
                 break;
             
             case 'mousedown':
-                // if the event was caused by the mouse, don't let the target gain focus.
-                evt.preventDefault();
                 this.clickHandler(evt);
                 break;
             
