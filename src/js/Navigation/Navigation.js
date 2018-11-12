@@ -36,12 +36,13 @@ class Navigation {
         let target = evt.target;
         let submenuList = null;
 
-
-        // if the mouse click is inside the menu, prevent the target from gaining focus and continue.
+        // if the click is inside the menu on a button, prevent the target from gaining focus and continue.
         // otherwise do nothing.
-        if (this.menu.contains(target)) {
+        if (this.menu.contains(target) && target.localName !== 'a') {
             evt.preventDefault();
         } else {
+            // the click is on a link or outside the menu so it should be cleared.
+            this.clearAll();
             return;
         }
 
