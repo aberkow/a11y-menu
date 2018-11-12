@@ -101,21 +101,30 @@ class Navigation {
         const { target, target: { offsetParent: { parentNode } } } = evt;
 
         let expandedButtonNode = this.menu.querySelectorAll('[aria-expanded="true"]');
-        let openElementCollection = this.menu.getElementsByClassName('submenu-list-open');
+        let openMenuNode = this.menu.querySelectorAll('.submenu-list-open');
 
-        // if we leave the menu, clear everything
         if (!this.menu.contains(target) && expandedButtonNode.length) {
+            // if we leave the menu, clear everything
             this.clearAll();
+        } else if (this.menu.contains(target) && openMenuNode.length > 1) {
+            // if focus is still in the menu and there's a sub-sub-menu, 
+            // handle openning and closing when focus leaves.
+            openMenuNode.forEach(menu => {
+                if (!menu.contains(target)) {
+                    this.toggleSubmenuMenuClass(menu);
+                    this.toggleButtonAria(menu.previousElementSibling);
+                }
+            })
         } else {
             // still in the menu, but moving from one <li> to another
             // toggle just the button and submenu for the elements that received focusout.
             expandedButtonNode = parentNode.querySelectorAll('[aria-expanded="true"]');
-            openElementCollection = parentNode.getElementsByClassName('submenu-list-open');
+            openMenuNode = parentNode.querySelectorAll('.submenu-list-open');
             
             // check to make sure that the user hasn't moved to a different menu.
             if (parentNode.id === this.menuId) {
                 this.toggleButtonAria(expandedButtonNode[0]);
-                this.toggleSubmenuMenuClass(openElementCollection[0]);
+                this.toggleSubmenuMenuClass(openMenuNode[0]);
             }
         }
         return;
