@@ -134,20 +134,13 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 ```
 
-
 ### Javascript Defaults
 The constructor comes with the following defaults. These can be overridden as needed
 - `menuId` - the default is `'main-menu'`
-- `fontFamily` - the default is `'Font Awesome 5 Free'`. Note that currently the other supported font families are 
-  - `'FontAwesome'`
-  - `'Glyphicons Halflings'` (for Bootstrap)
-- `chevronDown` - the default is '\\f078',
-- `chevronUp` - the default is '\\f077'
-
-**NB - When using FontAwesome, Bootstrap icons, or similar, you must use the HTML escaped versions.**
+- `click` - the default is `false`
 
 ### Most basic case
-The `Navigation` class is designed to be as simple to use as possible. In order to use it, create a new `Navigation` constructor and assign it to a variable. Inside of an event listener, use the `init` method on the the instance.
+The `Navigation` class is designed to be as simple to use as possible. In order to use it, create a new `Navigation` constructor and assign it to a variable. Inside of an event listener, use the `init` method on the the instance. This implementation will create a **hover** menu.
 ```javascript
 const navigation = new Navigation();
 document.addEventListener('DOMContentLoaded', () => {
@@ -156,15 +149,20 @@ document.addEventListener('DOMContentLoaded', () => {
 ```
 
 ### Overridding defaults
-Defaults can be overridden individually. For instance, to change the icon used, pass the constructor a configuration object with the appropriate keys and values. 
+Defaults can be overridden individually or together.
 ```javascript
 const menuOpts = {
-  chevronDown: '\\f13a',
-  chevronUp: '\\f139'
+  menuId: 'main-nav',
+  click: true
 }
 const navigation = new Navigation(menuOpts);
 ```
-This will use the `chevron-circle-down` and `chevron-circle-up` FontAwesome icons.
+This will create a nav menu with an id of `main-nav` and it will use the `click` functionality instead of hover.
+
+## Sass defaults
+The stylesheet provided is meant to provide a skeleton on which to add additional styles (e.g. colors, padding, etc...). An example of adding icons is provided in `src/scss/icon-styles.scss`. These styles will override the baseline text icons in favor of Font Awesome icons.
+
+Overriding and changing the styles of the menu is as easy as either making the selectors more specific or placing your custom styles lower in the cascade. Greater specificity can be achieved by using the provided class names.
 
 ## Development
 To begin developing

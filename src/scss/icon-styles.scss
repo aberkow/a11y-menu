@@ -1,0 +1,25 @@
+// support for icons is provided directly via sass.
+// this is an example of using Font Awesome 5 for icons.
+// text-based fallbacks are provided in main.scss
+
+nav {
+  ul {
+    li {
+      .submenu-icon {
+        &:before {
+          content: '\f078';
+          font-family: 'Font Awesome 5 Free';
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
+
+nav ul.click-menu li > button[aria-expanded="true"] span::before,
+nav ul:not(.click-menu) li:hover > button span::before,
+nav ul li:focus > button span::before { 
+  content: '\f077';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: bold;
+}
