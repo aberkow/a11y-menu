@@ -1,3 +1,6 @@
+// polyfill to support IE
+import '@babel/polyfill';
+
 class Navigation {
     constructor({
         menuId = 'main-menu',
@@ -55,7 +58,7 @@ class Navigation {
         // if there's an open submenu with sub-submenus...
         if (document.querySelectorAll('.submenu-list-open').length > 0 && !document.querySelectorAll('.submenu-list-open')[0].contains(target)) {
             
-            const submenuNodeList = document.querySelectorAll('.submenu-list-open');
+            const submenuArray = Array.from(document.querySelectorAll('.submenu-list-open'));
 
             if (target.nextSibling && target.nextSibling.localName === 'ul') {
                 // if you click from one menu item to another, open the next menu and close the previous one immediately.
@@ -63,7 +66,7 @@ class Navigation {
                 nextMenu.classList.add('submenu-list-open');    
             }
             
-            submenuNodeList.forEach((el) => {
+            submenuArray.forEach((el) => {
                 // toggle all the menus in the NodeList
                 this.toggleSubmenuMenuClass(el);
             })
@@ -100,16 +103,16 @@ class Navigation {
         
         const { target, target: { offsetParent: { parentNode } } } = evt;
 
-        let expandedButtonNode = this.menu.querySelectorAll('[aria-expanded="true"]');
-        let openMenuNode = this.menu.querySelectorAll('.submenu-list-open');
+        let expandedButtonArray = Array.from(this.menu.querySelectorAll('[aria-expanded="true"]'));
+        let openMenuArray = Array.from(this.menu.querySelectorAll('.submenu-list-open'));
 
-        if (!this.menu.contains(target) && expandedButtonNode.length) {
+        if (!this.menu.contains(target) && expandedButtonArray.length) {
             // if we leave the menu, clear everything
             this.clearAll();
-        } else if (this.menu.contains(target) && openMenuNode.length > 1) {
+        } else if (this.menu.contains(target) && openMenuArray.length > 1) {
             // if focus is still in the menu and there's a sub-sub-menu, 
             // handle openning and closing when focus leaves.
-            openMenuNode.forEach(menu => {
+            openMenuArray.forEach(menu => {
                 if (!menu.contains(target)) {
                     this.toggleSubmenuMenuClass(menu);
                     this.toggleButtonAria(menu.previousElementSibling);
@@ -118,13 +121,13 @@ class Navigation {
         } else {
             // still in the menu, but moving from one <li> to another
             // toggle just the button and submenu for the elements that received focusout.
-            expandedButtonNode = parentNode.querySelectorAll('[aria-expanded="true"]');
-            openMenuNode = parentNode.querySelectorAll('.submenu-list-open');
+            expandedButtonArray = Array.from(parentNode.querySelectorAll('[aria-expanded="true"]'));
+            openMenuArray = Array.from(parentNode.querySelectorAll('.submenu-list-open'));
             
             // check to make sure that the user hasn't moved to a different menu.
             if (parentNode.id === this.menuId) {
-                this.toggleButtonAria(expandedButtonNode[0]);
-                this.toggleSubmenuMenuClass(openMenuNode[0]);
+                this.toggleButtonAria(expandedButtonArray[0]);
+                this.toggleSubmenuMenuClass(openMenuArray[0]);
             }
         }
         return;
@@ -152,7 +155,7 @@ class Navigation {
      * @memberof Navigation
      */
     clearMenus() {
-        const menuNode = document.querySelectorAll('.submenu-list-open');
+        const menuNode = Array.from(document.querySelectorAll('.submenu-list-open'));
         menuNode.forEach(menu => {
             menu.classList.toggle('submenu-list-open');
         })
@@ -166,7 +169,7 @@ class Navigation {
      * @memberof Navigation
      */
     clearButtons() {
-        const buttonNode = document.querySelectorAll('.submenu-toggle');
+        const buttonNode = Array.from(document.querySelectorAll('.submenu-toggle'));
         buttonNode.forEach((button) => {
             button.setAttribute('aria-expanded', 'false');
         })
@@ -182,7 +185,7 @@ class Navigation {
      * @memberof Navigation
      */
     toggleButtonAria(target) {
-        const buttonNode = document.querySelectorAll('.submenu-toggle');
+        const buttonNode = Array.from(document.querySelectorAll('.submenu-toggle'));
         
         buttonNode.forEach(button => {
             // for each button, determine if there is a button "above" it
@@ -275,7 +278,7 @@ class Navigation {
      */
     setEventListeners() {
         // if this script is running, remove the 'no-js' class from the elements.
-        const listElements = Array.prototype.slice.call(this.menu.getElementsByClassName('no-js'));
+        const listElements = Array.from(this.menu.getElementsByClassName('no-js'));
         listElements.forEach(element => {
             element.classList.remove('no-js');
         });
@@ -285,7 +288,7 @@ class Navigation {
         if (this.click) {
             listeners.push('mousedown', 'mouseup');
             
-            const subMenuList = this.menu.querySelectorAll('.submenu-list');
+            const subMenuList = Array.from(this.menu.querySelectorAll('.submenu-list'));
             
             subMenuList.forEach(menu => menu.classList.add('click-menu'));
 
@@ -317,7 +320,7 @@ class Navigation {
         }
 
         // the list of all the submenu icons
-        const icons = this.menu.querySelectorAll('.submenu-icon');
+        const icons = Array.from(this.menu.querySelectorAll('.submenu-icon'));
         // the css to inject into the page
         const hoverCss = `
             nav ul li span::before {
