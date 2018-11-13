@@ -5,9 +5,11 @@
       {
         "targets": {
           "browsers": [
-            "last 3 versions"
+            ">0.25%",
+            "ie 10"
           ]
-        }
+        },
+        "useBuiltIns": "entry"
       }
     ]
   ],
@@ -20,9 +22,11 @@
           {
             "targets": {
               "browsers": [
-                "last 3 versions"
+                ">0.25%",
+                "ie 10"
               ]
-            }
+            },
+            "useBuiltIns": "entry"
           }
         ]
       ],

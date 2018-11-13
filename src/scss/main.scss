@@ -1,4 +1,6 @@
 // import .scss files here.
+@import './icon-styles.scss';
+
 %submenu-icon {
     background: transparent;
     border: transparent;
@@ -54,11 +56,11 @@ nav {
         list-style-type: none;
         padding: 0;
         li {
-            display: block;
+            display: flex;
             position: relative;
             // needed to override bootstrap's insistence on making these block elements.
             .submenu-link {
-                display: inline;
+                display: block;
             }
             ul {
                 height: 0;
@@ -69,8 +71,8 @@ nav {
                 visibility: hidden;
                 background-color: #fff;
                 li {
-                    display: block;
-                    margin: 0.5em 0;
+                    display: flex;
+                    flex-wrap: wrap;
                     a {
                         display: inline-block;
                         height: 100%;
@@ -83,7 +85,7 @@ nav {
                 @extend %submenu-open;
                 ul.submenu-list-open {
                     @extend %submenu-open;
-                    padding: 0 2em;
+                    padding: 0 0 0 2em;
                     position: relative;
                 }
             }
