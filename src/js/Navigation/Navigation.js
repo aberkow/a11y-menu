@@ -4,15 +4,8 @@ import '@babel/polyfill';
 class Navigation {
     constructor({
         menuId = 'main-menu',
-        fontFamily = 'Font Awesome 5 Free',
-        chevronDown = '\\f078',
-        chevronUp = '\\f077',
         click = false
     } = {}) {
-        this.chevronDown = chevronDown;
-        this.chevronUp = chevronUp;
-        this.fontFamilies = ['FontAwesome', 'Font Awesome 5 Free', 'Glyphicons Halflings'];
-        this.fontFamily = fontFamily;
         this.hasNestedSubmenu = false;
         this.menu = null;
         this.menuId = menuId;
@@ -305,57 +298,6 @@ class Navigation {
     }
 
     /**
-     *
-     * Inline styles to the <head> for the visual indicators
-     * 
-     * @returns void
-     * @memberof Navigation
-     */
-    setSubmenuIcon() {
-        // possible font-family for the icons
-        let fontFamily = this.fontFamily;
-
-        if (!this.fontFamilies.includes(fontFamily)) {
-            fontFamily = '';
-        }
-
-        // the list of all the submenu icons
-        const icons = Array.from(this.menu.querySelectorAll('.submenu-icon'));
-        // the css to inject into the page
-        const hoverCss = `
-            nav ul li span::before {
-                content: '${this.chevronDown}';
-                font-family: '${fontFamily}';
-                font-weight: bold;
-            }
-            nav ul.click-menu li > button[aria-expanded="true"] span::before,
-            nav ul:not(.click-menu) li:hover > button span::before,
-            nav ul li:focus > button span::before { 
-                content: '${this.chevronUp}';
-                font-family: '${fontFamily}'; 
-                font-weight: bold;
-            }`;
-
-        // create a style tag
-        const style = document.createElement('style');
-
-        // add the styles to the tag (or a stylesheet if it exists)
-        if (style.styleSheet) {
-            style.styleSheet.cssText = hoverCss;
-        } else {
-            style.appendChild(document.createTextNode(hoverCss));
-        }
-
-        // add the tag to the <head>
-        document.getElementsByTagName('head')[0].appendChild(style);
-
-        // set the data-before attribute to the values passed in the constructor.
-        icons.forEach((icon) => icon.setAttribute('data-before', this.chevronDown));
-
-        return;
-    }
-
-    /**
      * 
      * Initialize the menu by
      * - attaching event listeners
@@ -366,7 +308,7 @@ class Navigation {
     init() {
         this.menu = document.getElementById(this.menuId);
         this.setEventListeners();
-        this.setSubmenuIcon();
+        // this.setSubmenuIcon();
     }
 }
 
