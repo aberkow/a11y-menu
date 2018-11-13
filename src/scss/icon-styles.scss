@@ -5,7 +5,7 @@
 nav {
   ul {
     li {
-      .submenu-icon {
+      .am-submenu-icon {
         &:before {
           content: '\f078';
           font-family: 'Font Awesome 5 Free';
@@ -16,8 +16,8 @@ nav {
   }
 }
 
-nav ul.click-menu li > button[aria-expanded="true"] span::before,
-nav ul:not(.click-menu) li:hover > button span::before,
+nav ul.am-click-menu li > button[aria-expanded="true"] span::before,
+nav ul:not(.click-menu) li:hover > button .am-submenu-icon::before,
 nav ul li:focus > button span::before { 
   content: '\f077';
   font-family: 'Font Awesome 5 Free';

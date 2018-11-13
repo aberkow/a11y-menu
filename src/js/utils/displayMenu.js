@@ -17,9 +17,9 @@ const generateMenuItemMarkup = (menuItem) => {
         hasLink = true;
     }
     if (hasLink && hasSubmenu) {
-        return `<a class='submenu-link' aria-label='${menuItem.name}, tab to the next button to expand the sub-menu' href=${menuItem.link}>${menuItem.name}</a><button class='submenu-button submenu-toggle' aria-haspopup='true' aria-expanded='false' aria-label='show submenu'><span class='submenu-icon' aria-hidden='true' data-before='∨'></span></button>`;
+        return `<a class='am-submenu-link' aria-label='${menuItem.name}, tab to the next button to expand the sub-menu' href=${menuItem.link}>${menuItem.name}</a><button class='am-submenu-button am-submenu-toggle' aria-haspopup='true' aria-expanded='false' aria-label='show submenu'><span class='am-submenu-icon' aria-hidden='true' data-before='∨'></span></button>`;
     } else if (!hasLink || !hasLink && hasSubmenu) {
-        return `<button aria-haspopup='true' aria-expanded='false' class='submenu-toggle'>${menuItem.name}<span class='submenu-icon' aria-hidden='true' data-before='∨'></span></button>`;
+        return `<button aria-haspopup='true' aria-expanded='false' class='am-submenu-toggle'>${menuItem.name}<span class='am-submenu-icon' aria-hidden='true' data-before='∨'></span></button>`;
     } else {
         // just a link
         return `<a href=${menuItem.link}>${menuItem.name}</a>`;
@@ -61,9 +61,9 @@ const displayMenu = (ul, json) => {
             // create a <ul> to hold the submenu
             const subMenu = document.createElement('ul');
             // ul.classList.add('submenu-list');
-            subMenu.classList.add('submenu-list');
+            subMenu.classList.add('am-submenu-list');
             // this is super temporary. just to get things rolling...
-            subMenu.id = `submenu-${menuItem.slug}`;
+            subMenu.id = `am-submenu-${menuItem.slug}`;
             // create the submenu structure by recursively calling this same function
             // it will recieve the subMenu created above and the array of items from the json object
             displayMenu(subMenu, menuItem.sub);

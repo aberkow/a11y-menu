@@ -162,7 +162,7 @@ This will create a nav menu with an id of `main-nav` and it will use the `click`
 ## Sass defaults
 The stylesheet provided is meant to provide a skeleton on which to add additional styles (e.g. colors, padding, etc...). An example of adding icons is provided in `src/scss/icon-styles.scss`. These styles will override the baseline text icons in favor of Font Awesome icons.
 
-Overriding and changing the styles of the menu is as easy as either making the selectors more specific or placing your custom styles lower in the cascade. Greater specificity can be achieved by using the provided class names.
+Overriding and changing the styles of the menu is as easy as either making the selectors more specific or placing your custom styles lower in the cascade. Greater specificity can be achieved by using the provided `am-` class names.
 
 ## Development
 To begin developing
