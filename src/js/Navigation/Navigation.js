@@ -26,18 +26,46 @@ class Navigation {
      * @memberof Navigation
      */
     clickHandler(evt) {
+        console.log(evt.type)
         let target = evt.target;
         let submenuList = null;
 
         // if the click is inside the menu on a button, prevent the target from gaining focus and continue.
         // otherwise do nothing.
-        if (this.menu.contains(target) && target.localName !== 'a') {
-            evt.preventDefault();
-        } else {
-            // the click is on a link or outside the menu so it should be cleared.
+
+        if (!this.menu.contains(target) && (evt.type === 'mousedown' || evt.type === 'keydown')) {
             this.clearAll();
-            return;
-        }
+        } else if (this.menu.contains(target) && evt.type !== 'keydown') {
+            evt.preventDefault();
+        } 
+        // else if (this.menu.contains(target) && evt.type === 'keydown') {
+        //     // break;
+        // } 
+
+
+
+        // if (this.menu.contains(target)) {
+        //     console.log(this.menu.contains(target), target.localName)
+        //     evt.preventDefault();
+        // } else {
+        //     // the click is on a link or outside the menu so it should be cleared.
+        //     console.log('clear?')
+        //     this.clearAll();
+        //     return;
+        // }
+
+        // if (!this.menu.contains(target) && target.localName !== 'a') {
+        //     // the click is on a link or outside the menu so it should be cleared.
+        //     console.log('clear?')
+        //     this.clearAll();
+        //     return;
+        // } 
+        // else {
+        //     evt.preventDefault();
+        // }
+
+
+
 
         // people might click on the icon instead of the button.
         // if so, set the target to the parent (button)
@@ -64,9 +92,11 @@ class Navigation {
             this.toggleButtonAria(target);
     
         } else {
+            const nextSibling = target.nextElementSibling;
+            
             // we're near a submenu by clicking on a button but the menu isn't initially open.
-            if (target.nextSibling !== null) {
-                submenuList = target.nextSibling;
+            if (nextSibling !== null && nextSibling.localName === 'ul') {
+                submenuList = nextSibling;
 
                 // check if there's a nested submenu
                 submenuList.getElementsByTagName('ul').length ?
@@ -232,7 +262,6 @@ class Navigation {
         
         // mousedown focusin click
         // keydown focusin keydown click
-
         switch (evt.type) {
             case 'focusin':
                 this.focusInHandler(evt);
@@ -272,10 +301,10 @@ class Navigation {
             element.classList.remove('no-js');
         });
         // define a list of possible event listeners
-        let listeners = ['click', 'focusin', 'keydown', 'mouseover'];
+        let listeners = ['focusin', 'keydown', 'mouseover'];
 
         if (this.click) {
-            listeners.push('mousedown', 'mouseup');
+            listeners.push('mousedown');
             
             const subMenuList = Array.from(this.menu.querySelectorAll('.am-submenu-list'));
             
