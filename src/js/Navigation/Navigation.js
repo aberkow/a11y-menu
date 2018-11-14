@@ -1,9 +1,6 @@
-// polyfill to support IE
-import '@babel/polyfill';
-
 class Navigation {
     constructor({
-        menuId = 'main-menu',
+        menuId = 'am-main-menu',
         click = false
     } = {}) {
         this.hasNestedSubmenu = false;
@@ -49,21 +46,20 @@ class Navigation {
         }
         
         // if there's an open submenu with sub-submenus...
-        if (document.querySelectorAll('.submenu-list-open').length > 0 && !document.querySelectorAll('.submenu-list-open')[0].contains(target)) {
-            
-            const submenuArray = Array.from(document.querySelectorAll('.submenu-list-open'));
+        if (document.querySelectorAll('.am-submenu-list-open').length > 0 && !document.querySelectorAll('.am-submenu-list-open')[0].contains(target)) {
+
+            const submenuArray = Array.from(document.querySelectorAll('.am-submenu-list-open'));
 
             if (target.nextSibling && target.nextSibling.localName === 'ul') {
                 // if you click from one menu item to another, open the next menu and close the previous one immediately.
                 const nextMenu = target.nextSibling;
-                nextMenu.classList.add('submenu-list-open');    
+                nextMenu.classList.add('am-submenu-list-open');    
             }
             
             submenuArray.forEach((el) => {
                 // toggle all the menus in the NodeList
                 this.toggleSubmenuMenuClass(el);
             })
-            
             
             this.toggleButtonAria(target);
     
@@ -97,7 +93,7 @@ class Navigation {
         const { target, target: { offsetParent: { parentNode } } } = evt;
 
         let expandedButtonArray = Array.from(this.menu.querySelectorAll('[aria-expanded="true"]'));
-        let openMenuArray = Array.from(this.menu.querySelectorAll('.submenu-list-open'));
+        let openMenuArray = Array.from(this.menu.querySelectorAll('.am-submenu-list-open'));
 
         if (!this.menu.contains(target) && expandedButtonArray.length) {
             // if we leave the menu, clear everything
@@ -115,7 +111,7 @@ class Navigation {
             // still in the menu, but moving from one <li> to another
             // toggle just the button and submenu for the elements that received focusout.
             expandedButtonArray = Array.from(parentNode.querySelectorAll('[aria-expanded="true"]'));
-            openMenuArray = Array.from(parentNode.querySelectorAll('.submenu-list-open'));
+            openMenuArray = Array.from(parentNode.querySelectorAll('.am-submenu-list-open'));
             
             // check to make sure that the user hasn't moved to a different menu.
             if (parentNode.id === this.menuId) {
@@ -135,38 +131,10 @@ class Navigation {
      */
     toggleSubmenuMenuClass(el) {
         if (el !== null && el !== undefined) {
-            el.classList.toggle('submenu-list-open');
+            el.classList.toggle('am-submenu-list-open');
         } else {
             this.clearMenus();
         }
-    }
-
-    /**
-     * Close all submenus
-     * 
-     * @returns void
-     * @memberof Navigation
-     */
-    clearMenus() {
-        const menuNode = Array.from(document.querySelectorAll('.submenu-list-open'));
-        menuNode.forEach(menu => {
-            menu.classList.toggle('submenu-list-open');
-        })
-        return;
-    }
-
-    /**
-     * Toggle all visual icons and set aria-expanded to false.
-     *
-     * @returns void
-     * @memberof Navigation
-     */
-    clearButtons() {
-        const buttonNode = Array.from(document.querySelectorAll('.submenu-toggle'));
-        buttonNode.forEach((button) => {
-            button.setAttribute('aria-expanded', 'false');
-        })
-        return;
     }
 
     /**
@@ -178,12 +146,12 @@ class Navigation {
      * @memberof Navigation
      */
     toggleButtonAria(target) {
-        const buttonNode = Array.from(document.querySelectorAll('.submenu-toggle'));
+        const buttonNode = Array.from(document.querySelectorAll('.am-submenu-toggle'));
         
         buttonNode.forEach(button => {
             // for each button, determine if there is a button "above" it
             const prevButton = button.parentElement.parentElement.previousElementSibling;
-            
+
             // case - clicking on a sub-submenu button which is currently NOT expanded.
             if (button.isSameNode(target) && button.getAttribute('aria-expanded') === 'false' && prevButton) {
                 // toggle the states of the previous button and the button/target
@@ -207,6 +175,34 @@ class Navigation {
                 button.setAttribute('aria-expanded', 'false')
             }
         });
+        return;
+    }
+
+    /**
+     * Close all submenus
+     * 
+     * @returns void
+     * @memberof Navigation
+     */
+    clearMenus() {
+        const menuArray = Array.from(this.menu.querySelectorAll('.am-submenu-list-open'));
+        menuArray.forEach(menu => {
+            menu.classList.toggle('am-submenu-list-open');
+        })
+        return;
+    }
+
+    /**
+     * Toggle all visual icons and set aria-expanded to false.
+     *
+     * @returns void
+     * @memberof Navigation
+     */
+    clearButtons() {
+        const buttonArray = Array.from(this.menu.querySelectorAll('.am-submenu-toggle'))
+        buttonArray.forEach((button) => {
+            button.setAttribute('aria-expanded', 'false');
+        })
         return;
     }
 
@@ -271,7 +267,7 @@ class Navigation {
      */
     setEventListeners() {
         // if this script is running, remove the 'no-js' class from the elements.
-        const listElements = Array.from(this.menu.getElementsByClassName('no-js'));
+        const listElements = Array.from(this.menu.querySelectorAll('.no-js'));
         listElements.forEach(element => {
             element.classList.remove('no-js');
         });
@@ -281,9 +277,9 @@ class Navigation {
         if (this.click) {
             listeners.push('mousedown', 'mouseup');
             
-            const subMenuList = Array.from(this.menu.querySelectorAll('.submenu-list'));
+            const subMenuList = Array.from(this.menu.querySelectorAll('.am-submenu-list'));
             
-            subMenuList.forEach(menu => menu.classList.add('click-menu'));
+            subMenuList.forEach(menu => menu.classList.add('am-click-menu'));
 
         } else {
             listeners.push('mouseout');
@@ -300,15 +296,14 @@ class Navigation {
     /**
      * 
      * Initialize the menu by
+     * - assigning the menu
      * - attaching event listeners
-     * - adding styles to the <head>
      *
      * @memberof Navigation
      */
     init() {
         this.menu = document.getElementById(this.menuId);
         this.setEventListeners();
-        // this.setSubmenuIcon();
     }
 }
 

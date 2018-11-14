@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 ```
 
-`main.scss` can be required using webpack or similar.
+`main.scss` can be required using webpack or similar. Another option is to include in your project the transpiled css file that can be found at `dist/main.css`.
 
 ### Installing via Composer.
 This package can be installed as a dependency via [Composer](https://getcomposer.org/). To check if you have Composer installed, run the `composer` command in the terminal. If Composer's not available, install it. Then within your project run `composer require ucomm/a11y-menu`.
@@ -103,16 +103,18 @@ add_action('wp_enqueue_scripts', 'load_scripts');
 ```php
 /**
  * header.php (or whichever file you want to use for displaying the menu)
- * container -> this should be set to 'nav' to make sure the CSS works.
- * items_wrap -> ensures that you can use a custom ID for the <ul> element
- * menu_id -> 'main-menu' is the default ID used by the Navigation JS class.
+ * 
+ * container -> this should be set to 'nav' for better accessibility and to make sure the CSS works.
+ * items_wrap -> ensures that you can use a custom ID for the <ul> element.
+ * menu_id -> The ID should be prefixed with 'am-' to act as a namespace. 
+ *  For instance, 'am-main-menu' is the default ID used by the Navigation JS class.
  *  However this can be overridden if you like
  * walker -> the instance of the walker class
  */
 $args = array(
   'container' => 'nav',
   'items_wrap' => '<ul id="%1$s" class="nav navbar-nav %2$s">%3$s</ul>',
-  'menu_id' => 'main-menu',
+  'menu_id' => 'am-main-menu',
   'theme_location' => 'menu-name',
   'walker' => new A11y\Menu_Walker()
 );
@@ -124,8 +126,6 @@ wp_nav_menu($args);
 * 
 * the main index.js file or wherever you wish to instantiate the Navigation class.
 * see below for overriding the constructor defaults.
-* NB - this is written in ES6. To use ES5 syntax, convert the arrow function to a regular function like this.
-* () => {} becomes function() {}
 */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 ### Javascript Defaults
 The constructor comes with the following defaults. These can be overridden as needed
-- `menuId` - the default is `'main-menu'`
+- `menuId` - the default is `'am-main-menu'`
 - `click` - the default is `false`
 
 ### Most basic case
@@ -152,7 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
 Defaults can be overridden individually or together.
 ```javascript
 const menuOpts = {
-  menuId: 'main-nav',
+  // assumes a <ul> with an id of 'am-my-navigation'
+  menuId: 'am-my-navigation',
   click: true
 }
 const navigation = new Navigation(menuOpts);

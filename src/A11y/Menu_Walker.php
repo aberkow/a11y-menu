@@ -64,14 +64,14 @@ class Menu_Walker extends \Walker_Nav_Menu {
       $output .= "<li data-count='$this->parentItemCount' data-has-children='true' $class_names>";
       if (!$has_top_level_page) {
         // if the thing at the top of the list doesn't go to a top level page, make it into a button.
-        $output .= "<button aria-haspopup='true' aria-expanded='false' aria-owns='list-$this->parentItemCount' class='am-submenu-toggle submenu-toggle'>$item->title";
+        $output .= "<button aria-haspopup='true' aria-expanded='false' aria-owns='list-$this->parentItemCount' class='am-submenu-toggle am-submenu-button'>$item->title";
         // the data-before attribute let's you change the value via js like with an event handler.
-        $output .= "<span class='am-submenu-icon submenu-icon' aria-hidden='true' data-before='∨'></span></button>";
+        $output .= "<span class='am-submenu-icon' aria-hidden='true' data-before='∨'></span></button>";
       } else {
-        $output .= "<a class='am-submenu-link submenu-link' aria-label='$item->title, tab to the next button to expand the sub-menu' href='$item->url'>$item->title";
+        $output .= "<a class='am-submenu-link' aria-label='$item->title, tab to the next button to expand the sub-menu' href='$item->url'>$item->title";
         $output .= "</a>
-        <button class='am-submenu-button submenu-button submenu-toggle' aria-haspopup='true' aria-expanded='false' aria-label='show submenu' aria-owns='list-$this->parentItemCount'>
-        <span aria-hidden='true' class='am-submenu-icon submenu-icon' data-before='∨'></span>
+        <button class='am-submenu-button am-submenu-toggle' aria-haspopup='true' aria-expanded='false' aria-label='show submenu' aria-owns='list-$this->parentItemCount'>
+        <span aria-hidden='true' class='am-submenu-icon' data-before='∨'></span>
         </button>";
       }
       // build the list items then increment the count of how many contain children
