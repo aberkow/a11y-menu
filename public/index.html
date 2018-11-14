@@ -13,14 +13,18 @@
 </head>
 
 <body>
-    <h1>A11Y Menu</h1>
-    <p>This version is built in javascript using a json file. If you turn off javascript it won't work correctly...</p>
+    <div class="content-wrapper">
+        <h1>A11Y Menu</h1>
+        <p>This version is built in javascript using a json file. If you turn off javascript it won't work correctly...</p>
+    </div>
     <nav role="navigation">
         <ul id="am-main-menu" class="am-click-menu"></ul>
     </nav>
-    <a href="#">A link</a>
-    <hr />
-    <p>This version will keep working even if javascript is off. If you're using a recent version of chrome, firefox, or safari, you will still be able to tab through the menu even without js.</p>
+    <div class="content-wrapper">
+        <p>If you tab onto <a href="#">this link</a>, you can see that the menus above will close.</p>
+        <hr />
+        <p>The version below will keep working even if javascript is off. If you're using a recent version of chrome, firefox, or safari, you will still be able to tab through the menu even without js.</p>
+    </div>
     <nav role="navigation">
         <ul id="am-menu">
             <li class="no-js">

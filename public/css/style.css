@@ -1,10 +1,35 @@
-/* nav {
-  background-color: rgba(177,2,0,0.8);
+body {
+  margin: 0;
+}
+
+hr {
+  margin: 3em 0;
+}
+
+.content-wrapper {
+  margin: 4em auto;
+  max-width: 75em;
+}
+
+nav {
+  background-color: #e7e7e7;
   font-family: sans-serif;
-  margin: 2em 0 10em;
+  margin: 2em 0;
   padding: 2em;
 }
 
+nav > ul > li + li {
+  margin-left: 1em;
+}
+
+.am-submenu-list a {
+  padding: 1em;
+}
+
+.am-submenu-button {
+  padding-right: 1em;
+}
+/* 
 nav li {
   padding: 1em;
 }
