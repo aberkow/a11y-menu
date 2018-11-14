@@ -23,7 +23,7 @@ nav {
     >ul {
         display: flex;
     }
-    ul:not(.click-menu) {
+    ul:not(.am-click-menu) {
         li {
             &:hover {
                 >ul {
@@ -59,7 +59,7 @@ nav {
             display: flex;
             position: relative;
             // needed to override bootstrap's insistence on making these block elements.
-            .submenu-link {
+            .am-submenu-link {
                 display: block;
             }
             ul {
@@ -81,9 +81,9 @@ nav {
                 }
             }
             // open the menu when the class is applied via js
-            ul.submenu-list-open {
+            ul.am-submenu-list-open {
                 @extend %submenu-open;
-                ul.submenu-list-open {
+                ul.am-submenu-list-open {
                     @extend %submenu-open;
                     padding: 0 0 0 2em;
                     position: relative;
