@@ -38,34 +38,6 @@ class Navigation {
         } else if (this.menu.contains(target) && evt.type !== 'keydown') {
             evt.preventDefault();
         } 
-        // else if (this.menu.contains(target) && evt.type === 'keydown') {
-        //     // break;
-        // } 
-
-
-
-        // if (this.menu.contains(target)) {
-        //     console.log(this.menu.contains(target), target.localName)
-        //     evt.preventDefault();
-        // } else {
-        //     // the click is on a link or outside the menu so it should be cleared.
-        //     console.log('clear?')
-        //     this.clearAll();
-        //     return;
-        // }
-
-        // if (!this.menu.contains(target) && target.localName !== 'a') {
-        //     // the click is on a link or outside the menu so it should be cleared.
-        //     console.log('clear?')
-        //     this.clearAll();
-        //     return;
-        // } 
-        // else {
-        //     evt.preventDefault();
-        // }
-
-
-
 
         // people might click on the icon instead of the button.
         // if so, set the target to the parent (button)
