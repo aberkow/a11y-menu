@@ -26,7 +26,6 @@ class Navigation {
      * @memberof Navigation
      */
     clickHandler(evt) {
-        console.log(evt.type)
         let target = evt.target;
         let submenuList = null;
 
