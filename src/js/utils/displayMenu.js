@@ -85,4 +85,5 @@ const displayMenu = (ul, json) => {
 
 // the recursive function call wasn't working when it was inside the module.exports object directly.
 // so break it out and set the function here.
-module.exports.displayMenu = displayMenu;
+
+export { displayMenu };
