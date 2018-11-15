@@ -308,5 +308,5 @@ class Navigation {
 }
 
 /* strip-code */
-module.exports = Navigation;
+export default Navigation;
 /* end-strip-code */

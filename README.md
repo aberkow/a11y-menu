@@ -12,34 +12,33 @@ This project aims to create a re-useable and accessible main navigation module. 
 This package can be installed via npm using `npm install a11y-menu`. This will provide access to the JS and sass files, but _not_ the WordPress menu walker. The intention is to give javascript developers access to the JS menu walker, navigation script, and styles in a way that can be used with webpack or other bundlers.
 
 ### Creating a menu via JS
-There are three files that can be used together to create an accessible menu.
+There are two functions and one stylesheet that can be used together to create an accessible menu.
 
-- displayMenu.js
-- Navigation.js
+- `displayMenu`
+- `Navigation`
 - main.scss
 
-`displayMenu.js` takes a json file (see /mock-data below for the format). It can be imported and used as follows
+`displayMenu()` takes a json file (see /mock-data below for the format). It can be imported and used as follows
 ```js
 import { displayMenu } from 'a11y-menu';
 // testData is an arbitrary json file.
-const testData = require('./test-data.json');
+import { menu } from './test-data.json';
 const mainMenu = document.getElementById('main-menu');
 
-displayMenu(mainMenu, testData.menu); 
+displayMenu(mainMenu, menu); 
 ```
 This can be combined with the `Navigation` class to create a working menu with submenus that display on either click or hover events.
 
 ```js
 // clickable menu
-import { displayMenu } from 'a11y-menu';
-import Navigation from 'a11y-menu';
+import Navigation, { displayMenu } from 'a11y-menu';
 // testData is an arbitrary json file.
-const testData = require('./test-data.json');
+import { menu } from './test-data.json';
 const mainMenu = document.getElementById('main-menu');
 
-mainMenu.classList.add('click-menu');
+mainMenu.classList.add('am-click-menu');
 
-displayMenu(mainMenu, testData.menu);
+displayMenu(mainMenu, menu);
 
 const navigation = new Navigation({ click: true });
 
@@ -50,15 +49,16 @@ document.addEventListener('DOMContentLoaded', () => {
 ```
 ```js
 // hoverable menu
-import { displayMenu } from 'a11y-menu';
-import Navigation from 'a11y-menu';
+import Navigation, { displayMenu } from 'a11y-menu';
 // testData is an arbitrary json file.
-const testData = require('./test-data.json');
+import { menu } from './test-data.json';
+
 const mainMenu = document.getElementById('main-menu');
 
-mainMenu.classList.remove('click-menu');
+// if needed
+mainMenu.classList.remove('am-click-menu');
 
-displayMenu(mainMenu, testData.menu);
+displayMenu(mainMenu, menu);
 
 const navigation = new Navigation();
 

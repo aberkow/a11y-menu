@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>Accessibility Menu</title>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
   crossorigin="anonymous">
   <link rel="stylesheet" href="../dist/main.css">
@@ -13,14 +13,18 @@
 </head>
 
 <body>
-    <h1>A11Y Menu</h1>
-    <p>This version is built in javascript using a json file. If you turn off javascript it won't work correctly...</p>
+    <div class="content-wrapper">
+        <h1><abbr title="accessibility">A11Y</abbr> Menu</h1>
+        <p>This version is built in javascript using a json file. If you turn off javascript it won't work correctly...</p>
+    </div>
     <nav role="navigation">
         <ul id="am-main-menu" class="am-click-menu"></ul>
     </nav>
-    <a href="#">A link</a>
-    <hr />
-    <p>This version will keep working even if javascript is off. If you're using a recent version of chrome, firefox, or safari, you will still be able to tab through the menu even without js.</p>
+    <div class="content-wrapper">
+        <p>If you tab onto <a href="#">this link</a>, you can see that the menus above will close.</p>
+        <hr />
+        <p>The version below will keep working even if javascript is off. If you're using a recent version of chrome, firefox, or safari, you will still be able to tab through the menu even without js.</p>
+    </div>
     <nav role="navigation">
         <ul id="am-menu">
             <li class="no-js">
