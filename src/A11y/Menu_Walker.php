@@ -9,6 +9,21 @@ class Menu_Walker extends \Walker_Nav_Menu {
   public function __construct() {
     $this->parentItemCount = 0;
   }
+
+  /**
+   * Check if the item has a link which is going outbound.
+   *
+   * @param [string] $url the URL of the item
+   * @return boolean
+   */
+  private function is_outbound_link($url) {
+    // parse the url to get the host
+    $parsed = parse_url($url);
+    $host = $parsed['host'];
+    
+    // is the item going to an outbound link?
+    return $host === $_SERVER['HTTP_HOST'] ? false : true;
+  }
   public function start_lvl(&$output, $depth = 0, $args = array()) {
     // the levels are only the interior <ul> tags. they don't include the exterior wrapping tag.
 
@@ -28,7 +43,6 @@ class Menu_Walker extends \Walker_Nav_Menu {
     $output .= "</ul>";
   }
   public function start_el(&$output, $item, $depth = 0, $args = array(), $id = 0) {
-
     // prevent errors from being thrown if a menu hasn't been set yet.
     if (!$item->db_id) {
       return;
@@ -45,9 +59,15 @@ class Menu_Walker extends \Walker_Nav_Menu {
     if (!empty($item->classes)) {
       $classes = (array)$item->classes;
     }
-    $class_names = join(' ', apply_filters('nav_menu_css_class', array_filter($classes), $item, $args, $depth));
+    
     // a list of class names plus the html class attribute
-    $class_names = $class_names ? " class='no-js am-list-item " . esc_attr($class_names) . "'" : "";
+    $class_names = join(' ', apply_filters('nav_menu_css_class', array_filter($classes), $item, $args, $depth));
+
+    if (!$this->is_outbound_link($item->url)) {
+      $class_names = $class_names ? " class='no-js am-list-item " . esc_attr($class_names) . "'" : "";
+    } else {
+      $class_names = $class_names ? " class='no-js am-list-item am-outbound " . esc_attr($class_names) . "'" : "";
+    }
 
     // check that items with children have links
     // make sure that links with [http(s)://]# are rendered as buttons.
