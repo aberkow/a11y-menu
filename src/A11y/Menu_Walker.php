@@ -25,7 +25,12 @@ class Menu_Walker extends \Walker_Nav_Menu {
 
     // parse the url to get the host
     $parsed = parse_url($url);
-    $host = $parsed['host'];
+
+    if (isset($parsed['host'])) {
+      $host = $parsed['host'];
+    } else {
+      return false;
+    }
     
     // is the item going to an outbound link?
     return $host === $_SERVER['HTTP_HOST'] ? false : true;
