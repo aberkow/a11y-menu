@@ -17,6 +17,12 @@ class Menu_Walker extends \Walker_Nav_Menu {
    * @return boolean
    */
   private function is_outbound_link($url) {
+
+    // exit early if the url is empty or is a # (which will be turned into a button)
+    if ($url === '' || $url === '#') {
+      return false;
+    }
+
     // parse the url to get the host
     $parsed = parse_url($url);
     $host = $parsed['host'];
