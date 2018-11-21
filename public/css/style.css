@@ -1,31 +1,75 @@
+:root {
+  --white: #ffffff;
+  --black: #000000;
+  --lightGrey: #efefef;
+  --blue: #2a46bf;
+}
+
 body {
+  background-color: var(--white);
   margin: 0;
+}
+
+p,
+ul,
+code,
+pre {
+  line-height: 1.5;
+  font-size: 1.1em;
 }
 
 hr {
   margin: 3em 0;
 }
 
+abbr {
+  text-decoration: none;
+}
+
+pre {
+  background-color: var(--lightGrey);
+  padding-top: 1em;
+}
+
+code     {
+  background-color: var(--lightGrey);
+  padding: 0.2em;
+}
+
+a {
+  color: var(--black);
+  font-weight: bold;
+}
+
+a:hover,
+a:focus,
+a:hover > i,
+a:focus > i {
+  color: var(--blue);
+}
+
 .content-wrapper {
   margin: 4em auto;
-  max-width: 75em;
+  max-width: 45em;
+}
+
+.screen-reader {
+  position: absolute;
+  left: -999999px;
 }
 
 nav {
-  background-color: #e7e7e7;
+  background-color: var(--white);
   font-family: sans-serif;
-  margin: 2em 0;
+  margin: 2em auto;
+  max-width: 110em;
   padding: 0 2em;
 }
 
 li.no-js ul,
 .am-submenu-list {
-  background-color: #e7e7e7;
+  background-color: var(--white);
   padding-left: 1em;
-}
-
-.am-submenu-button {
-  padding-right: 1em;
 }
 
 #am-main-menu,
@@ -36,6 +80,7 @@ li.no-js ul,
 #am-main-menu a,
 #am-menu a {
   color: black;
+  font-weight: normal;
   padding: 1.5em 0.5em;
   text-decoration: none;
 }
@@ -48,13 +93,12 @@ li.no-js ul,
 #am-main-menu button:focus,
 #am-menu button:hover,
 #am-menu button:focus {
-  background-color: #cccccc;
-  box-shadow: inset 0 -0.5em rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 -0.25em var(--blue);
 }
 
 #am-main-menu button:focus span,
 #am-menu button:focus span {
-  background-color: #cccccc;
+  background-color: var(--white);
   color: black;
 }
 

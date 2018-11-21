@@ -130,6 +130,10 @@ nav {
                 margin: 0;
                 padding: 0;
                 border: 0;
+                padding: 0 0.5em;
+                span {
+                    margin-left: 0;
+                }
                 // give a visual cue to carets that are next to links
                 &:focus {
                     >span {

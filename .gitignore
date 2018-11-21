@@ -2,7 +2,6 @@
 .DS_Store
 .sass-cache/
 node_modules
-public/js
 dist/index.js
 dist/index.js.map
 /vendor/
