@@ -35,10 +35,7 @@ gulp.task('js:other', () => {
       errorHandler: onError
     }))
     .pipe(webpack(require('./webpack.config.js')))
-    // .pipe(gulp.dest('public/js'), {
-    //   overwrite: true
-    // })
-    .pipe(gulp.dest('dist'), {
+    .pipe(gulp.dest('public/js'), {
       overwrite: true
     })
 })
@@ -87,4 +84,4 @@ gulp.task('watch', ['js:navigation', 'js:other', 'sass:main', 'sass:other'], () 
   gulp.watch(['!./src/scss/main.scss', './src/scss/**/*.scss'], ['sass:other']);
 });
 
-gulp.task('default', ['js:navigation', 'sass:main']);
+gulp.task('default', ['js:navigation', 'js:other', 'sass:main', 'sass:other']);
