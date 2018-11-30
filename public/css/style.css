@@ -26,14 +26,10 @@ abbr {
   text-decoration: none;
 }
 
-pre {
-  background-color: var(--lightGrey);
-  padding-top: 1em;
-}
-
-code     {
-  background-color: var(--lightGrey);
-  padding: 0.2em;
+code[class*=language-],
+pre[class*=language-],
+:not(pre) > code[class*=language-] {
+  border-radius: 0;
 }
 
 a {
@@ -59,7 +55,6 @@ a:focus > i {
 }
 
 nav {
-  background-color: var(--white);
   font-family: sans-serif;
   margin: 2em auto;
   max-width: 110em;
@@ -77,23 +72,47 @@ li.no-js ul,
   margin: 0;
 }
 
-#am-main-menu a,
-#am-menu a {
+#am-navigation {
+  background-color: var(--lightGrey);
+}
+
+#am-main-menu a {
   color: black;
   font-weight: normal;
   padding: 1.5em 0.5em;
   text-decoration: none;
 }
 
+#am-nav {
+  background-color: var(--black);
+  opacity: 0.8; 
+}
+
+#am-menu a,
+#am-menu button {
+  color: var(--white);
+  font-family: serif;
+  font-weight: lighter;
+  padding: 1.5em 0.5em;
+  text-decoration: none;
+}
+
+#am-menu button > span {
+  color: var(--white)
+}
+
 #am-main-menu a:hover,
 #am-main-menu a:focus,
+#am-main-menu button:hover,
+#am-main-menu button:focus {
+box-shadow: inset 0 -0.25em var(--blue);
+}
 #am-menu a:hover,
 #am-menu a:focus,
-#am-main-menu button:hover,
-#am-main-menu button:focus,
 #am-menu button:hover,
 #am-menu button:focus {
-  box-shadow: inset 0 -0.25em var(--blue);
+
+
 }
 
 #am-main-menu button:focus span,
