@@ -7858,6 +7858,7 @@ var _exports2 = _interopRequireDefault(_exports);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var menus = document.querySelectorAll('nav[id^="am-"]');
 var testData = __webpack_require__(282);
 var mainMenu = document.getElementById('am-main-menu');
 
@@ -7865,14 +7866,17 @@ var mainMenu = document.getElementById('am-main-menu');
 var navigation = new _exports2.default({ click: true });
 
 document.addEventListener('DOMContentLoaded', function (evt) {
+    Prism.highlightAll();
     navigation.init();
 });
 
-document.addEventListener('click', function (evt) {
-    if (evt.target.localName === 'a') {
-        evt.preventDefault();
-        alert('Sorry but the links on this page don\'t go anywhere. Feel free to click the buttons!');
-    }
+menus.forEach(function (menu) {
+    menu.addEventListener('click', function (evt) {
+        if (evt.target.localName === 'a') {
+            evt.preventDefault();
+            alert('Sorry but the links in these menus don\'t go anywhere.');
+        }
+    });
 });
 
 /***/ }),

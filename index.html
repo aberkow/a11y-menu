@@ -8,6 +8,7 @@
   <title>Accessibility Menu</title>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
   crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism-okaidia.min.css">
   <link rel="stylesheet" href="dist/main.css">
   <link rel="stylesheet" href="public/css/style.css">
 </head>
@@ -42,41 +43,40 @@
                 npm install a11y-menu
             </pre>
             <p>Then using a bundler (webpack, parcel, etc...), you can quickly create a menu from a formatted <code>json</code> file.</p>
-            <pre>
-                // to create a clickable menu
-                
-                import Navigation, { displayMenu } from 'a11y-menu';
+            <!-- yes... I know this is a little messy... -->
+<pre class="language-javascript"><code class="language-javascript">// to create a clickable menu
 
-                // test-data is an arbitrary json file.
-                import { menuData } from './test-data.json';
+import Navigation, { displayMenu } from 'a11y-menu';
 
-                const mainMenu = document.getElementById('main-menu');
-                
-                mainMenu.classList.add('am-click-menu');
-                
-                displayMenu(mainMenu, menuData);
-                
-                const navigation = new Navigation({ click: true });
-                
-                document.addEventListener('DOMContentLoaded', () => {
-                    navigation.init();
-                });
-            </pre>
+// test-data is an arbitrary json file.
+import { menuData } from './test-data.json';
+
+const mainMenu = document.getElementById('main-menu');
+
+mainMenu.classList.add('am-click-menu');
+
+displayMenu(mainMenu, menuData);
+
+const navigation = new Navigation({ click: true });
+
+document.addEventListener('DOMContentLoaded', () => {
+    navigation.init();
+});</code></pre>
+
             <h3>composer</h3>
-            <pre>
-                composer require ucomm/a11y-menu
-            </pre>
-            <p>Bringing it into a wordpress project is also easy. After requiring the <code>vendor/autoload.php</code> file and enqueueing the stylesheets and javascript (see the readme), you can use the custom nav walker.</p>
-            <pre>
-                $args = array(
-                    'container' => 'nav',
-                    'menu_id' => 'am-main-menu',
-                    'theme_location' => 'menu-name',
-                    'walker' => new A11y\Menu_Walker()
-                );
 
-                wp_nav_menu($args);
-            </pre>
+<pre class="language-bash"><code class="language-bash">composer require ucomm/a11y-menu</code></pre>
+
+            <p>Bringing it into a wordpress project is also easy. After requiring the <code class="language-bash">vendor/autoload.php</code> file and enqueueing the stylesheets and javascript (see the readme), you can use the custom nav walker.</p>
+
+<pre class="language-php"><code class="language-php">$args = array(
+    'container' => 'nav',
+    'menu_id' => 'am-main-menu',
+    'theme_location' => 'menu-name',
+    'walker' => new A11y\Menu_Walker()
+);
+
+wp_nav_menu($args);</code></pre>
             <h3>Styles</h3>
             <p>The menu comes with a minimal set of styles which can be easily overridden. The base styles are just a starting point and should not be used "as is". The menus below represent the base styles plus additional styles for:</p>
 
@@ -87,14 +87,14 @@
                 <li>margin and padding</li>
                 <li>etc...</li>
             </ul>
-            <p>Just turn off the <code>css/style.css</code></p>
+            <p>Just turn off the <code class="language-bash">css/style.css</code></p>
         </div>
     </div>
     <div class="content-wrapper">
         <h2>JS based menu</h2>
         <p>The version below is built in javascript using a json file. If you turn off javascript it will disappear...</p>
     </div>
-    <nav role="navigation">
+    <nav id="am-navigation" role="navigation">
         <ul id="am-main-menu" class="am-click-menu"></ul>
     </nav>
     <div class="content-wrapper">
@@ -102,7 +102,7 @@
         <hr />
         <p>The version below will keep working even if javascript is off. This emulates server-side rendering. If you're using a recent version of chrome, firefox, or safari, you will still be able to tab through the menu even without js. <a href="https://caniuse.com/#search=focus-within">Check out <abbr title="can I use">caniuse</abbr> for details</a>.</p>
     </div>
-    <nav role="navigation">
+    <nav id="am-nav" role="navigation">
         <ul id="am-menu">
             <li class="no-js">
                 <a href="/">Basic Link</a>
@@ -163,9 +163,16 @@
             </li>
         </ul>
   </nav>
-  <!-- Tests the menu against the exact Navigation version in the dist folder -->
-  <!-- <script src="../dist/Navigation.js" type="text/javascript"></script> -->
-  <!-- Please make sure to create this file by running the gulp task -->
+
+  <!-- All this is needed for the cool syntax highlighting -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-clike.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-markup-templating.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-markup.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-php.min.js"></script>
+
   <script src="public/js/index.js" type="text/javascript"></script>
 </body>
 

@@ -26,14 +26,10 @@ abbr {
   text-decoration: none;
 }
 
-pre {
-  background-color: var(--lightGrey);
-  padding-top: 1em;
-}
-
-code     {
-  background-color: var(--lightGrey);
-  padding: 0.2em;
+code[class*=language-],
+pre[class*=language-],
+:not(pre) > code[class*=language-] {
+  border-radius: 0;
 }
 
 a {

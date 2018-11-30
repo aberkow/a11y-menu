@@ -18,7 +18,7 @@
 }
 
 // styles that apply more generally to the menu
-nav {
+nav[id^='am-'] {
     // select the first ul
     >ul {
         display: flex;
