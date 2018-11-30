@@ -39,11 +39,12 @@
                 or <a href="https://packagist.org/packages/ucomm/a11y-menu">composer</a> package (NB - the PHP version is currently
                 wordpress only. More versions are planned for the future).</p>
             <p>In either case, the a11y-menu should be brought in as a dependency</p>
-            <pre>
-                npm install a11y-menu
-            </pre>
-            <p>Then using a bundler (webpack, parcel, etc...), you can quickly create a menu from a formatted <code>json</code> file.</p>
+
+<pre class="language-bash"><code class="language-bash">npm install a11y-menu</code></pre>
+
+            <p>Then using a bundler (webpack, parcel, etc...), you can quickly create a menu from a formatted <code class="language-bash">json</code> file.</p>
             <!-- yes... I know this is a little messy... -->
+            
 <pre class="language-javascript"><code class="language-javascript">// to create a clickable menu
 
 import Navigation, { displayMenu } from 'a11y-menu';
