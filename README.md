@@ -1,6 +1,4 @@
 # a11y Menu
-This is still a work in progress and not ready for production yet.
-
 This project aims to create a re-useable and accessible main navigation module. There are a few goals...
 - Be able to include this package as a standalone or in a WordPress plugin/theme
 - Allow for quick implementation of accessible menus
@@ -70,8 +68,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
 `main.scss` can be required using webpack or similar. Another option is to include in your project the transpiled css file that can be found at `dist/main.css`.
 
+
 ### Installing via Composer.
 This package can be installed as a dependency via [Composer](https://getcomposer.org/). To check if you have Composer installed, run the `composer` command in the terminal. If Composer's not available, install it. Then within your project run `composer require ucomm/a11y-menu`.
+### Creating a menu with PHP
+For non-WordPress PHP projects, you can use the [`aberkow/a11y-menu-php` composer package](https://github.com/aberkow/a11y-menu-php). The package takes the place of the javascript `displayMenu` function for PHP projects. It can be installed with `composer require aberkow/a11y-menu-php` and exposes a single static method which can be used like this:
+```php
+<?php
+
+require('vendor/autoload.php');
+$data = file_get_contents('path/to/file.json');
+$menu = json_decode($data)->menu;
+
+?>
+<nav id="am-navigation">
+  <ul id="am-php-menu">
+    <?php echo A11y\Menu_Generator::display_menu($menu); ?>
+  </ul>
+</nav>
+```
 ### Creating a WordPress menu in a theme.
 In order to use the custom Walker within your theme, you'll need to do the following
 ```php
