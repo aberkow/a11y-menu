@@ -7933,6 +7933,7 @@ var Navigation = function () {
         this.menu = null;
         this.menuId = menuId;
         this.click = click;
+        this.currentItem = null;
     }
 
     _createClass(Navigation, [{
@@ -7941,11 +7942,13 @@ var Navigation = function () {
             var type = evt.type,
                 target = evt.target;
 
+            var customEvt = this.createCustomEvt();
             if (type === 'mouseout' && target.getAttribute('aria-haspopup') === "true") {
                 target.setAttribute('aria-expanded', 'false');
             } else if (type === 'mouseover' && target.getAttribute('aria-haspopup') === "false") {
                 target.setAttribute('aria-expanded', 'true');
             }
+            target.dispatchEvent(customEvt);
         }
         /**
          *
@@ -8010,6 +8013,8 @@ var Navigation = function () {
                     this.toggleButtonAria(target);
                 }
             }
+            var customEvt = this.createCustomEvt();
+            target.dispatchEvent(customEvt);
         }
 
         /**
@@ -8174,6 +8179,62 @@ var Navigation = function () {
         }
 
         /**
+         * 
+         * Get the button element which is expanded
+         * 
+         * @return DOM element
+         */
+
+    }, {
+        key: 'getCurrentItem',
+        value: function getCurrentItem() {
+            var expandedEl = this.menu.querySelector('[aria-expanded="true"]');
+            if (expandedEl) {
+                return expandedEl.parentElement;
+            }
+        }
+
+        /**
+         * 
+         * Add a class to the current top level list item
+         * 
+         * @param obj the event object
+         * @return void  
+         */
+
+    }, {
+        key: 'setCurrentItem',
+        value: function setCurrentItem(evt) {
+            var itemNode = Array.from(this.menu.querySelectorAll('li'));
+            itemNode.forEach(function (item) {
+                item.classList.remove('am-current-item');
+            });
+
+            if (evt.detail.parent) {
+                this.currentItem = evt.detail.parent;
+                this.currentItem.classList.add('am-current-item');
+            }
+        }
+
+        /**
+         * 
+         * Create a custom event to hook into on clicks and hovers.
+         * 
+         * @return obj 
+         */
+
+    }, {
+        key: 'createCustomEvt',
+        value: function createCustomEvt() {
+            return new CustomEvent('am-set-current-item', {
+                bubbles: true,
+                detail: {
+                    parent: this.getCurrentItem()
+                }
+            });
+        }
+
+        /**
          *
          * dispatch events to the correct functions.
          * types include: click, focusin, keydown, mousedown
@@ -8253,6 +8314,9 @@ var Navigation = function () {
                     _this3.eventDispatcher(evt);
                 });
             }
+            this.menu.addEventListener('am-set-current-item', function (evt) {
+                _this3.setCurrentItem(evt);
+            });
         }
 
         /**

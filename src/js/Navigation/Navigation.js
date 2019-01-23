@@ -7,15 +7,18 @@ class Navigation {
         this.menu = null;
         this.menuId = menuId;
         this.click = click;
+        this.currentItem = null;
     }
 
     hoverHandler(evt) {
         const { type, target } = evt;
+        const customEvt = this.createCustomEvt();
         if (type === 'mouseout' && target.getAttribute('aria-haspopup') === "true") {
             target.setAttribute('aria-expanded', 'false');
         } else if (type === 'mouseover' && target.getAttribute('aria-haspopup') === "false") {
             target.setAttribute('aria-expanded', 'true');
         }
+        target.dispatchEvent(customEvt)
     }
     /**
      *
@@ -76,8 +79,10 @@ class Navigation {
         
                 this.toggleSubmenuMenuClass(submenuList);
                 this.toggleButtonAria(target);
-            } 
+            }
         }
+        const customEvt = this.createCustomEvt();
+        target.dispatchEvent(customEvt)
     }
 
     /**
@@ -221,6 +226,55 @@ class Navigation {
     }
 
     /**
+     * 
+     * Get the button element which is expanded
+     * 
+     * @return DOM element
+     */
+    getCurrentItem() {
+        const expandedEl = this.menu.querySelector('[aria-expanded="true"]')
+        if (expandedEl) {
+            return expandedEl.parentElement;
+        }        
+    }
+
+    /**
+     * 
+     * Add a class to the current top level list item
+     * 
+     * @param obj the event object
+     * @return void  
+     */
+    setCurrentItem(evt) {
+        const itemNode = Array.from(this.menu.querySelectorAll('li'));
+        itemNode.forEach(item => {
+            item.classList.remove('am-current-item');
+        })
+
+        
+        if (evt.detail.parent) {
+            this.currentItem = evt.detail.parent;
+            this.currentItem.classList.add('am-current-item');
+        }
+    }
+
+
+    /**
+     * 
+     * Create a custom event to hook into on clicks and hovers.
+     * 
+     * @return obj 
+     */
+    createCustomEvt() {
+        return new CustomEvent('am-set-current-item', {
+            bubbles: true,
+            detail: {
+                parent: this.getCurrentItem()
+            }
+        })
+    }
+
+    /**
      *
      * dispatch events to the correct functions.
      * types include: click, focusin, keydown, mousedown
@@ -291,6 +345,9 @@ class Navigation {
                 this.eventDispatcher(evt);
             });
         }
+        this.menu.addEventListener('am-set-current-item', (evt) => {
+            this.setCurrentItem(evt);
+        })
     }
 
     /**
