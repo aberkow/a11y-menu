@@ -123,6 +123,7 @@ class Navigation {
             if (parentNode.id === this.menuId) {
                 this.toggleButtonAria(expandedButtonArray[0]);
                 this.toggleSubmenuMenuClass(openMenuArray[0]);
+                this.clearCurrent();
             }
         }
         return;
@@ -212,6 +213,12 @@ class Navigation {
         return;
     }
 
+    clearCurrent() {
+        const currentItem = this.menu.querySelector('.am-current-item');
+        currentItem.classList.remove('am-current-item');
+        return;
+    }
+
     /**
      * 
      * Completely reset the state of the menu
@@ -222,12 +229,14 @@ class Navigation {
     clearAll() {
         this.clearMenus();
         this.clearButtons();
+        this.clearCurrent();
         return;
     }
 
     /**
      * 
      * Get the button element which is expanded
+     * Helps with identifying the top level list item
      * 
      * @return DOM element
      */
@@ -246,14 +255,15 @@ class Navigation {
      * @return void  
      */
     setCurrentItem(evt) {
+        const { detail: { current } } = evt;
         const itemNode = Array.from(this.menu.querySelectorAll('li'));
         itemNode.forEach(item => {
             item.classList.remove('am-current-item');
         })
 
         
-        if (evt.detail.parent) {
-            this.currentItem = evt.detail.parent;
+        if (current) {
+            this.currentItem = current;
             this.currentItem.classList.add('am-current-item');
         }
     }
@@ -269,7 +279,7 @@ class Navigation {
         return new CustomEvent('am-set-current-item', {
             bubbles: true,
             detail: {
-                parent: this.getCurrentItem()
+                current: this.getCurrentItem()
             }
         })
     }

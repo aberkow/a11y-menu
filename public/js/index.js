@@ -8061,6 +8061,7 @@ var Navigation = function () {
                 if (parentNode.id === this.menuId) {
                     this.toggleButtonAria(expandedButtonArray[0]);
                     this.toggleSubmenuMenuClass(openMenuArray[0]);
+                    this.clearCurrent();
                 }
             }
             return;
@@ -8161,6 +8162,13 @@ var Navigation = function () {
             });
             return;
         }
+    }, {
+        key: 'clearCurrent',
+        value: function clearCurrent() {
+            var currentItem = this.menu.querySelector('.am-current-item');
+            currentItem.classList.remove('am-current-item');
+            return;
+        }
 
         /**
          * 
@@ -8175,12 +8183,14 @@ var Navigation = function () {
         value: function clearAll() {
             this.clearMenus();
             this.clearButtons();
+            this.clearCurrent();
             return;
         }
 
         /**
          * 
          * Get the button element which is expanded
+         * Helps with identifying the top level list item
          * 
          * @return DOM element
          */
@@ -8205,13 +8215,15 @@ var Navigation = function () {
     }, {
         key: 'setCurrentItem',
         value: function setCurrentItem(evt) {
+            var current = evt.detail.current;
+
             var itemNode = Array.from(this.menu.querySelectorAll('li'));
             itemNode.forEach(function (item) {
                 item.classList.remove('am-current-item');
             });
 
-            if (evt.detail.parent) {
-                this.currentItem = evt.detail.parent;
+            if (current) {
+                this.currentItem = current;
                 this.currentItem.classList.add('am-current-item');
             }
         }
@@ -8229,7 +8241,7 @@ var Navigation = function () {
             return new CustomEvent('am-set-current-item', {
                 bubbles: true,
                 detail: {
-                    parent: this.getCurrentItem()
+                    current: this.getCurrentItem()
                 }
             });
         }
