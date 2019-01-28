@@ -7933,6 +7933,7 @@ var Navigation = function () {
         this.menu = null;
         this.menuId = menuId;
         this.click = click;
+        this.currentItem = null;
     }
 
     _createClass(Navigation, [{
@@ -7941,11 +7942,13 @@ var Navigation = function () {
             var type = evt.type,
                 target = evt.target;
 
+            var customEvt = this.createCustomEvt();
             if (type === 'mouseout' && target.getAttribute('aria-haspopup') === "true") {
                 target.setAttribute('aria-expanded', 'false');
             } else if (type === 'mouseover' && target.getAttribute('aria-haspopup') === "false") {
                 target.setAttribute('aria-expanded', 'true');
             }
+            target.dispatchEvent(customEvt);
         }
         /**
          *
@@ -8010,6 +8013,8 @@ var Navigation = function () {
                     this.toggleButtonAria(target);
                 }
             }
+            var customEvt = this.createCustomEvt();
+            target.dispatchEvent(customEvt);
         }
 
         /**
@@ -8056,6 +8061,7 @@ var Navigation = function () {
                 if (parentNode.id === this.menuId) {
                     this.toggleButtonAria(expandedButtonArray[0]);
                     this.toggleSubmenuMenuClass(openMenuArray[0]);
+                    this.clearCurrent();
                 }
             }
             return;
@@ -8156,6 +8162,13 @@ var Navigation = function () {
             });
             return;
         }
+    }, {
+        key: 'clearCurrent',
+        value: function clearCurrent() {
+            var currentItem = this.menu.querySelector('.am-current-item');
+            currentItem.classList.remove('am-current-item');
+            return;
+        }
 
         /**
          * 
@@ -8170,7 +8183,67 @@ var Navigation = function () {
         value: function clearAll() {
             this.clearMenus();
             this.clearButtons();
+            this.clearCurrent();
             return;
+        }
+
+        /**
+         * 
+         * Get the button element which is expanded
+         * Helps with identifying the top level list item
+         * 
+         * @return DOM element
+         */
+
+    }, {
+        key: 'getCurrentItem',
+        value: function getCurrentItem() {
+            var expandedEl = this.menu.querySelector('[aria-expanded="true"]');
+            if (expandedEl) {
+                return expandedEl.parentElement;
+            }
+        }
+
+        /**
+         * 
+         * Add a class to the current top level list item
+         * 
+         * @param obj the event object
+         * @return void  
+         */
+
+    }, {
+        key: 'setCurrentItem',
+        value: function setCurrentItem(evt) {
+            var current = evt.detail.current;
+
+            var itemNode = Array.from(this.menu.querySelectorAll('li'));
+            itemNode.forEach(function (item) {
+                item.classList.remove('am-current-item');
+            });
+
+            if (current) {
+                this.currentItem = current;
+                this.currentItem.classList.add('am-current-item');
+            }
+        }
+
+        /**
+         * 
+         * Create a custom event to hook into on clicks and hovers.
+         * 
+         * @return obj 
+         */
+
+    }, {
+        key: 'createCustomEvt',
+        value: function createCustomEvt() {
+            return new CustomEvent('am-set-current-item', {
+                bubbles: true,
+                detail: {
+                    current: this.getCurrentItem()
+                }
+            });
         }
 
         /**
@@ -8253,6 +8326,9 @@ var Navigation = function () {
                     _this3.eventDispatcher(evt);
                 });
             }
+            this.menu.addEventListener('am-set-current-item', function (evt) {
+                _this3.setCurrentItem(evt);
+            });
         }
 
         /**
