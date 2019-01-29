@@ -7,15 +7,18 @@ class Navigation {
         this.menu = null;
         this.menuId = menuId;
         this.click = click;
+        this.currentItem = null;
     }
 
     hoverHandler(evt) {
         const { type, target } = evt;
+        const customEvt = this.createCustomEvt();
         if (type === 'mouseout' && target.getAttribute('aria-haspopup') === "true") {
             target.setAttribute('aria-expanded', 'false');
         } else if (type === 'mouseover' && target.getAttribute('aria-haspopup') === "false") {
             target.setAttribute('aria-expanded', 'true');
         }
+        target.dispatchEvent(customEvt)
     }
     /**
      *
@@ -76,8 +79,10 @@ class Navigation {
         
                 this.toggleSubmenuMenuClass(submenuList);
                 this.toggleButtonAria(target);
-            } 
+            }
         }
+        const customEvt = this.createCustomEvt();
+        target.dispatchEvent(customEvt)
     }
 
     /**
@@ -118,6 +123,7 @@ class Navigation {
             if (parentNode.id === this.menuId) {
                 this.toggleButtonAria(expandedButtonArray[0]);
                 this.toggleSubmenuMenuClass(openMenuArray[0]);
+                this.clearCurrent();
             }
         }
         return;
@@ -207,6 +213,12 @@ class Navigation {
         return;
     }
 
+    clearCurrent() {
+        const currentItem = this.menu.querySelector('.am-current-item');
+        currentItem.classList.remove('am-current-item');
+        return;
+    }
+
     /**
      * 
      * Completely reset the state of the menu
@@ -217,7 +229,59 @@ class Navigation {
     clearAll() {
         this.clearMenus();
         this.clearButtons();
+        this.clearCurrent();
         return;
+    }
+
+    /**
+     * 
+     * Get the button element which is expanded
+     * Helps with identifying the top level list item
+     * 
+     * @return DOM element
+     */
+    getCurrentItem() {
+        const expandedEl = this.menu.querySelector('[aria-expanded="true"]')
+        if (expandedEl) {
+            return expandedEl.parentElement;
+        }        
+    }
+
+    /**
+     * 
+     * Add a class to the current top level list item
+     * 
+     * @param obj the event object
+     * @return void  
+     */
+    setCurrentItem(evt) {
+        const { detail: { current } } = evt;
+        const itemNode = Array.from(this.menu.querySelectorAll('li'));
+        itemNode.forEach(item => {
+            item.classList.remove('am-current-item');
+        })
+
+        
+        if (current) {
+            this.currentItem = current;
+            this.currentItem.classList.add('am-current-item');
+        }
+    }
+
+
+    /**
+     * 
+     * Create a custom event to hook into on clicks and hovers.
+     * 
+     * @return obj 
+     */
+    createCustomEvt() {
+        return new CustomEvent('am-set-current-item', {
+            bubbles: true,
+            detail: {
+                current: this.getCurrentItem()
+            }
+        })
     }
 
     /**
@@ -291,6 +355,9 @@ class Navigation {
                 this.eventDispatcher(evt);
             });
         }
+        this.menu.addEventListener('am-set-current-item', (evt) => {
+            this.setCurrentItem(evt);
+        })
     }
 
     /**
