@@ -193,9 +193,11 @@ class Navigation {
      */
     clearMenus() {
         const menuArray = Array.from(this.menu.querySelectorAll('.am-submenu-list-open'));
-        menuArray.forEach(menu => {
-            menu.classList.toggle('am-submenu-list-open');
-        })
+        if (menuArray.length > 0) {
+            menuArray.forEach(menu => {
+                menu.classList.toggle('am-submenu-list-open');
+            })
+        }
         return;
     }
 
@@ -213,9 +215,17 @@ class Navigation {
         return;
     }
 
+    /**
+     * Remove the current item from the menu
+     * 
+     * @returns void
+     * @memberof Navigation
+     */
     clearCurrent() {
         const currentItem = this.menu.querySelector('.am-current-item');
-        currentItem.classList.remove('am-current-item');
+        if (currentItem) {
+            currentItem.classList.remove('am-current-item');
+        }
         return;
     }
 
