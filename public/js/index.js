@@ -8140,9 +8140,11 @@ var Navigation = function () {
         key: 'clearMenus',
         value: function clearMenus() {
             var menuArray = Array.from(this.menu.querySelectorAll('.am-submenu-list-open'));
-            menuArray.forEach(function (menu) {
-                menu.classList.toggle('am-submenu-list-open');
-            });
+            if (menuArray.length > 0) {
+                menuArray.forEach(function (menu) {
+                    menu.classList.toggle('am-submenu-list-open');
+                });
+            }
             return;
         }
 
@@ -8162,11 +8164,21 @@ var Navigation = function () {
             });
             return;
         }
+
+        /**
+         * Remove the current item from the menu
+         * 
+         * @returns void
+         * @memberof Navigation
+         */
+
     }, {
         key: 'clearCurrent',
         value: function clearCurrent() {
             var currentItem = this.menu.querySelector('.am-current-item');
-            currentItem.classList.remove('am-current-item');
+            if (currentItem) {
+                currentItem.classList.remove('am-current-item');
+            }
             return;
         }
 
