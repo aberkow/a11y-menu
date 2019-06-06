@@ -50,7 +50,7 @@ class Navigation {
         // if there's an open submenu with sub-submenus...
         if (document.querySelectorAll('.am-submenu-list-open').length > 0 && !document.querySelectorAll('.am-submenu-list-open')[0].contains(target)) {
 
-            const submenuArray = Array.from(document.querySelectorAll('.am-submenu-list-open'));
+            const submenuArray = [].slice.call(document.querySelectorAll('.am-submenu-list-open'));
 
             if (target.nextSibling && target.nextSibling.localName === 'ul') {
                 // if you click from one menu item to another, open the next menu and close the previous one immediately.
@@ -104,8 +104,8 @@ class Navigation {
         
         const { target, target: { offsetParent: { parentNode } } } = evt;
 
-        let expandedButtonArray = Array.from(this.menu.querySelectorAll('[aria-expanded="true"]'));
-        let openMenuArray = Array.from(this.menu.querySelectorAll('.am-submenu-list-open'));
+        let expandedButtonArray = [].slice.call(this.menu.querySelectorAll('[aria-expanded="true"]'));
+        let openMenuArray = [].slice.call(this.menu.querySelectorAll('.am-submenu-list-open'));
 
         if (!this.menu.contains(target) && expandedButtonArray.length) {
             // if we leave the menu, clear everything
@@ -122,8 +122,8 @@ class Navigation {
         } else {
             // still in the menu, but moving from one <li> to another
             // toggle just the button and submenu for the elements that received focusout.
-            expandedButtonArray = Array.from(parentNode.querySelectorAll('[aria-expanded="true"]'));
-            openMenuArray = Array.from(parentNode.querySelectorAll('.am-submenu-list-open'));
+            expandedButtonArray = [].slice.call(parentNode.querySelectorAll('[aria-expanded="true"]'));
+            openMenuArray = [].slice.call(parentNode.querySelectorAll('.am-submenu-list-open'));
             
             // check to make sure that the user hasn't moved to a different menu.
             if (parentNode.id === this.menuId) {
@@ -159,7 +159,7 @@ class Navigation {
      * @memberof Navigation
      */
     toggleButtonAria(target) {
-        const buttonNode = Array.from(document.querySelectorAll('.am-submenu-toggle'));
+        const buttonNode = [].slice.call(document.querySelectorAll('.am-submenu-toggle'));
         
         buttonNode.forEach(button => {
             // for each button, determine if there is a button "above" it
@@ -198,7 +198,7 @@ class Navigation {
      * @memberof Navigation
      */
     clearMenus() {
-        const menuArray = Array.from(this.menu.querySelectorAll('.am-submenu-list-open'));
+        const menuArray = [].slice.call(this.menu.querySelectorAll('.am-submenu-list-open'));
         if (menuArray.length > 0) {
             menuArray.forEach(menu => {
                 menu.classList.toggle('am-submenu-list-open');
@@ -214,7 +214,7 @@ class Navigation {
      * @memberof Navigation
      */
     clearButtons() {
-        const buttonArray = Array.from(this.menu.querySelectorAll('.am-submenu-toggle'))
+        const buttonArray = [].slice.call(this.menu.querySelectorAll('.am-submenu-toggle'))
         buttonArray.forEach((button) => {
             button.setAttribute('aria-expanded', 'false');
         })
@@ -271,7 +271,7 @@ class Navigation {
      * @return void  
      */
     setCurrentItem(current) {
-        const itemNode = Array.from(this.menu.querySelectorAll('li'));
+        const itemNode = [].slice.call(this.menu.querySelectorAll('li'));
         itemNode.forEach(item => {
             item.classList.remove('am-current-item');
         })
@@ -330,7 +330,7 @@ class Navigation {
      */
     setEventListeners() {
         // if this script is running, remove the 'no-js' class from the elements.
-        const listElements = Array.from(this.menu.querySelectorAll('.no-js'));
+        const listElements = [].slice.call(this.menu.querySelectorAll('.no-js'));
         listElements.forEach(element => {
             element.classList.remove('no-js');
         });
@@ -340,7 +340,7 @@ class Navigation {
         if (this.click) {
             listeners.push('mousedown');
             
-            const subMenuList = Array.from(this.menu.querySelectorAll('.am-submenu-list'));
+            const subMenuList = [].slice.call(this.menu.querySelectorAll('.am-submenu-list'));
             
             subMenuList.forEach(menu => menu.classList.add('am-click-menu'));
 

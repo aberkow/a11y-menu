@@ -7985,7 +7985,7 @@ var Navigation = function () {
             // if there's an open submenu with sub-submenus...
             if (document.querySelectorAll('.am-submenu-list-open').length > 0 && !document.querySelectorAll('.am-submenu-list-open')[0].contains(target)) {
 
-                var submenuArray = Array.from(document.querySelectorAll('.am-submenu-list-open'));
+                var submenuArray = [].slice.call(document.querySelectorAll('.am-submenu-list-open'));
 
                 if (target.nextSibling && target.nextSibling.localName === 'ul') {
                     // if you click from one menu item to another, open the next menu and close the previous one immediately.
@@ -8041,8 +8041,8 @@ var Navigation = function () {
                 parentNode = evt.target.offsetParent.parentNode;
 
 
-            var expandedButtonArray = Array.from(this.menu.querySelectorAll('[aria-expanded="true"]'));
-            var openMenuArray = Array.from(this.menu.querySelectorAll('.am-submenu-list-open'));
+            var expandedButtonArray = [].slice.call(this.menu.querySelectorAll('[aria-expanded="true"]'));
+            var openMenuArray = [].slice.call(this.menu.querySelectorAll('.am-submenu-list-open'));
 
             if (!this.menu.contains(target) && expandedButtonArray.length) {
                 // if we leave the menu, clear everything
@@ -8059,8 +8059,8 @@ var Navigation = function () {
             } else {
                 // still in the menu, but moving from one <li> to another
                 // toggle just the button and submenu for the elements that received focusout.
-                expandedButtonArray = Array.from(parentNode.querySelectorAll('[aria-expanded="true"]'));
-                openMenuArray = Array.from(parentNode.querySelectorAll('.am-submenu-list-open'));
+                expandedButtonArray = [].slice.call(parentNode.querySelectorAll('[aria-expanded="true"]'));
+                openMenuArray = [].slice.call(parentNode.querySelectorAll('.am-submenu-list-open'));
 
                 // check to make sure that the user hasn't moved to a different menu.
                 if (parentNode.id === this.menuId) {
@@ -8102,7 +8102,7 @@ var Navigation = function () {
     }, {
         key: 'toggleButtonAria',
         value: function toggleButtonAria(target) {
-            var buttonNode = Array.from(document.querySelectorAll('.am-submenu-toggle'));
+            var buttonNode = [].slice.call(document.querySelectorAll('.am-submenu-toggle'));
 
             buttonNode.forEach(function (button) {
                 // for each button, determine if there is a button "above" it
@@ -8144,7 +8144,7 @@ var Navigation = function () {
     }, {
         key: 'clearMenus',
         value: function clearMenus() {
-            var menuArray = Array.from(this.menu.querySelectorAll('.am-submenu-list-open'));
+            var menuArray = [].slice.call(this.menu.querySelectorAll('.am-submenu-list-open'));
             if (menuArray.length > 0) {
                 menuArray.forEach(function (menu) {
                     menu.classList.toggle('am-submenu-list-open');
@@ -8163,7 +8163,7 @@ var Navigation = function () {
     }, {
         key: 'clearButtons',
         value: function clearButtons() {
-            var buttonArray = Array.from(this.menu.querySelectorAll('.am-submenu-toggle'));
+            var buttonArray = [].slice.call(this.menu.querySelectorAll('.am-submenu-toggle'));
             buttonArray.forEach(function (button) {
                 button.setAttribute('aria-expanded', 'false');
             });
@@ -8232,7 +8232,7 @@ var Navigation = function () {
     }, {
         key: 'setCurrentItem',
         value: function setCurrentItem(current) {
-            var itemNode = Array.from(this.menu.querySelectorAll('li'));
+            var itemNode = [].slice.call(this.menu.querySelectorAll('li'));
             itemNode.forEach(function (item) {
                 item.classList.remove('am-current-item');
             });
@@ -8298,7 +8298,7 @@ var Navigation = function () {
             var _this3 = this;
 
             // if this script is running, remove the 'no-js' class from the elements.
-            var listElements = Array.from(this.menu.querySelectorAll('.no-js'));
+            var listElements = [].slice.call(this.menu.querySelectorAll('.no-js'));
             listElements.forEach(function (element) {
                 element.classList.remove('no-js');
             });
@@ -8308,7 +8308,7 @@ var Navigation = function () {
             if (this.click) {
                 listeners.push('mousedown');
 
-                var subMenuList = Array.from(this.menu.querySelectorAll('.am-submenu-list'));
+                var subMenuList = [].slice.call(this.menu.querySelectorAll('.am-submenu-list'));
 
                 subMenuList.forEach(function (menu) {
                     return menu.classList.add('am-click-menu');
