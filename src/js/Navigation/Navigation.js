@@ -81,8 +81,14 @@ class Navigation {
                 this.toggleButtonAria(target);
             }
         }
-        const customEvt = this.createCustomEvt();
-        target.dispatchEvent(customEvt)
+
+        // set a class on the top level parent of the current selection
+        const currentItem = this.getCurrentItem()
+
+        if (currentItem && currentItem !== 'undefined') {
+            this.setCurrentItem(currentItem)
+        }
+
     }
 
     /**
@@ -264,8 +270,7 @@ class Navigation {
      * @param obj the event object
      * @return void  
      */
-    setCurrentItem(evt) {
-        const { detail: { current } } = evt;
+    setCurrentItem(current) {
         const itemNode = Array.from(this.menu.querySelectorAll('li'));
         itemNode.forEach(item => {
             item.classList.remove('am-current-item');
@@ -276,22 +281,6 @@ class Navigation {
             this.currentItem = current;
             this.currentItem.classList.add('am-current-item');
         }
-    }
-
-
-    /**
-     * 
-     * Create a custom event to hook into on clicks and hovers.
-     * 
-     * @return obj 
-     */
-    createCustomEvt() {
-        return new CustomEvent('am-set-current-item', {
-            bubbles: true,
-            detail: {
-                current: this.getCurrentItem()
-            }
-        })
     }
 
     /**
@@ -365,9 +354,6 @@ class Navigation {
                 this.eventDispatcher(evt);
             });
         }
-        this.menu.addEventListener('am-set-current-item', (evt) => {
-            this.setCurrentItem(evt);
-        })
     }
 
     /**

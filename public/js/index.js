@@ -8013,8 +8013,13 @@ var Navigation = function () {
                     this.toggleButtonAria(target);
                 }
             }
-            var customEvt = this.createCustomEvt();
-            target.dispatchEvent(customEvt);
+
+            // set a class on the top level parent of the current selection
+            var currentItem = this.getCurrentItem();
+
+            if (currentItem && currentItem !== 'undefined') {
+                this.setCurrentItem(currentItem);
+            }
         }
 
         /**
@@ -8226,9 +8231,7 @@ var Navigation = function () {
 
     }, {
         key: 'setCurrentItem',
-        value: function setCurrentItem(evt) {
-            var current = evt.detail.current;
-
+        value: function setCurrentItem(current) {
             var itemNode = Array.from(this.menu.querySelectorAll('li'));
             itemNode.forEach(function (item) {
                 item.classList.remove('am-current-item');
@@ -8238,24 +8241,6 @@ var Navigation = function () {
                 this.currentItem = current;
                 this.currentItem.classList.add('am-current-item');
             }
-        }
-
-        /**
-         * 
-         * Create a custom event to hook into on clicks and hovers.
-         * 
-         * @return obj 
-         */
-
-    }, {
-        key: 'createCustomEvt',
-        value: function createCustomEvt() {
-            return new CustomEvent('am-set-current-item', {
-                bubbles: true,
-                detail: {
-                    current: this.getCurrentItem()
-                }
-            });
         }
 
         /**
@@ -8338,9 +8323,6 @@ var Navigation = function () {
                     _this3.eventDispatcher(evt);
                 });
             }
-            this.menu.addEventListener('am-set-current-item', function (evt) {
-                _this3.setCurrentItem(evt);
-            });
         }
 
         /**
