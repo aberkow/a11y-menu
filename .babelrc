@@ -1,36 +1,12 @@
 {
   "presets": [
     [
-      "env",
+      "@babel/preset-env",
       {
-        "targets": {
-          "browsers": [
-            ">0.25%",
-            "ie 10"
-          ]
-        },
-        "useBuiltIns": "entry"
+        "debug": true,
+        "useBuiltIns": "usage",
+        "corejs": 3
       }
     ]
-  ],
-  "env": {
-    "production": {
-      "presets": [
-        "minify",
-        [
-          "env",
-          {
-            "targets": {
-              "browsers": [
-                ">0.25%",
-                "ie 10"
-              ]
-            },
-            "useBuiltIns": "entry"
-          }
-        ]
-      ],
-      "comments": false
-    }
-  }
+  ]
 }
