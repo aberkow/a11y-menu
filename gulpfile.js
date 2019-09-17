@@ -50,6 +50,7 @@ const indexJs = () => {
       errorHandler: onError
     }))
     .pipe(webpack({
+      mode: process.env.NODE_ENV,
       output: {
         filename: 'index.js',
         path: path.resolve(__dirname, 'public', 'js')
@@ -93,4 +94,9 @@ gulp.task('watch', () => {
 
 gulp.task('build', gulp.parallel(navJs, sassMain))
 
-gulp.task('default', gulp.series(clean, gulp.parallel(navJs, indexJs, sassMain)))
+gulp.task('default', 
+  gulp.series(
+    clean, 
+    gulp.parallel(navJs, indexJs, sassMain)
+  )
+)

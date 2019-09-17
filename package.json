@@ -17,8 +17,9 @@
     "url": "https://github.com/aberkow/a11y-menu"
   },
   "scripts": {
-    "develop": "webpack --watch",
-    "build:public": "webpack"
+    "clean": "gulp clean",
+    "develop": "cross-env NODE_ENV=development gulp watch",
+    "build": "cross-env NODE_ENV=production gulp"
   },
   "files": [
     "src/js/exports.js",
@@ -35,6 +36,7 @@
     "@babel/preset-env": "^7.6.0",
     "babel-loader": "^8.0.6",
     "browser-sync": "^2.26.7",
+    "cross-env": "^5.2.1",
     "del": "^5.1.0",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^7.0.0",
