@@ -2341,7 +2341,9 @@ function () {
 
       if (!this.menu.contains(target) && (type === 'mousedown' || type === 'keydown')) {
         this.clearAll();
-      } else if (this.menu.contains(target) && type !== 'keydown') {
+      }
+
+      if (this.menu.contains(target) && type !== 'keydown') {
         evt.preventDefault();
       } // if there's an open submenu with sub-submenus...
 
