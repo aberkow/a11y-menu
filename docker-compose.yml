@@ -15,7 +15,6 @@ services:
       # mount files/directories necessary for wordpress
       - ./www:/var/www/html
       - ./.entrypoint/server-entrypoint:/entrypoint
-      - ./vendor:/var/www/html/content/themes/lobo/vendor
     depends_on:
       - mysql
     restart: always

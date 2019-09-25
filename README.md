@@ -183,13 +183,13 @@ Overriding and changing the styles of the menu is as easy as either making the s
 ## Development
 To begin developing
 
-- `yarn install`
-- `gulp watch`
+- `npm install`
+- `npm run develop`
 
 This will begin watching the js and scss files and place them in the appropriate directories. `Navigation.js` and `main.scss` will be transpiled and sent to `/dist`. Serving `/public/index.html` will read those files from the `/dist` directory.
 
 ## Production
-To create a new production version run `gulp` from the root.
+To create a new production version run `npm run build`.
 
 ## Structure
 
@@ -229,7 +229,3 @@ Base styles for the menu.
 Watches and builds js/scss files as appropriate.
 ### webpack.config.js
 Handles bundling for local testing.
-
-## TODO
-
-- separate out the main WordPress walker and dependencies from any other implementation. Ideas for a plugin should be handled in a different package.

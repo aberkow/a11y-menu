@@ -32,7 +32,8 @@
         "wordpress-install-dir": "./www/wordpress"
     },
     "config": {
-        "secure-http": true
+        "secure-http": true,
+        "sort-packages": true
     },
     "autoload": {
         "psr-4": {
@@ -49,6 +50,6 @@
     "require-dev": {
         "johnpbloch/wordpress": "@stable",
         "wpackagist-plugin/wordpress-importer": "dev-trunk",
-        "wpackagist-theme/twentyseventeen": "^1.6"
+        "wpackagist-theme/twentynineteen": "^1.4"
     }
 }
