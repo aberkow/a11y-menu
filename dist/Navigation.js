@@ -2334,20 +2334,15 @@ function () {
     value: function clickHandler(evt) {
       var _this = this;
 
-      var target = evt.target;
+      var target = evt.target,
+          type = evt.type;
       var submenuList = null; // if the click is inside the menu on a button, prevent the target from gaining focus and continue.
       // otherwise do nothing.
 
-      if (!this.menu.contains(target) && (evt.type === 'mousedown' || evt.type === 'keydown')) {
+      if (!this.menu.contains(target) && (type === 'mousedown' || type === 'keydown')) {
         this.clearAll();
-      } else if (this.menu.contains(target) && evt.type !== 'keydown') {
+      } else if (this.menu.contains(target) && type !== 'keydown') {
         evt.preventDefault();
-      } // people might click on the icon instead of the button.
-      // if so, set the target to the parent (button)
-
-
-      if (target.localName === 'span') {
-        target = target.parentElement;
       } // if there's an open submenu with sub-submenus...
 
 

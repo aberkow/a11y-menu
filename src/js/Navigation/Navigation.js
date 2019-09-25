@@ -19,24 +19,18 @@ class Navigation {
      * @memberof Navigation
      */
     clickHandler(evt) {
-        let target = evt.target;
+        const { target, type } = evt
         let submenuList = null;
 
         // if the click is inside the menu on a button, prevent the target from gaining focus and continue.
         // otherwise do nothing.
 
-        if (!this.menu.contains(target) && (evt.type === 'mousedown' || evt.type === 'keydown')) {
+        if (!this.menu.contains(target) && (type === 'mousedown' || type === 'keydown')) {
             this.clearAll();
-        } else if (this.menu.contains(target) && evt.type !== 'keydown') {
+        } else if (this.menu.contains(target) && type !== 'keydown') {
             evt.preventDefault();
         } 
 
-        // people might click on the icon instead of the button.
-        // if so, set the target to the parent (button)
-        if (target.localName === 'span') {
-            target = target.parentElement;
-        }
-        
         // if there's an open submenu with sub-submenus...
         if (document.querySelectorAll('.am-submenu-list-open').length > 0 && !document.querySelectorAll('.am-submenu-list-open')[0].contains(target)) {
 
