@@ -10,16 +10,6 @@ class Navigation {
         this.currentItem = null;
     }
 
-    hoverHandler(evt) {
-        const { type, target } = evt;
-        const customEvt = this.createCustomEvt();
-        if (type === 'mouseout' && target.getAttribute('aria-haspopup') === "true") {
-            target.setAttribute('aria-expanded', 'false');
-        } else if (type === 'mouseover' && target.getAttribute('aria-haspopup') === "false") {
-            target.setAttribute('aria-expanded', 'true');
-        }
-        target.dispatchEvent(customEvt)
-    }
     /**
      *
      * Handle incoming clicks
@@ -330,7 +320,7 @@ class Navigation {
      */
     setEventListeners() {
         // define a list of possible event listeners
-        let listeners = ['focusin', 'keydown', 'mouseover'];
+        let listeners = ['focusin', 'keydown'];
 
         if (this.click) {
             listeners.push('mousedown');
@@ -339,9 +329,8 @@ class Navigation {
             
             subMenuList.forEach(menu => menu.classList.add('am-click-menu'));
 
-        } else {
-            listeners.push('mouseout');
-        }
+        } 
+
         // attach them to the document.
         for (let i = 0; i < listeners.length; i++) {
             document.addEventListener(listeners[i], (evt) => {

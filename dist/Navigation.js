@@ -2319,32 +2319,17 @@ function () {
     this.click = click;
     this.currentItem = null;
   }
+  /**
+   *
+   * Handle incoming clicks
+   *
+   * @param {object} evt object
+   * @returns void
+   * @memberof Navigation
+   */
+
 
   _createClass(Navigation, [{
-    key: "hoverHandler",
-    value: function hoverHandler(evt) {
-      var type = evt.type,
-          target = evt.target;
-      var customEvt = this.createCustomEvt();
-
-      if (type === 'mouseout' && target.getAttribute('aria-haspopup') === "true") {
-        target.setAttribute('aria-expanded', 'false');
-      } else if (type === 'mouseover' && target.getAttribute('aria-haspopup') === "false") {
-        target.setAttribute('aria-expanded', 'true');
-      }
-
-      target.dispatchEvent(customEvt);
-    }
-    /**
-     *
-     * Handle incoming clicks
-     *
-     * @param {object} evt object
-     * @returns void
-     * @memberof Navigation
-     */
-
-  }, {
     key: "clickHandler",
     value: function clickHandler(evt) {
       var _this = this;
@@ -2665,7 +2650,7 @@ function () {
       var _this3 = this;
 
       // define a list of possible event listeners
-      var listeners = ['focusin', 'keydown', 'mouseover'];
+      var listeners = ['focusin', 'keydown'];
 
       if (this.click) {
         listeners.push('mousedown');
@@ -2673,8 +2658,6 @@ function () {
         subMenuList.forEach(function (menu) {
           return menu.classList.add('am-click-menu');
         });
-      } else {
-        listeners.push('mouseout');
       } // attach them to the document.
 
 
