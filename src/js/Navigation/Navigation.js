@@ -329,11 +329,6 @@ class Navigation {
      * @memberof Navigation
      */
     setEventListeners() {
-        // if this script is running, remove the 'no-js' class from the elements.
-        const listElements = Array.from(this.menu.querySelectorAll('.no-js'));
-        listElements.forEach(element => {
-            element.classList.remove('no-js');
-        });
         // define a list of possible event listeners
         let listeners = ['focusin', 'keydown', 'mouseover'];
 
@@ -358,6 +353,18 @@ class Navigation {
 
     /**
      * 
+     * remove the no-js class from list elements
+     * 
+     */
+    removeNoJs() {
+        const listElements = Array.from(this.menu.querySelectorAll('.no-js'));
+        listElements.forEach(element => {
+            element.classList.remove('no-js');
+        });
+    }
+
+    /**
+     * 
      * Initialize the menu by
      * - assigning the menu
      * - attaching event listeners
@@ -366,6 +373,7 @@ class Navigation {
      */
     init() {
         this.menu = document.getElementById(this.menuId);
+        this.removeNoJs()
         this.setEventListeners();
     }
 }
