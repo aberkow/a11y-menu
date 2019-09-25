@@ -331,6 +331,32 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/internals/array-method-has-species-support.js":
+/*!****************************************************************************!*\
+  !*** ./node_modules/core-js/internals/array-method-has-species-support.js ***!
+  \****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var fails = __webpack_require__(/*! ../internals/fails */ "./node_modules/core-js/internals/fails.js");
+var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ "./node_modules/core-js/internals/well-known-symbol.js");
+
+var SPECIES = wellKnownSymbol('species');
+
+module.exports = function (METHOD_NAME) {
+  return !fails(function () {
+    var array = [];
+    var constructor = array.constructor = {};
+    constructor[SPECIES] = function () {
+      return { foo: 1 };
+    };
+    return array[METHOD_NAME](Boolean).foo !== 1;
+  });
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/internals/array-species-create.js":
 /*!****************************************************************!*\
   !*** ./node_modules/core-js/internals/array-species-create.js ***!
@@ -2152,6 +2178,63 @@ $({ target: 'Array', stat: true, forced: INCORRECT_ITERATION }, {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/modules/es.array.slice.js":
+/*!********************************************************!*\
+  !*** ./node_modules/core-js/modules/es.array.slice.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var isObject = __webpack_require__(/*! ../internals/is-object */ "./node_modules/core-js/internals/is-object.js");
+var isArray = __webpack_require__(/*! ../internals/is-array */ "./node_modules/core-js/internals/is-array.js");
+var toAbsoluteIndex = __webpack_require__(/*! ../internals/to-absolute-index */ "./node_modules/core-js/internals/to-absolute-index.js");
+var toLength = __webpack_require__(/*! ../internals/to-length */ "./node_modules/core-js/internals/to-length.js");
+var toIndexedObject = __webpack_require__(/*! ../internals/to-indexed-object */ "./node_modules/core-js/internals/to-indexed-object.js");
+var createProperty = __webpack_require__(/*! ../internals/create-property */ "./node_modules/core-js/internals/create-property.js");
+var arrayMethodHasSpeciesSupport = __webpack_require__(/*! ../internals/array-method-has-species-support */ "./node_modules/core-js/internals/array-method-has-species-support.js");
+var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ "./node_modules/core-js/internals/well-known-symbol.js");
+
+var SPECIES = wellKnownSymbol('species');
+var nativeSlice = [].slice;
+var max = Math.max;
+
+// `Array.prototype.slice` method
+// https://tc39.github.io/ecma262/#sec-array.prototype.slice
+// fallback for not array-like ES3 strings and DOM objects
+$({ target: 'Array', proto: true, forced: !arrayMethodHasSpeciesSupport('slice') }, {
+  slice: function slice(start, end) {
+    var O = toIndexedObject(this);
+    var length = toLength(O.length);
+    var k = toAbsoluteIndex(start, length);
+    var fin = toAbsoluteIndex(end === undefined ? length : end, length);
+    // inline `ArraySpeciesCreate` for usage native `Array#slice` where it's possible
+    var Constructor, result, n;
+    if (isArray(O)) {
+      Constructor = O.constructor;
+      // cross-realm fallback
+      if (typeof Constructor == 'function' && (Constructor === Array || isArray(Constructor.prototype))) {
+        Constructor = undefined;
+      } else if (isObject(Constructor)) {
+        Constructor = Constructor[SPECIES];
+        if (Constructor === null) Constructor = undefined;
+      }
+      if (Constructor === Array || Constructor === undefined) {
+        return nativeSlice.call(O, k, fin);
+      }
+    }
+    result = new (Constructor === undefined ? Array : Constructor)(max(fin - k, 0));
+    for (n = 0; k < fin; k++, n++) if (k in O) createProperty(result, n, O[k]);
+    result.length = n;
+    return result;
+  }
+});
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/modules/es.object.define-property.js":
 /*!*******************************************************************!*\
   !*** ./node_modules/core-js/modules/es.object.define-property.js ***!
@@ -2283,12 +2366,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var core_js_modules_es_array_from__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.array.from */ "./node_modules/core-js/modules/es.array.from.js");
 /* harmony import */ var core_js_modules_es_array_from__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_from__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.object.define-property */ "./node_modules/core-js/modules/es.object.define-property.js");
-/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.string.iterator */ "./node_modules/core-js/modules/es.string.iterator.js");
-/* harmony import */ var core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.array.slice */ "./node_modules/core-js/modules/es.array.slice.js");
+/* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.object.define-property */ "./node_modules/core-js/modules/es.object.define-property.js");
+/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.string.iterator */ "./node_modules/core-js/modules/es.string.iterator.js");
+/* harmony import */ var core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_5__);
+
 
 
 
@@ -2349,7 +2435,7 @@ function () {
 
 
       if (document.querySelectorAll('.am-submenu-list-open').length > 0 && !document.querySelectorAll('.am-submenu-list-open')[0].contains(target)) {
-        var submenuArray = Array.from(document.querySelectorAll('.am-submenu-list-open'));
+        var submenuArray = [].slice.call(document.querySelectorAll('.am-submenu-list-open'));
 
         if (target.nextSibling && target.nextSibling.localName === 'ul') {
           // if you click from one menu item to another, open the next menu and close the previous one immediately.
@@ -2398,8 +2484,8 @@ function () {
 
       var target = evt.target,
           parentNode = evt.target.offsetParent.parentNode;
-      var expandedButtonArray = Array.from(this.menu.querySelectorAll('[aria-expanded="true"]'));
-      var openMenuArray = Array.from(this.menu.querySelectorAll('.am-submenu-list-open'));
+      var expandedButtonArray = [].slice.call(this.menu.querySelectorAll('[aria-expanded="true"]'));
+      var openMenuArray = [].slice.call(this.menu.querySelectorAll('.am-submenu-list-open'));
 
       if (!this.menu.contains(target) && expandedButtonArray.length) {
         // if we leave the menu, clear everything
@@ -2417,8 +2503,8 @@ function () {
       } else {
         // still in the menu, but moving from one <li> to another
         // toggle just the button and submenu for the elements that received focusout.
-        expandedButtonArray = Array.from(parentNode.querySelectorAll('[aria-expanded="true"]'));
-        openMenuArray = Array.from(parentNode.querySelectorAll('.am-submenu-list-open')); // check to make sure that the user hasn't moved to a different menu.
+        expandedButtonArray = [].slice.call(parentNode.querySelectorAll('[aria-expanded="true"]'));
+        openMenuArray = [].slice.call(parentNode.querySelectorAll('.am-submenu-list-open')); // check to make sure that the user hasn't moved to a different menu.
 
         if (parentNode.id === this.menuId) {
           this.toggleButtonAria(expandedButtonArray[0]);
@@ -2458,7 +2544,7 @@ function () {
   }, {
     key: "toggleButtonAria",
     value: function toggleButtonAria(target) {
-      var buttonNode = Array.from(document.querySelectorAll('.am-submenu-toggle'));
+      var buttonNode = [].slice.call(document.querySelectorAll('.am-submenu-toggle'));
       buttonNode.forEach(function (button) {
         // for each button, determine if there is a button "above" it
         var prevButton = button.parentElement.parentElement.previousElementSibling; // case - clicking on a sub-submenu button which is currently NOT expanded.
@@ -2494,7 +2580,7 @@ function () {
   }, {
     key: "clearMenus",
     value: function clearMenus() {
-      var menuArray = Array.from(this.menu.querySelectorAll('.am-submenu-list-open'));
+      var menuArray = [].slice.call(this.menu.querySelectorAll('.am-submenu-list-open'));
 
       if (menuArray.length > 0) {
         menuArray.forEach(function (menu) {
@@ -2514,7 +2600,7 @@ function () {
   }, {
     key: "clearButtons",
     value: function clearButtons() {
-      var buttonArray = Array.from(this.menu.querySelectorAll('.am-submenu-toggle'));
+      var buttonArray = [].slice.call(this.menu.querySelectorAll('.am-submenu-toggle'));
       buttonArray.forEach(function (button) {
         button.setAttribute('aria-expanded', 'false');
       });
@@ -2575,7 +2661,7 @@ function () {
   }, {
     key: "setCurrentItem",
     value: function setCurrentItem(current) {
-      var itemNode = Array.from(this.menu.querySelectorAll('li'));
+      var itemNode = [].slice.call(this.menu.querySelectorAll('li'));
       itemNode.forEach(function (item) {
         item.classList.remove('am-current-item');
       });
@@ -2641,7 +2727,7 @@ function () {
 
       if (this.click) {
         listeners.push('mousedown');
-        var subMenuList = Array.from(this.menu.querySelectorAll('.am-submenu-list'));
+        var subMenuList = [].slice.call(this.menu.querySelectorAll('.am-submenu-list'));
         subMenuList.forEach(function (menu) {
           return menu.classList.add('am-click-menu');
         });
