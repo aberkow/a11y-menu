@@ -2319,50 +2319,32 @@ function () {
     this.click = click;
     this.currentItem = null;
   }
+  /**
+   *
+   * Handle incoming clicks
+   *
+   * @param {object} evt object
+   * @returns void
+   * @memberof Navigation
+   */
+
 
   _createClass(Navigation, [{
-    key: "hoverHandler",
-    value: function hoverHandler(evt) {
-      var type = evt.type,
-          target = evt.target;
-      var customEvt = this.createCustomEvt();
-
-      if (type === 'mouseout' && target.getAttribute('aria-haspopup') === "true") {
-        target.setAttribute('aria-expanded', 'false');
-      } else if (type === 'mouseover' && target.getAttribute('aria-haspopup') === "false") {
-        target.setAttribute('aria-expanded', 'true');
-      }
-
-      target.dispatchEvent(customEvt);
-    }
-    /**
-     *
-     * Handle incoming clicks
-     *
-     * @param {object} evt object
-     * @returns void
-     * @memberof Navigation
-     */
-
-  }, {
     key: "clickHandler",
     value: function clickHandler(evt) {
       var _this = this;
 
-      var target = evt.target;
+      var target = evt.target,
+          type = evt.type;
       var submenuList = null; // if the click is inside the menu on a button, prevent the target from gaining focus and continue.
       // otherwise do nothing.
 
-      if (!this.menu.contains(target) && (evt.type === 'mousedown' || evt.type === 'keydown')) {
+      if (!this.menu.contains(target) && (type === 'mousedown' || type === 'keydown')) {
         this.clearAll();
-      } else if (this.menu.contains(target) && evt.type !== 'keydown') {
+      }
+
+      if (this.menu.contains(target) && type !== 'keydown') {
         evt.preventDefault();
-      } // people might click on the icon instead of the button.
-      // if so, set the target to the parent (button)
-
-
-      if (target.localName === 'span') {
-        target = target.parentElement;
       } // if there's an open submenu with sub-submenus...
 
 
@@ -2516,7 +2498,7 @@ function () {
 
       if (menuArray.length > 0) {
         menuArray.forEach(function (menu) {
-          menu.classList.toggle('am-submenu-list-open');
+          return menu.classList.toggle('am-submenu-list-open');
         });
       }
 
@@ -2549,11 +2531,7 @@ function () {
     key: "clearCurrent",
     value: function clearCurrent() {
       var currentItem = this.menu.querySelector('.am-current-item');
-
-      if (currentItem) {
-        currentItem.classList.remove('am-current-item');
-      }
-
+      if (currentItem) currentItem.classList.remove('am-current-item');
       return;
     }
     /**
@@ -2584,10 +2562,7 @@ function () {
     key: "getCurrentItem",
     value: function getCurrentItem() {
       var expandedEl = this.menu.querySelector('[aria-expanded="true"]');
-
-      if (expandedEl) {
-        return expandedEl.parentElement;
-      }
+      if (expandedEl) return expandedEl.parentElement;
     }
     /**
      * 
@@ -2623,8 +2598,6 @@ function () {
   }, {
     key: "eventDispatcher",
     value: function eventDispatcher(evt) {
-      // mousedown focusin click
-      // keydown focusin keydown click
       switch (evt.type) {
         case 'focusin':
           this.focusInHandler(evt);
@@ -2664,8 +2637,7 @@ function () {
     value: function setEventListeners() {
       var _this3 = this;
 
-      // define a list of possible event listeners
-      var listeners = ['focusin', 'keydown', 'mouseover'];
+      var listeners = ['focusin', 'keydown'];
 
       if (this.click) {
         listeners.push('mousedown');
@@ -2673,14 +2645,10 @@ function () {
         subMenuList.forEach(function (menu) {
           return menu.classList.add('am-click-menu');
         });
-      } else {
-        listeners.push('mouseout');
-      } // attach them to the document.
-
+      }
 
       for (var i = 0; i < listeners.length; i++) {
         document.addEventListener(listeners[i], function (evt) {
-          // dispatch the events to the class methods.
           _this3.eventDispatcher(evt);
         });
       }
