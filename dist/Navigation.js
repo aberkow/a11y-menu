@@ -2498,7 +2498,7 @@ function () {
 
       if (menuArray.length > 0) {
         menuArray.forEach(function (menu) {
-          menu.classList.toggle('am-submenu-list-open');
+          return menu.classList.toggle('am-submenu-list-open');
         });
       }
 
@@ -2531,11 +2531,7 @@ function () {
     key: "clearCurrent",
     value: function clearCurrent() {
       var currentItem = this.menu.querySelector('.am-current-item');
-
-      if (currentItem) {
-        currentItem.classList.remove('am-current-item');
-      }
-
+      if (currentItem) currentItem.classList.remove('am-current-item');
       return;
     }
     /**
@@ -2566,10 +2562,7 @@ function () {
     key: "getCurrentItem",
     value: function getCurrentItem() {
       var expandedEl = this.menu.querySelector('[aria-expanded="true"]');
-
-      if (expandedEl) {
-        return expandedEl.parentElement;
-      }
+      if (expandedEl) return expandedEl.parentElement;
     }
     /**
      * 
@@ -2605,8 +2598,6 @@ function () {
   }, {
     key: "eventDispatcher",
     value: function eventDispatcher(evt) {
-      // mousedown focusin click
-      // keydown focusin keydown click
       switch (evt.type) {
         case 'focusin':
           this.focusInHandler(evt);
@@ -2646,7 +2637,6 @@ function () {
     value: function setEventListeners() {
       var _this3 = this;
 
-      // define a list of possible event listeners
       var listeners = ['focusin', 'keydown'];
 
       if (this.click) {
@@ -2655,12 +2645,10 @@ function () {
         subMenuList.forEach(function (menu) {
           return menu.classList.add('am-click-menu');
         });
-      } // attach them to the document.
-
+      }
 
       for (var i = 0; i < listeners.length; i++) {
         document.addEventListener(listeners[i], function (evt) {
-          // dispatch the events to the class methods.
           _this3.eventDispatcher(evt);
         });
       }

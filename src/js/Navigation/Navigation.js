@@ -186,9 +186,7 @@ class Navigation {
     clearMenus() {
         const menuArray = Array.from(this.menu.querySelectorAll('.am-submenu-list-open'));
         if (menuArray.length > 0) {
-            menuArray.forEach(menu => {
-                menu.classList.toggle('am-submenu-list-open');
-            })
+            menuArray.forEach(menu => menu.classList.toggle('am-submenu-list-open'))
         }
         return;
     }
@@ -215,9 +213,7 @@ class Navigation {
      */
     clearCurrent() {
         const currentItem = this.menu.querySelector('.am-current-item');
-        if (currentItem) {
-            currentItem.classList.remove('am-current-item');
-        }
+        if (currentItem) currentItem.classList.remove('am-current-item');
         return;
     }
 
@@ -244,9 +240,7 @@ class Navigation {
      */
     getCurrentItem() {
         const expandedEl = this.menu.querySelector('[aria-expanded="true"]')
-        if (expandedEl) {
-            return expandedEl.parentElement;
-        }        
+        if (expandedEl) return expandedEl.parentElement;     
     }
 
     /**
@@ -261,7 +255,6 @@ class Navigation {
         itemNode.forEach(item => {
             item.classList.remove('am-current-item');
         })
-
         
         if (current) {
             this.currentItem = current;
@@ -279,9 +272,6 @@ class Navigation {
      * @memberof Navigation
      */
     eventDispatcher(evt) {
-        
-        // mousedown focusin click
-        // keydown focusin keydown click
         switch (evt.type) {
             case 'focusin':
                 this.focusInHandler(evt);
@@ -297,12 +287,10 @@ class Navigation {
                     // throw away all other events.
                     return;
                 }
-                break;
-            
+                break;            
             case 'mousedown':
                 this.clickHandler(evt);
                 break;
-            
             default:
                 return;
         }
@@ -315,7 +303,6 @@ class Navigation {
      * @memberof Navigation
      */
     setEventListeners() {
-        // define a list of possible event listeners
         let listeners = ['focusin', 'keydown'];
 
         if (this.click) {
@@ -324,13 +311,10 @@ class Navigation {
             const subMenuList = Array.from(this.menu.querySelectorAll('.am-submenu-list'));
             
             subMenuList.forEach(menu => menu.classList.add('am-click-menu'));
-
         } 
 
-        // attach them to the document.
         for (let i = 0; i < listeners.length; i++) {
             document.addEventListener(listeners[i], (evt) => {
-                // dispatch the events to the class methods.
                 this.eventDispatcher(evt);
             });
         }
