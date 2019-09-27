@@ -28,7 +28,9 @@ class Navigation {
      * @return DOM element
      */
     getCurrentTopLevelItem(target) {
-        return target.closest(`#${this.menuId} > li`)
+        if (target !== null) {
+            return target.closest(`#${this.menuId} > li`)
+        }
     }
 
     /**
@@ -39,7 +41,11 @@ class Navigation {
      * @memberof Navigation
      */
     toggleSubmenuClass(target) {
+
+        if (target.localName !== 'button') return
+
         const openSubmenus = Array.from(this.menu.querySelectorAll('.am-submenu-list-open'))
+
         const siblingSubmenu = target.nextElementSibling
 
         siblingSubmenu.classList.toggle('am-submenu-list-open')
@@ -130,6 +136,7 @@ class Navigation {
         this.clearSubmenuClass(target)
         this.clearAllAriaExpanded(target)
         document.removeEventListener('click', this.clearAll.bind(this))
+        document.removeEventListener('focusin', this.clearAll.bind(this))
         document.removeEventListener('keydown', this.clearAll.bind(this))
     }
 
@@ -160,7 +167,9 @@ class Navigation {
     /**
      *
      * attach event listeners to the document
-     * only allow action for the keydown event for esc key press
+     *  - click: clicks on the body clear the menu
+     *  - focusin: if the body gets focus, clear the menu
+     *  - keydown: if the escape key is pressed, clear the menu
      *
      * @param {object} target
      * @memberof Navigation
@@ -169,6 +178,13 @@ class Navigation {
         if (target.getAttribute('aria-expanded') === 'true') {
             this.clearAll = this.clearAll.bind(this)
             document.addEventListener('click', this.clearAll)
+
+            document.addEventListener('focusin', (evt) => {
+                if (!this.menu.contains(evt.target)) {
+                    this.clearAll({ target: document.body })
+                }
+            })
+            
             document.addEventListener('keydown', (evt) => {
                 if (evt.which === 27) {
                     this.clearAll({ target: document.body })
@@ -222,11 +238,18 @@ class Navigation {
         this.setDocumentEventListeners(target)
     }
 
-    focusInHandler({ target }) {
-        console.log(target, 'target');
-        // this.toggleSubmenuClass(target)
-        // this.toggleAriaState(target)
-        // this.setDocumentEventListeners(target)
+    focusInHandler(evt) {
+        const currentTopLevelItem = this.getCurrentTopLevelItem(evt.target)
+        const related = evt.relatedTarget
+        
+        if (!currentTopLevelItem.contains(related) || !this.menu.contains(evt.target)) {
+            // this.clearSubmenuClass(evt.target)
+            this.clearSubmenuClass(related)
+            this.clearAllAriaExpanded(related)
+        } 
+
+        console.log(currentTopLevelItem.contains(related), 'test')
+
     }
 
     init() {

@@ -2520,7 +2520,9 @@ function () {
   }, {
     key: "getCurrentTopLevelItem",
     value: function getCurrentTopLevelItem(target) {
-      return target.closest("#".concat(this.menuId, " > li"));
+      if (target !== null) {
+        return target.closest("#".concat(this.menuId, " > li"));
+      }
     }
     /**
      *
@@ -2533,6 +2535,7 @@ function () {
   }, {
     key: "toggleSubmenuClass",
     value: function toggleSubmenuClass(target) {
+      if (target.localName !== 'button') return;
       var openSubmenus = Array.from(this.menu.querySelectorAll('.am-submenu-list-open'));
       var siblingSubmenu = target.nextElementSibling;
       siblingSubmenu.classList.toggle('am-submenu-list-open');
@@ -2633,6 +2636,7 @@ function () {
       this.clearSubmenuClass(target);
       this.clearAllAriaExpanded(target);
       document.removeEventListener('click', this.clearAll.bind(this));
+      document.removeEventListener('focusin', this.clearAll.bind(this));
       document.removeEventListener('keydown', this.clearAll.bind(this));
     }
     /**
@@ -2666,7 +2670,9 @@ function () {
     /**
      *
      * attach event listeners to the document
-     * only allow action for the keydown event for esc key press
+     *  - click: clicks on the body clear the menu
+     *  - focusin: if the body gets focus, clear the menu
+     *  - keydown: if the escape key is pressed, clear the menu
      *
      * @param {object} target
      * @memberof Navigation
@@ -2680,6 +2686,13 @@ function () {
       if (target.getAttribute('aria-expanded') === 'true') {
         this.clearAll = this.clearAll.bind(this);
         document.addEventListener('click', this.clearAll);
+        document.addEventListener('focusin', function (evt) {
+          if (!_this2.menu.contains(evt.target)) {
+            _this2.clearAll({
+              target: document.body
+            });
+          }
+        });
         document.addEventListener('keydown', function (evt) {
           if (evt.which === 27) {
             _this2.clearAll({
@@ -2745,11 +2758,17 @@ function () {
     }
   }, {
     key: "focusInHandler",
-    value: function focusInHandler(_ref4) {
-      var target = _ref4.target;
-      console.log(target, 'target'); // this.toggleSubmenuClass(target)
-      // this.toggleAriaState(target)
-      // this.setDocumentEventListeners(target)
+    value: function focusInHandler(evt) {
+      var currentTopLevelItem = this.getCurrentTopLevelItem(evt.target);
+      var related = evt.relatedTarget;
+
+      if (!currentTopLevelItem.contains(related) || !this.menu.contains(evt.target)) {
+        // this.clearSubmenuClass(evt.target)
+        this.clearSubmenuClass(related);
+        this.clearAllAriaExpanded(related);
+      }
+
+      console.log(currentTopLevelItem.contains(related), 'test');
     }
   }, {
     key: "init",
