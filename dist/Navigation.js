@@ -950,6 +950,45 @@ module.exports = function (exec) {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/internals/function-bind.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/core-js/internals/function-bind.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var aFunction = __webpack_require__(/*! ../internals/a-function */ "./node_modules/core-js/internals/a-function.js");
+var isObject = __webpack_require__(/*! ../internals/is-object */ "./node_modules/core-js/internals/is-object.js");
+
+var slice = [].slice;
+var factories = {};
+
+var construct = function (C, argsLength, args) {
+  if (!(argsLength in factories)) {
+    for (var list = [], i = 0; i < argsLength; i++) list[i] = 'a[' + i + ']';
+    // eslint-disable-next-line no-new-func
+    factories[argsLength] = Function('C,a', 'return new C(' + list.join(',') + ')');
+  } return factories[argsLength](C, args);
+};
+
+// `Function.prototype.bind` method implementation
+// https://tc39.github.io/ecma262/#sec-function.prototype.bind
+module.exports = Function.bind || function bind(that /* , ...args */) {
+  var fn = aFunction(this);
+  var partArgs = slice.call(arguments, 1);
+  var boundFunction = function bound(/* args... */) {
+    var args = partArgs.concat(slice.call(arguments));
+    return this instanceof boundFunction ? construct(fn, args.length, args) : fn.apply(that, args);
+  };
+  if (isObject(fn.prototype)) boundFunction.prototype = fn.prototype;
+  return boundFunction;
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/internals/function-to-string.js":
 /*!**************************************************************!*\
   !*** ./node_modules/core-js/internals/function-to-string.js ***!
@@ -2178,6 +2217,31 @@ $({ target: 'Array', stat: true, forced: INCORRECT_ITERATION }, {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/modules/es.array.map.js":
+/*!******************************************************!*\
+  !*** ./node_modules/core-js/modules/es.array.map.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var $map = __webpack_require__(/*! ../internals/array-iteration */ "./node_modules/core-js/internals/array-iteration.js").map;
+var arrayMethodHasSpeciesSupport = __webpack_require__(/*! ../internals/array-method-has-species-support */ "./node_modules/core-js/internals/array-method-has-species-support.js");
+
+// `Array.prototype.map` method
+// https://tc39.github.io/ecma262/#sec-array.prototype.map
+// with adding support of @@species
+$({ target: 'Array', proto: true, forced: !arrayMethodHasSpeciesSupport('map') }, {
+  map: function map(callbackfn /* , thisArg */) {
+    return $map(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
+  }
+});
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/modules/es.array.slice.js":
 /*!********************************************************!*\
   !*** ./node_modules/core-js/modules/es.array.slice.js ***!
@@ -2230,6 +2294,25 @@ $({ target: 'Array', proto: true, forced: !arrayMethodHasSpeciesSupport('slice')
     result.length = n;
     return result;
   }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/es.function.bind.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/core-js/modules/es.function.bind.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var bind = __webpack_require__(/*! ../internals/function-bind */ "./node_modules/core-js/internals/function-bind.js");
+
+// `Function.prototype.bind` method
+// https://tc39.github.io/ecma262/#sec-function.prototype.bind
+$({ target: 'Function', proto: true }, {
+  bind: bind
 });
 
 
@@ -2366,14 +2449,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var core_js_modules_es_array_from__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.array.from */ "./node_modules/core-js/modules/es.array.from.js");
 /* harmony import */ var core_js_modules_es_array_from__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_from__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.array.slice */ "./node_modules/core-js/modules/es.array.slice.js");
-/* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.object.define-property */ "./node_modules/core-js/modules/es.object.define-property.js");
-/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.string.iterator */ "./node_modules/core-js/modules/es.string.iterator.js");
-/* harmony import */ var core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_array_map__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.array.map */ "./node_modules/core-js/modules/es.array.map.js");
+/* harmony import */ var core_js_modules_es_array_map__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_map__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.array.slice */ "./node_modules/core-js/modules/es.array.slice.js");
+/* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_function_bind__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.function.bind */ "./node_modules/core-js/modules/es.function.bind.js");
+/* harmony import */ var core_js_modules_es_function_bind__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_bind__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.object.define-property */ "./node_modules/core-js/modules/es.object.define-property.js");
+/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.string.iterator */ "./node_modules/core-js/modules/es.string.iterator.js");
+/* harmony import */ var core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_7__);
+
+
 
 
 
@@ -2399,154 +2488,75 @@ function () {
 
     _classCallCheck(this, Navigation);
 
-    this.hasNestedSubmenu = false;
     this.menu = null;
     this.menuId = menuId;
     this.click = click;
     this.currentItem = null;
   }
   /**
-   *
-   * Handle incoming clicks
-   *
-   * @param {object} evt object
-   * @returns void
-   * @memberof Navigation
+   * 
+   * js is available
+   * remove the no-js class from nav menu list items
+   * 
    */
 
 
   _createClass(Navigation, [{
-    key: "clickHandler",
-    value: function clickHandler(evt) {
-      var _this = this;
-
-      var target = evt.target,
-          type = evt.type;
-      var submenuList = null; // if the click is inside the menu on a button, prevent the target from gaining focus and continue.
-      // otherwise do nothing.
-
-      if (!this.menu.contains(target) && (type === 'mousedown' || type === 'keydown')) {
-        this.clearAll();
-      }
-
-      if (this.menu.contains(target) && type !== 'keydown') {
-        evt.preventDefault();
-      } // if there's an open submenu with sub-submenus...
-
-
-      if (document.querySelectorAll('.am-submenu-list-open').length > 0 && !document.querySelectorAll('.am-submenu-list-open')[0].contains(target)) {
-        var submenuArray = [].slice.call(document.querySelectorAll('.am-submenu-list-open'));
-
-        if (target.nextSibling && target.nextSibling.localName === 'ul') {
-          // if you click from one menu item to another, open the next menu and close the previous one immediately.
-          var nextMenu = target.nextSibling;
-          nextMenu.classList.add('am-submenu-list-open');
-        }
-
-        submenuArray.forEach(function (el) {
-          // toggle all the menus in the NodeList
-          _this.toggleSubmenuMenuClass(el);
-        });
-        this.toggleButtonAria(target);
-      } else {
-        var nextSibling = target.nextElementSibling; // we're near a submenu by clicking on a button but the menu isn't initially open.
-
-        if (nextSibling !== null && nextSibling.localName === 'ul') {
-          submenuList = nextSibling; // check if there's a nested submenu
-
-          submenuList.getElementsByTagName('ul').length ? this.hasNestedSubmenu = true : this.hasNestedSubmenu = false;
-          this.toggleSubmenuMenuClass(submenuList);
-          this.toggleButtonAria(target);
-        }
-      } // set a class on the top level parent of the current selection
-
-
-      var currentItem = this.getCurrentItem();
-
-      if (currentItem && currentItem !== 'undefined') {
-        this.setCurrentItem(currentItem);
-      }
+    key: "removeNoJs",
+    value: function removeNoJs() {
+      var listItems = Array.from(this.menu.querySelectorAll('.no-js'));
+      listItems.map(function (item) {
+        return item.classList.remove('no-js');
+      });
     }
     /**
      * 
-     * Handle automatically closing the sub-menus.
-     * When a person opens a sub-menu and then leaves by tabbing, close the sub-menu.
+     * Get the button element which is expanded
+     * Helps with identifying the top level list item
      * 
-     * @param {object} evt
-     * @return - void
-     * @memberof Navigation
+     * @return DOM element
      */
 
   }, {
-    key: "focusInHandler",
-    value: function focusInHandler(evt) {
-      var _this2 = this;
-
-      var target = evt.target,
-          parentNode = evt.target.offsetParent.parentNode;
-      var expandedButtonArray = [].slice.call(this.menu.querySelectorAll('[aria-expanded="true"]'));
-      var openMenuArray = [].slice.call(this.menu.querySelectorAll('.am-submenu-list-open'));
-
-      if (!this.menu.contains(target) && expandedButtonArray.length) {
-        // if we leave the menu, clear everything
-        this.clearAll();
-      } else if (this.menu.contains(target) && openMenuArray.length > 1) {
-        // if focus is still in the menu and there's a sub-sub-menu, 
-        // handle openning and closing when focus leaves.
-        openMenuArray.forEach(function (menu) {
-          if (!menu.contains(target)) {
-            _this2.toggleSubmenuMenuClass(menu);
-
-            _this2.toggleButtonAria(menu.previousElementSibling);
-          }
-        });
-      } else {
-        // still in the menu, but moving from one <li> to another
-        // toggle just the button and submenu for the elements that received focusout.
-        expandedButtonArray = [].slice.call(parentNode.querySelectorAll('[aria-expanded="true"]'));
-        openMenuArray = [].slice.call(parentNode.querySelectorAll('.am-submenu-list-open')); // check to make sure that the user hasn't moved to a different menu.
-
-        if (parentNode.id === this.menuId) {
-          this.toggleButtonAria(expandedButtonArray[0]);
-          this.toggleSubmenuMenuClass(openMenuArray[0]);
-          this.clearCurrent();
-        }
-      }
-
-      return;
+    key: "getCurrentTopLevelItem",
+    value: function getCurrentTopLevelItem(target) {
+      return target.closest("#".concat(this.menuId, " > li"));
     }
     /**
-     * 
-     * Toggle the class of the submenu element or reset the classes for all menus
      *
-     * @param {object} el - a submenu (<ul>) element.
+     * Toggle the class of sub-menus relative to the target button
+     *
+     * @param {object} target - a button element
      * @memberof Navigation
      */
 
   }, {
-    key: "toggleSubmenuMenuClass",
-    value: function toggleSubmenuMenuClass(el) {
-      if (el !== null && el !== undefined) {
-        el.classList.toggle('am-submenu-list-open');
-      } else {
-        this.clearMenus();
-      }
+    key: "toggleSubmenuClass",
+    value: function toggleSubmenuClass(target) {
+      var openSubmenus = Array.from(this.menu.querySelectorAll('.am-submenu-list-open'));
+      var siblingSubmenu = target.nextElementSibling;
+      siblingSubmenu.classList.toggle('am-submenu-list-open');
+      openSubmenus.map(function (menu) {
+        var siblingButton = menu.previousElementSibling;
+
+        if (!siblingButton.isSameNode(target) && !menu.contains(target)) {
+          menu.classList.remove('am-submenu-list-open');
+        }
+      });
     }
     /**
-     * 
-     * Toggle the state of each button to reflect the aria-expanded state
      *
-     * @param {*} target - the DOM element returned by evt.target
-     * @returns void
+     * Toggle the state of the aria-expanded attribute relative to the target button
+     *
+     * @param {object} target - a button element
      * @memberof Navigation
      */
 
   }, {
-    key: "toggleButtonAria",
-    value: function toggleButtonAria(target) {
-      var buttonNode = [].slice.call(document.querySelectorAll('.am-submenu-toggle'));
-      buttonNode.forEach(function (button) {
-        // for each button, determine if there is a button "above" it
+    key: "toggleAriaState",
+    value: function toggleAriaState(target) {
+      var buttons = Array.from(this.menu.querySelectorAll('.am-submenu-toggle'));
+      buttons.map(function (button) {
         var prevButton = button.parentElement.parentElement.previousElementSibling; // case - clicking on a sub-submenu button which is currently NOT expanded.
 
         if (button.isSameNode(target) && button.getAttribute('aria-expanded') === 'false' && prevButton) {
@@ -2568,113 +2578,123 @@ function () {
                 button.setAttribute('aria-expanded', 'false');
               }
       });
-      return;
     }
     /**
-     * Close all submenus
+     *
+     * remove the am-submenu-list-open class from all submenus not associated with the target
      * 
-     * @returns void
+     * @param {object} target - the event target
      * @memberof Navigation
      */
 
   }, {
-    key: "clearMenus",
-    value: function clearMenus() {
-      var menuArray = [].slice.call(this.menu.querySelectorAll('.am-submenu-list-open'));
+    key: "clearSubmenuClass",
+    value: function clearSubmenuClass(target) {
+      var menuArray = Array.from(document.querySelectorAll('.am-submenu-list-open'));
 
-      if (menuArray.length > 0) {
-        menuArray.forEach(function (menu) {
+      if (!target.closest('.am-submenu-toggle')) {
+        menuArray.map(function (menu) {
           return menu.classList.toggle('am-submenu-list-open');
         });
       }
-
-      return;
     }
     /**
-     * Toggle all visual icons and set aria-expanded to false.
      *
-     * @returns void
+     * set aria-expanded false on all buttons not associated with the target
+     *
+     * @param {object} target - the event target
      * @memberof Navigation
      */
 
   }, {
-    key: "clearButtons",
-    value: function clearButtons() {
-      var buttonArray = [].slice.call(this.menu.querySelectorAll('.am-submenu-toggle'));
-      buttonArray.forEach(function (button) {
-        button.setAttribute('aria-expanded', 'false');
-      });
-      return;
-    }
-    /**
-     * Remove the current item from the menu
-     * 
-     * @returns void
-     * @memberof Navigation
-     */
+    key: "clearAllAriaExpanded",
+    value: function clearAllAriaExpanded(target) {
+      var buttonArray = Array.from(document.querySelectorAll('.am-submenu-toggle'));
 
-  }, {
-    key: "clearCurrent",
-    value: function clearCurrent() {
-      var currentItem = this.menu.querySelector('.am-current-item');
-      if (currentItem) currentItem.classList.remove('am-current-item');
-      return;
+      if (!target.closest('.am-submenu-toggle')) {
+        buttonArray.map(function (button) {
+          return button.setAttribute('aria-expanded', 'false');
+        });
+      }
     }
     /**
-     * 
-     * Completely reset the state of the menu
-     * 
-     * @returns void
+     *
+     * close all submenus and set the state of all items with aria-expanded to false
+     * remove event listeners from the document
+     *
+     * @param {object} { target } destructured from the event object
      * @memberof Navigation
      */
 
   }, {
     key: "clearAll",
-    value: function clearAll() {
-      this.clearMenus();
-      this.clearButtons();
-      this.clearCurrent();
-      return;
+    value: function clearAll(_ref2) {
+      var target = _ref2.target;
+      this.clearSubmenuClass(target);
+      this.clearAllAriaExpanded(target);
+      document.removeEventListener('click', this.clearAll.bind(this));
+      document.removeEventListener('keydown', this.clearAll.bind(this));
     }
     /**
+     *
+     * Remove the no-js class and attach event listeners to the menu
      * 
-     * Get the button element which is expanded
-     * Helps with identifying the top level list item
-     * 
-     * @return DOM element
+     * @memberof Navigation
      */
 
   }, {
-    key: "getCurrentItem",
-    value: function getCurrentItem() {
-      var expandedEl = this.menu.querySelector('[aria-expanded="true"]');
-      if (expandedEl) return expandedEl.parentElement;
+    key: "setMenuEventListeners",
+    value: function setMenuEventListeners() {
+      var _this = this;
+
+      var listeners = ['focusin', 'keydown'];
+
+      if (this.click) {
+        listeners.push('mousedown');
+        var subMenuList = [].slice.call(this.menu.querySelectorAll('.am-submenu-list'));
+        subMenuList.forEach(function (menu) {
+          return menu.classList.add('am-click-menu');
+        });
+      }
+
+      for (var i = 0; i < listeners.length; i++) {
+        this.menu.addEventListener(listeners[i], function (evt) {
+          _this.eventDispatcher(evt);
+        });
+      }
     }
     /**
-     * 
-     * Add a class to the current top level list item
-     * 
-     * @param obj the event object
-     * @return void  
+     *
+     * attach event listeners to the document
+     * only allow action for the keydown event for esc key press
+     *
+     * @param {object} target
+     * @memberof Navigation
      */
 
   }, {
-    key: "setCurrentItem",
-    value: function setCurrentItem(current) {
-      var itemNode = [].slice.call(this.menu.querySelectorAll('li'));
-      itemNode.forEach(function (item) {
-        item.classList.remove('am-current-item');
-      });
+    key: "setDocumentEventListeners",
+    value: function setDocumentEventListeners(target) {
+      var _this2 = this;
 
-      if (current) {
-        this.currentItem = current;
-        this.currentItem.classList.add('am-current-item');
+      if (target.getAttribute('aria-expanded') === 'true') {
+        this.clearAll = this.clearAll.bind(this);
+        document.addEventListener('click', this.clearAll);
+        document.addEventListener('keydown', function (evt) {
+          if (evt.which === 27) {
+            _this2.clearAll({
+              target: document.body
+            });
+          }
+        });
       }
     }
     /**
      *
      * dispatch events to the correct functions.
-     * types include: click, focusin, keydown, mousedown
+     * types include: focusin, keydown, mousedown
+     * 
+     * treat keydowns from the return key (13) as mousedown events
      *
      * @param {object} evt
      * @returns void
@@ -2691,20 +2711,13 @@ function () {
 
         case 'keydown':
           if (evt.keyCode === 13) {
-            // if the keydown is caused by the return key, it should be a click
-            this.clickHandler(evt);
-          } else if (evt.keyCode === 27) {
-            // if the keydown is caused by the escape key, close the menus
-            this.clearAll();
-          } else {
-            // throw away all other events.
-            return;
+            this.mouseDownHandler(evt);
           }
 
           break;
 
         case 'mousedown':
-          this.clickHandler(evt);
+          this.mouseDownHandler(evt);
           break;
 
         default:
@@ -2713,61 +2726,37 @@ function () {
     }
     /**
      *
-     * Remove the no-js class and attach event listeners
+     * handle mousedown events by managing
+     * - submenu classes
+     * - aria-expanded state
+     * - event listeners on the document
      * 
+     * @param {object} { target } destructured from the event object
      * @memberof Navigation
      */
 
   }, {
-    key: "setEventListeners",
-    value: function setEventListeners() {
-      var _this3 = this;
-
-      var listeners = ['focusin', 'keydown'];
-
-      if (this.click) {
-        listeners.push('mousedown');
-        var subMenuList = [].slice.call(this.menu.querySelectorAll('.am-submenu-list'));
-        subMenuList.forEach(function (menu) {
-          return menu.classList.add('am-click-menu');
-        });
-      }
-
-      for (var i = 0; i < listeners.length; i++) {
-        document.addEventListener(listeners[i], function (evt) {
-          _this3.eventDispatcher(evt);
-        });
-      }
+    key: "mouseDownHandler",
+    value: function mouseDownHandler(_ref3) {
+      var target = _ref3.target;
+      this.toggleSubmenuClass(target);
+      this.toggleAriaState(target);
+      this.setDocumentEventListeners(target);
     }
-    /**
-     * 
-     * remove the no-js class from list elements
-     * 
-     */
-
   }, {
-    key: "removeNoJs",
-    value: function removeNoJs() {
-      var listElements = Array.from(this.menu.querySelectorAll('.no-js'));
-      listElements.forEach(function (element) {
-        element.classList.remove('no-js');
-      });
+    key: "focusInHandler",
+    value: function focusInHandler(_ref4) {
+      var target = _ref4.target;
+      console.log(target, 'target'); // this.toggleSubmenuClass(target)
+      // this.toggleAriaState(target)
+      // this.setDocumentEventListeners(target)
     }
-    /**
-     * 
-     * Initialize the menu by
-     * - assigning the menu
-     * - attaching event listeners
-     *
-     * @memberof Navigation
-     */
-
   }, {
     key: "init",
     value: function init() {
       this.menu = document.getElementById(this.menuId);
       this.removeNoJs();
-      this.setEventListeners();
+      this.setMenuEventListeners();
     }
   }]);
 
