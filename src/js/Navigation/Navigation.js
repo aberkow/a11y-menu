@@ -274,13 +274,8 @@ class Navigation {
      */
     focusInHandler({ target, relatedTarget }) {
         const topItem = this.toggleCurrentTopLevelItemClass(target)
-
-        // the menu contains the thing we left && the parent li does not contain the thing we left
         if (this.menu.contains(relatedTarget) && !topItem.contains(relatedTarget)) {
-            console.log(topItem, relatedTarget, 'test')
-            this.clearAll({ target: relatedTarget })
-        } else {
-            console.log(topItem, relatedTarget, 'else')
+            this.clearAll({ target: document.body })
         }
     }
 

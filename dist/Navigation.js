@@ -2831,15 +2831,12 @@ function () {
     value: function focusInHandler(_ref4) {
       var target = _ref4.target,
           relatedTarget = _ref4.relatedTarget;
-      var topItem = this.toggleCurrentTopLevelItemClass(target); // the menu contains the thing we left && the parent li does not contain the thing we left
+      var topItem = this.toggleCurrentTopLevelItemClass(target);
 
       if (this.menu.contains(relatedTarget) && !topItem.contains(relatedTarget)) {
-        console.log(topItem, relatedTarget, 'test');
         this.clearAll({
-          target: relatedTarget
+          target: document.body
         });
-      } else {
-        console.log(topItem, relatedTarget, 'else');
       }
     }
   }, {
