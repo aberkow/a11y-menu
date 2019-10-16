@@ -35,6 +35,29 @@ class Navigation {
 
     /**
      *
+     * Manage the state of the top level item associated with targets
+     * 
+     * @param {*} target 
+     * @returns {Element} the top level <li> associated with the target
+     * @memberof Navigation
+     */
+    toggleCurrentTopLevelItemClass(target) {
+        const topLevelItems = Array.from(document.querySelectorAll(`#${this.menuId} > li`))
+        return topLevelItems.map(item => {
+            item.classList.remove('am-current-menu-item')
+            if (item.contains(target)) {
+                item.classList.add('am-current-menu-item')
+                return item
+            }
+        }).filter(item => {
+            if (item !== undefined) {
+                return item
+            }
+        })[0]
+    }
+
+    /**
+     *
      * Toggle the class of sub-menus relative to the target button
      *
      * @param {object} target - a button element
@@ -42,12 +65,15 @@ class Navigation {
      */
     toggleSubmenuClass(target) {
 
-        if (target.localName !== 'button') return
-
         const openSubmenus = Array.from(this.menu.querySelectorAll('.am-submenu-list-open'))
 
         const siblingSubmenu = target.nextElementSibling
 
+        if (!siblingSubmenu) {
+            openSubmenus.map(menu => menu.classList.remove('am-submenu-list-open'))
+            return
+        } 
+        
         siblingSubmenu.classList.toggle('am-submenu-list-open')
         openSubmenus.map(menu => {
             const siblingButton = menu.previousElementSibling
@@ -207,7 +233,7 @@ class Navigation {
     eventDispatcher(evt) {
         switch (evt.type) {
             case 'focusin':
-                this.focusInHandler(evt);
+                this.focusInHandler(evt)
                 break;
             case 'keydown':
                 if (evt.keyCode === 13) {
@@ -215,7 +241,7 @@ class Navigation {
                 } 
                 break;
             case 'mousedown':
-                this.mouseDownHandler(evt);
+                this.mouseDownHandler(evt)
                 break;
             default:
                 return;
@@ -233,23 +259,29 @@ class Navigation {
      * @memberof Navigation
      */
     mouseDownHandler({ target }) {
+        this.toggleCurrentTopLevelItemClass(target)
         this.toggleSubmenuClass(target)
-        this.toggleAriaState(target)
+        this.toggleAriaState(target) 
         this.setDocumentEventListeners(target)
     }
 
-    focusInHandler(evt) {
-        const currentTopLevelItem = this.getCurrentTopLevelItem(evt.target)
-        const related = evt.relatedTarget
-        
-        if (!currentTopLevelItem.contains(related) || !this.menu.contains(evt.target)) {
-            // this.clearSubmenuClass(evt.target)
-            this.clearSubmenuClass(related)
-            this.clearAllAriaExpanded(related)
-        } 
+    /**
+     *
+     * Handle focusin events
+     * 
+     * @param {*} { target, relatedTarget } DOM targets 
+     * @memberof Navigation
+     */
+    focusInHandler({ target, relatedTarget }) {
+        const topItem = this.toggleCurrentTopLevelItemClass(target)
 
-        console.log(currentTopLevelItem.contains(related), 'test')
-
+        // the menu contains the thing we left && the parent li does not contain the thing we left
+        if (this.menu.contains(relatedTarget) && !topItem.contains(relatedTarget)) {
+            console.log(topItem, relatedTarget, 'test')
+            this.clearAll({ target: relatedTarget })
+        } else {
+            console.log(topItem, relatedTarget, 'else')
+        }
     }
 
     init() {
