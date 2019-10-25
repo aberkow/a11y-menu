@@ -3,152 +3,97 @@ class Navigation {
         menuId = 'am-main-menu',
         click = false
     } = {}) {
-        this.hasNestedSubmenu = false;
-        this.menu = null;
-        this.menuId = menuId;
-        this.click = click;
-        this.currentItem = null;
+        this.menu = null
+        this.menuId = menuId
+        this.click = click
+        this.currentItem = null
+    }
+
+    /**
+     * 
+     * js is available
+     * remove the no-js class from nav menu list items
+     * 
+     */
+    removeNoJs() {
+        const listItems = Array.from(this.menu.querySelectorAll('.no-js'))
+        listItems.map(item => item.classList.remove('no-js'))
+    }
+
+    /**
+     * 
+     * Get the button element which is expanded
+     * Helps with identifying the top level list item
+     * 
+     * @return DOM element
+     */
+    getCurrentTopLevelItem(target) {
+        if (target !== null) {
+            return target.closest(`#${this.menuId} > li`)
+        }
     }
 
     /**
      *
-     * Handle incoming clicks
-     *
-     * @param {object} evt object
-     * @returns void
+     * Manage the state of the top level item associated with targets
+     * 
+     * @param {*} target 
+     * @returns {Element} the top level <li> associated with the target
      * @memberof Navigation
      */
-    clickHandler(evt) {
-        const { target, type } = evt
-        let submenuList = null;
+    toggleCurrentTopLevelItemClass(target) {
+        const topLevelItems = Array.from(document.querySelectorAll(`#${this.menuId} > li`))
+        return topLevelItems.map(item => {
+            item.classList.remove('am-current-menu-item')
+            if (item.contains(target)) {
+                item.classList.add('am-current-menu-item')
+                return item
+            }
+        }).filter(item => {
+            if (item !== undefined) {
+                return item
+            }
+        })[0]
+    }
 
-        // if the click is inside the menu on a button, prevent the target from gaining focus and continue.
-        // otherwise do nothing.
+    /**
+     *
+     * Toggle the class of sub-menus relative to the target button
+     *
+     * @param {object} target - a button element
+     * @memberof Navigation
+     */
+    toggleSubmenuClass(target) {
 
-        if (!this.menu.contains(target) && (type === 'mousedown' || type === 'keydown')) {
-            this.clearAll();
-        }
-        
-        if (this.menu.contains(target) && type !== 'keydown') {
-            evt.preventDefault();
+        const openSubmenus = Array.from(this.menu.querySelectorAll('.am-submenu-list-open'))
+
+        const siblingSubmenu = target.nextElementSibling
+
+        if (!siblingSubmenu) {
+            openSubmenus.map(menu => menu.classList.remove('am-submenu-list-open'))
+            return
         } 
-
-        // if there's an open submenu with sub-submenus...
-        if (document.querySelectorAll('.am-submenu-list-open').length > 0 && !document.querySelectorAll('.am-submenu-list-open')[0].contains(target)) {
-
-            const submenuArray = [].slice.call(document.querySelectorAll('.am-submenu-list-open'));
-
-            if (target.nextSibling && target.nextSibling.localName === 'ul') {
-                // if you click from one menu item to another, open the next menu and close the previous one immediately.
-                const nextMenu = target.nextSibling;
-                nextMenu.classList.add('am-submenu-list-open');    
-            }
-            
-            submenuArray.forEach((el) => {
-                // toggle all the menus in the NodeList
-                this.toggleSubmenuMenuClass(el);
-            })
-            
-            this.toggleButtonAria(target);
-    
-        } else {
-            const nextSibling = target.nextElementSibling;
-            
-            // we're near a submenu by clicking on a button but the menu isn't initially open.
-            if (nextSibling !== null && nextSibling.localName === 'ul') {
-                submenuList = nextSibling;
-
-                // check if there's a nested submenu
-                submenuList.getElementsByTagName('ul').length ?
-                    this.hasNestedSubmenu = true :
-                    this.hasNestedSubmenu = false;
         
-                this.toggleSubmenuMenuClass(submenuList);
-                this.toggleButtonAria(target);
+        siblingSubmenu.classList.toggle('am-submenu-list-open')
+        openSubmenus.map(menu => {
+            const siblingButton = menu.previousElementSibling
+            if (!siblingButton.isSameNode(target) && !menu.contains(target)) {
+                menu.classList.remove('am-submenu-list-open')
             }
-        }
-
-        // set a class on the top level parent of the current selection
-        const currentItem = this.getCurrentItem()
-
-        if (currentItem && currentItem !== 'undefined') {
-            this.setCurrentItem(currentItem)
-        }
-
+        })
     }
 
     /**
-     * 
-     * Handle automatically closing the sub-menus.
-     * When a person opens a sub-menu and then leaves by tabbing, close the sub-menu.
-     * 
-     * @param {object} evt
-     * @return - void
-     * @memberof Navigation
-     */
-    focusInHandler(evt) {
-        
-        const { target, target: { offsetParent: { parentNode } } } = evt;
-
-        let expandedButtonArray = [].slice.call(this.menu.querySelectorAll('[aria-expanded="true"]'));
-        let openMenuArray = [].slice.call(this.menu.querySelectorAll('.am-submenu-list-open'));
-
-        if (!this.menu.contains(target) && expandedButtonArray.length) {
-            // if we leave the menu, clear everything
-            this.clearAll();
-        } else if (this.menu.contains(target) && openMenuArray.length > 1) {
-            // if focus is still in the menu and there's a sub-sub-menu, 
-            // handle openning and closing when focus leaves.
-            openMenuArray.forEach(menu => {
-                if (!menu.contains(target)) {
-                    this.toggleSubmenuMenuClass(menu);
-                    this.toggleButtonAria(menu.previousElementSibling);
-                }
-            })
-        } else {
-            // still in the menu, but moving from one <li> to another
-            // toggle just the button and submenu for the elements that received focusout.
-            expandedButtonArray = [].slice.call(parentNode.querySelectorAll('[aria-expanded="true"]'));
-            openMenuArray = [].slice.call(parentNode.querySelectorAll('.am-submenu-list-open'));
-            
-            // check to make sure that the user hasn't moved to a different menu.
-            if (parentNode.id === this.menuId) {
-                this.toggleButtonAria(expandedButtonArray[0]);
-                this.toggleSubmenuMenuClass(openMenuArray[0]);
-                this.clearCurrent();
-            }
-        }
-        return;
-    }
-
-    /**
-     * 
-     * Toggle the class of the submenu element or reset the classes for all menus
      *
-     * @param {object} el - a submenu (<ul>) element.
-     * @memberof Navigation
-     */
-    toggleSubmenuMenuClass(el) {
-        if (el !== null && el !== undefined) {
-            el.classList.toggle('am-submenu-list-open');
-        } else {
-            this.clearMenus();
-        }
-    }
-
-    /**
-     * 
-     * Toggle the state of each button to reflect the aria-expanded state
+     * Toggle the state of the aria-expanded attribute relative to the target button
      *
-     * @param {*} target - the DOM element returned by evt.target
-     * @returns void
+     * @param {object} target - a button element
      * @memberof Navigation
      */
-    toggleButtonAria(target) {
-        const buttonNode = [].slice.call(document.querySelectorAll('.am-submenu-toggle'));
-        
-        buttonNode.forEach(button => {
-            // for each button, determine if there is a button "above" it
+    toggleAriaState(target) {
+        const buttons = Array.from(this.menu.querySelectorAll('.am-submenu-toggle'))
+
+        buttons.map(button => {
             const prevButton = button.parentElement.parentElement.previousElementSibling;
 
             // case - clicking on a sub-submenu button which is currently NOT expanded.
@@ -162,110 +107,124 @@ class Navigation {
                 // keep the previous button expanded and toggle the button/target
                 prevButton.setAttribute('aria-expanded', 'true');
                 button.setAttribute('aria-expanded', 'false');
-            } 
+            }
             // case - clicking on a top level button which is currently NOT expanded
             else if (button.isSameNode(target) && button.getAttribute('aria-expanded') === 'false') {
                 // expand the button
                 button.setAttribute('aria-expanded', 'true');
-            } 
+            }
             // case - all other buttons
             else {
                 // reset the state to false
                 button.setAttribute('aria-expanded', 'false')
             }
-        });
-        return;
+        })
     }
 
-    /**
-     * Close all submenus
-     * 
-     * @returns void
-     * @memberof Navigation
-     */
-    clearMenus() {
-        const menuArray = [].slice.call(this.menu.querySelectorAll('.am-submenu-list-open'));
-        if (menuArray.length > 0) {
-            menuArray.forEach(menu => menu.classList.toggle('am-submenu-list-open'))
-        }
-        return;
-    }
 
     /**
-     * Toggle all visual icons and set aria-expanded to false.
      *
-     * @returns void
+     * remove the am-submenu-list-open class from all submenus not associated with the target
+     * 
+     * @param {object} target - the event target
      * @memberof Navigation
      */
-    clearButtons() {
-        const buttonArray = [].slice.call(this.menu.querySelectorAll('.am-submenu-toggle'))
-        buttonArray.forEach((button) => {
-            button.setAttribute('aria-expanded', 'false');
-        })
-        return;
+    clearSubmenuClass(target) {
+        const menuArray = Array.from(document.querySelectorAll('.am-submenu-list-open'))
+        if (!target.closest('.am-submenu-toggle')) {
+            menuArray.map(menu => menu.classList.toggle('am-submenu-list-open'))
+        }
     }
 
     /**
-     * Remove the current item from the menu
-     * 
-     * @returns void
+     *
+     * set aria-expanded false on all buttons not associated with the target
+     *
+     * @param {object} target - the event target
      * @memberof Navigation
      */
-    clearCurrent() {
-        const currentItem = this.menu.querySelector('.am-current-item');
-        if (currentItem) currentItem.classList.remove('am-current-item');
-        return;
+    clearAllAriaExpanded(target) {
+        const buttonArray = Array.from(document.querySelectorAll('.am-submenu-toggle'))
+        if (!target.closest('.am-submenu-toggle')) {
+            buttonArray.map(button => button.setAttribute('aria-expanded', 'false'))
+        }
     }
 
     /**
-     * 
-     * Completely reset the state of the menu
-     * 
-     * @returns void
+     *
+     * close all submenus and set the state of all items with aria-expanded to false
+     * remove event listeners from the document
+     *
+     * @param {object} { target } destructured from the event object
      * @memberof Navigation
      */
-    clearAll() {
-        this.clearMenus();
-        this.clearButtons();
-        this.clearCurrent();
-        return;
+    clearAll({ target }) {
+        this.clearSubmenuClass(target)
+        this.clearAllAriaExpanded(target)
+        document.removeEventListener('click', this.clearAll.bind(this))
+        document.removeEventListener('focusin', this.clearAll.bind(this))
+        document.removeEventListener('keydown', this.clearAll.bind(this))
     }
 
     /**
+     *
+     * Remove the no-js class and attach event listeners to the menu
      * 
-     * Get the button element which is expanded
-     * Helps with identifying the top level list item
-     * 
-     * @return DOM element
+     * @memberof Navigation
      */
-    getCurrentItem() {
-        const expandedEl = this.menu.querySelector('[aria-expanded="true"]')
-        if (expandedEl) return expandedEl.parentElement;     
+    setMenuEventListeners() {
+        let listeners = ['focusin', 'keydown'];
+
+        if (this.click) {
+            listeners.push('mousedown');
+
+            const subMenuList = [].slice.call(this.menu.querySelectorAll('.am-submenu-list'));
+
+            subMenuList.forEach(menu => menu.classList.add('am-click-menu'));
+        }
+
+        for (let i = 0; i < listeners.length; i++) {
+            this.menu.addEventListener(listeners[i], (evt) => {
+                this.eventDispatcher(evt);
+            });
+        }
     }
 
     /**
-     * 
-     * Add a class to the current top level list item
-     * 
-     * @param obj the event object
-     * @return void  
+     *
+     * attach event listeners to the document
+     *  - click: clicks on the body clear the menu
+     *  - focusin: if the body gets focus, clear the menu
+     *  - keydown: if the escape key is pressed, clear the menu
+     *
+     * @param {object} target
+     * @memberof Navigation
      */
-    setCurrentItem(current) {
-        const itemNode = [].slice.call(this.menu.querySelectorAll('li'));
-        itemNode.forEach(item => {
-            item.classList.remove('am-current-item');
-        })
-        
-        if (current) {
-            this.currentItem = current;
-            this.currentItem.classList.add('am-current-item');
+    setDocumentEventListeners(target) {
+        if (target.getAttribute('aria-expanded') === 'true') {
+            this.clearAll = this.clearAll.bind(this)
+            document.addEventListener('click', this.clearAll)
+
+            document.addEventListener('focusin', (evt) => {
+                if (!this.menu.contains(evt.target)) {
+                    this.clearAll({ target: document.body })
+                }
+            })
+            
+            document.addEventListener('keydown', (evt) => {
+                if (evt.which === 27) {
+                    this.clearAll({ target: document.body })
+                }
+            })
         }
     }
 
     /**
      *
      * dispatch events to the correct functions.
-     * types include: click, focusin, keydown, mousedown
+     * types include: focusin, keydown, mousedown
+     * 
+     * treat keydowns from the return key (13) as mousedown events
      *
      * @param {object} evt
      * @returns void
@@ -274,22 +233,15 @@ class Navigation {
     eventDispatcher(evt) {
         switch (evt.type) {
             case 'focusin':
-                this.focusInHandler(evt);
+                this.focusInHandler(evt)
                 break;
             case 'keydown':
                 if (evt.keyCode === 13) {
-                    // if the keydown is caused by the return key, it should be a click
-                    this.clickHandler(evt);
-                } else if (evt.keyCode === 27) {
-                    // if the keydown is caused by the escape key, close the menus
-                    this.clearAll();
-                } else {
-                    // throw away all other events.
-                    return;
-                }
-                break;            
+                    this.mouseDownHandler(evt)
+                } 
+                break;
             case 'mousedown':
-                this.clickHandler(evt);
+                this.mouseDownHandler(evt)
                 break;
             default:
                 return;
@@ -298,52 +250,39 @@ class Navigation {
 
     /**
      *
-     * Remove the no-js class and attach event listeners
+     * handle mousedown events by managing
+     * - submenu classes
+     * - aria-expanded state
+     * - event listeners on the document
      * 
+     * @param {object} { target } destructured from the event object
      * @memberof Navigation
      */
-    setEventListeners() {
-        let listeners = ['focusin', 'keydown'];
+    mouseDownHandler({ target }) {
+        this.toggleCurrentTopLevelItemClass(target)
+        this.toggleSubmenuClass(target)
+        this.toggleAriaState(target) 
+        this.setDocumentEventListeners(target)
+    }
 
-        if (this.click) {
-            listeners.push('mousedown');
-            
-            const subMenuList = [].slice.call(this.menu.querySelectorAll('.am-submenu-list'));
-            
-            subMenuList.forEach(menu => menu.classList.add('am-click-menu'));
-        } 
-
-        for (let i = 0; i < listeners.length; i++) {
-            document.addEventListener(listeners[i], (evt) => {
-                this.eventDispatcher(evt);
-            });
+    /**
+     *
+     * Handle focusin events
+     * 
+     * @param {*} { target, relatedTarget } DOM targets 
+     * @memberof Navigation
+     */
+    focusInHandler({ target, relatedTarget }) {
+        const topItem = this.toggleCurrentTopLevelItemClass(target)
+        if (this.menu.contains(relatedTarget) && !topItem.contains(relatedTarget)) {
+            this.clearAll({ target: document.body })
         }
     }
 
-    /**
-     * 
-     * remove the no-js class from list elements
-     * 
-     */
-    removeNoJs() {
-        const listElements = Array.from(this.menu.querySelectorAll('.no-js'));
-        listElements.forEach(element => {
-            element.classList.remove('no-js');
-        });
-    }
-
-    /**
-     * 
-     * Initialize the menu by
-     * - assigning the menu
-     * - attaching event listeners
-     *
-     * @memberof Navigation
-     */
     init() {
-        this.menu = document.getElementById(this.menuId);
+        this.menu = document.getElementById(this.menuId)
         this.removeNoJs()
-        this.setEventListeners();
+        this.setMenuEventListeners()
     }
 }
 
