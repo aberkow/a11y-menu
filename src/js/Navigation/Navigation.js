@@ -44,9 +44,9 @@ class Navigation {
     toggleCurrentTopLevelItemClass(target) {
         const topLevelItems = Array.from(document.querySelectorAll(`#${this.menuId} > li`))
         return topLevelItems.map(item => {
-            item.classList.remove('am-current-menu-item')
+            item.classList.remove('am-current-item')
             if (item.contains(target)) {
-                item.classList.add('am-current-menu-item')
+                item.classList.add('am-current-item')
                 return item
             }
         }).filter(item => {
