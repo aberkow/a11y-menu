@@ -64,23 +64,27 @@ class Navigation {
      * @memberof Navigation
      */
     toggleSubmenuClass(target) {
-
+        const currentTopLevelItem = this.getCurrentTopLevelItem(target)
+        // console.log(currentTopLevelItem, 'current')
         const openSubmenus = Array.from(this.menu.querySelectorAll('.am-submenu-list-open'))
 
         const siblingSubmenu = target.nextElementSibling
+        console.log(siblingSubmenu)
 
-        if (!siblingSubmenu) {
-            openSubmenus.map(menu => menu.classList.remove('am-submenu-list-open'))
+        if (siblingSubmenu) {
+            siblingSubmenu.classList.toggle('am-submenu-list-open')
+            // openSubmenus.map(menu => menu.classList.remove('am-submenu-list-open'))
             return
         } 
         
-        siblingSubmenu.classList.toggle('am-submenu-list-open')
         openSubmenus.map(menu => {
             const siblingButton = menu.previousElementSibling
-            if (!siblingButton.isSameNode(target) && !menu.contains(target)) {
-                menu.classList.remove('am-submenu-list-open')
-            }
+            // console.log(menu, menu.contains(target), 'contains?');
+            if (!siblingButton.isSameNode(target) && !currentTopLevelItem.contains(target)) {
+                this.clearSubmenuClass(target)
+            } 
         })
+
     }
 
     /**
@@ -258,7 +262,12 @@ class Navigation {
      * @param {object} { target } destructured from the event object
      * @memberof Navigation
      */
-    mouseDownHandler({ target }) {
+    mouseDownHandler(evt) {
+
+        evt.preventDefault()
+
+        const { target } = evt
+
         this.toggleCurrentTopLevelItemClass(target)
         this.toggleSubmenuClass(target)
         this.toggleAriaState(target) 
