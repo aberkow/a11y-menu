@@ -265,12 +265,8 @@ class Navigation {
      * @param {object} { target } destructured from the event object
      * @memberof Navigation
      */
-    mouseDownHandler(evt) {
-        // a click on the button should not introduce focus
-        evt.preventDefault()
-
-        const { target } = evt
-
+    mouseDownHandler({ target }) {
+        if (target.localName !== 'button') return
         this.toggleCurrentTopLevelItemClass(target)
         this.manageSubmenuState(target)
         this.setDocumentEventListeners(target)

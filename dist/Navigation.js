@@ -2806,10 +2806,9 @@ function () {
 
   }, {
     key: "mouseDownHandler",
-    value: function mouseDownHandler(evt) {
-      // a click on the button should not introduce focus
-      evt.preventDefault();
-      var target = evt.target;
+    value: function mouseDownHandler(_ref3) {
+      var target = _ref3.target;
+      if (target.localName !== 'button') return;
       this.toggleCurrentTopLevelItemClass(target);
       this.manageSubmenuState(target);
       this.setDocumentEventListeners(target);
@@ -2824,9 +2823,9 @@ function () {
 
   }, {
     key: "focusInHandler",
-    value: function focusInHandler(_ref3) {
-      var target = _ref3.target,
-          relatedTarget = _ref3.relatedTarget;
+    value: function focusInHandler(_ref4) {
+      var target = _ref4.target,
+          relatedTarget = _ref4.relatedTarget;
       var topItem = this.toggleCurrentTopLevelItemClass(target);
 
       if (this.menu.contains(relatedTarget) && !topItem.contains(relatedTarget)) {
