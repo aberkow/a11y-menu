@@ -2580,70 +2580,61 @@ function () {
       })[0];
     }
     /**
+     * 
+     * Opens and closes submenus
+     * Change the state of the aria-expanded property and submenu class
      *
-     * Toggle the class of sub-menus relative to the target button
-     *
-     * @param {object} target - a button element
+     * @param {*} target DOM Node - specifically a <button />
      * @memberof Navigation
      */
 
   }, {
-    key: "toggleSubmenuClass",
-    value: function toggleSubmenuClass(target) {
-      var _this = this;
-
-      var currentTopLevelItem = this.getCurrentTopLevelItem(target); // console.log(currentTopLevelItem, 'current')
-
-      var openSubmenus = Array.from(this.menu.querySelectorAll('.am-submenu-list-open'));
-      var siblingSubmenu = target.nextElementSibling;
-      console.log(siblingSubmenu);
-
-      if (siblingSubmenu) {
-        siblingSubmenu.classList.toggle('am-submenu-list-open'); // openSubmenus.map(menu => menu.classList.remove('am-submenu-list-open'))
-
-        return;
-      }
-
-      openSubmenus.map(function (menu) {
-        var siblingButton = menu.previousElementSibling; // console.log(menu, menu.contains(target), 'contains?');
-
-        if (!siblingButton.isSameNode(target) && !currentTopLevelItem.contains(target)) {
-          _this.clearSubmenuClass(target);
-        }
-      });
-    }
-    /**
-     *
-     * Toggle the state of the aria-expanded attribute relative to the target button
-     *
-     * @param {object} target - a button element
-     * @memberof Navigation
-     */
-
-  }, {
-    key: "toggleAriaState",
-    value: function toggleAriaState(target) {
+    key: "manageSubmenuState",
+    value: function manageSubmenuState(target) {
       var buttons = Array.from(this.menu.querySelectorAll('.am-submenu-toggle'));
       buttons.map(function (button) {
-        var prevButton = button.parentElement.parentElement.previousElementSibling; // case - clicking on a sub-submenu button which is currently NOT expanded.
+        var prevButton = button.parentElement.parentElement.previousElementSibling;
+        var submenu = button.nextElementSibling;
+        var submenuOpenClass = 'am-submenu-list-open';
+        var sameNode = button.isSameNode(target);
+        var ariaExpanded = button.getAttribute('aria-expanded');
+        var parentSubmenu; // if for some reason there's a button with no submenu, return immediately
 
-        if (button.isSameNode(target) && button.getAttribute('aria-expanded') === 'false' && prevButton) {
-          // toggle the states of the previous button and the button/target
+        if (!submenu) return; // case - clicking on a sub-submenu button which is currently NOT expanded.
+
+        if (sameNode && ariaExpanded === 'false' && prevButton) {
+          // find the parent submenu
+          parentSubmenu = prevButton.nextElementSibling; // toggle the states of the previous button and the button/target
+
           prevButton.setAttribute('aria-expanded', 'true');
-          button.setAttribute('aria-expanded', 'true');
+          button.setAttribute('aria-expanded', 'true'); // keep the parent submenu open
+
+          parentSubmenu.classList.add(submenuOpenClass); // open the sub-submenu
+
+          submenu.classList.add(submenuOpenClass);
         } // case - clicking on a sub-submenu button which is currently expanded.
-        else if (button.isSameNode(target) && button.getAttribute('aria-expanded') === 'true' && prevButton) {
-            // keep the previous button expanded and toggle the button/target
+        else if (sameNode && ariaExpanded === 'true' && prevButton) {
+            // find the parent submenu
+            parentSubmenu = prevButton.nextElementSibling; // keep the previous button expanded and toggle the button/target
+
             prevButton.setAttribute('aria-expanded', 'true');
-            button.setAttribute('aria-expanded', 'false');
+            button.setAttribute('aria-expanded', 'false'); // keep the parent submenu open
+
+            parentSubmenu.classList.add(submenuOpenClass); // close the sub-submenu
+
+            submenu.classList.remove(submenuOpenClass);
           } // case - clicking on a top level button which is currently NOT expanded
-          else if (button.isSameNode(target) && button.getAttribute('aria-expanded') === 'false') {
+          else if (sameNode && ariaExpanded === 'false') {
               // expand the button
-              button.setAttribute('aria-expanded', 'true');
+              button.setAttribute('aria-expanded', 'true'); // open the submenu
+
+              submenu.classList.add(submenuOpenClass);
             } // case - all other buttons
             else {
-                // reset the state to false
-                button.setAttribute('aria-expanded', 'false');
+                // reset aria-expanded to false
+                button.setAttribute('aria-expanded', 'false'); // close the submenu
+
+                submenu.classList.remove(submenuOpenClass);
               }
       });
     }
@@ -2662,7 +2653,7 @@ function () {
 
       if (!target.closest('.am-submenu-toggle')) {
         menuArray.map(function (menu) {
-          return menu.classList.toggle('am-submenu-list-open');
+          return menu.classList.remove('am-submenu-list-open');
         });
       }
     }
@@ -2714,7 +2705,7 @@ function () {
   }, {
     key: "setMenuEventListeners",
     value: function setMenuEventListeners() {
-      var _this2 = this;
+      var _this = this;
 
       var listeners = ['focusin', 'keydown'];
 
@@ -2728,7 +2719,7 @@ function () {
 
       for (var i = 0; i < listeners.length; i++) {
         this.menu.addEventListener(listeners[i], function (evt) {
-          _this2.eventDispatcher(evt);
+          _this.eventDispatcher(evt);
         });
       }
     }
@@ -2746,21 +2737,21 @@ function () {
   }, {
     key: "setDocumentEventListeners",
     value: function setDocumentEventListeners(target) {
-      var _this3 = this;
+      var _this2 = this;
 
       if (target.getAttribute('aria-expanded') === 'true') {
         this.clearAll = this.clearAll.bind(this);
         document.addEventListener('click', this.clearAll);
         document.addEventListener('focusin', function (evt) {
-          if (!_this3.menu.contains(evt.target)) {
-            _this3.clearAll({
+          if (!_this2.menu.contains(evt.target)) {
+            _this2.clearAll({
               target: document.body
             });
           }
         });
         document.addEventListener('keydown', function (evt) {
           if (evt.which === 27) {
-            _this3.clearAll({
+            _this2.clearAll({
               target: document.body
             });
           }
@@ -2816,11 +2807,11 @@ function () {
   }, {
     key: "mouseDownHandler",
     value: function mouseDownHandler(evt) {
+      // a click on the button should not introduce focus
       evt.preventDefault();
       var target = evt.target;
       this.toggleCurrentTopLevelItemClass(target);
-      this.toggleSubmenuClass(target);
-      this.toggleAriaState(target);
+      this.manageSubmenuState(target);
       this.setDocumentEventListeners(target);
     }
     /**
