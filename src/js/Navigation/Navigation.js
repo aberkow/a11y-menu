@@ -57,70 +57,76 @@ class Navigation {
     }
 
     /**
+     * 
+     * Opens and closes submenus
+     * Change the state of the aria-expanded property and submenu class
      *
-     * Toggle the class of sub-menus relative to the target button
-     *
-     * @param {object} target - a button element
+     * @param {*} target DOM Node - specifically a <button />
      * @memberof Navigation
      */
-    toggleSubmenuClass(target) {
-
-        const openSubmenus = Array.from(this.menu.querySelectorAll('.am-submenu-list-open'))
-
-        const siblingSubmenu = target.nextElementSibling
-
-        if (!siblingSubmenu) {
-            openSubmenus.map(menu => menu.classList.remove('am-submenu-list-open'))
-            return
-        } 
-        
-        siblingSubmenu.classList.toggle('am-submenu-list-open')
-        openSubmenus.map(menu => {
-            const siblingButton = menu.previousElementSibling
-            if (!siblingButton.isSameNode(target) && !menu.contains(target)) {
-                menu.classList.remove('am-submenu-list-open')
-            }
-        })
-    }
-
-    /**
-     *
-     * Toggle the state of the aria-expanded attribute relative to the target button
-     *
-     * @param {object} target - a button element
-     * @memberof Navigation
-     */
-    toggleAriaState(target) {
+    manageSubmenuState(target) {
         const buttons = Array.from(this.menu.querySelectorAll('.am-submenu-toggle'))
-
+        
         buttons.map(button => {
             const prevButton = button.parentElement.parentElement.previousElementSibling;
+            const submenu = button.nextElementSibling
+            const submenuOpenClass = 'am-submenu-list-open'
+            const sameNode = button.isSameNode(target)
+            const ariaExpanded = button.getAttribute('aria-expanded')
+            let parentSubmenu;
+
+            // if for some reason there's a button with no submenu, return immediately
+            if (!submenu) return
 
             // case - clicking on a sub-submenu button which is currently NOT expanded.
-            if (button.isSameNode(target) && button.getAttribute('aria-expanded') === 'false' && prevButton) {
+            if (sameNode && ariaExpanded === 'false' && prevButton) {
+
+                // find the parent submenu
+                parentSubmenu = prevButton.nextElementSibling
+
                 // toggle the states of the previous button and the button/target
                 prevButton.setAttribute('aria-expanded', 'true');
                 button.setAttribute('aria-expanded', 'true');
+
+                // keep the parent submenu open
+                parentSubmenu.classList.add(submenuOpenClass)
+
+                // open the sub-submenu
+                submenu.classList.add(submenuOpenClass)
             }
+
             // case - clicking on a sub-submenu button which is currently expanded.
-            else if (button.isSameNode(target) && button.getAttribute('aria-expanded') === 'true' && prevButton) {
+            else if (sameNode && ariaExpanded === 'true' && prevButton) {
+
+                // find the parent submenu
+                parentSubmenu = prevButton.nextElementSibling
+
                 // keep the previous button expanded and toggle the button/target
                 prevButton.setAttribute('aria-expanded', 'true');
                 button.setAttribute('aria-expanded', 'false');
+
+                // keep the parent submenu open
+                parentSubmenu.classList.add(submenuOpenClass)
+
+                // close the sub-submenu
+                submenu.classList.remove(submenuOpenClass)
             }
             // case - clicking on a top level button which is currently NOT expanded
-            else if (button.isSameNode(target) && button.getAttribute('aria-expanded') === 'false') {
+            else if (sameNode && ariaExpanded === 'false') {
                 // expand the button
                 button.setAttribute('aria-expanded', 'true');
+                // open the submenu
+                submenu.classList.add(submenuOpenClass)
             }
             // case - all other buttons
             else {
-                // reset the state to false
+                // reset aria-expanded to false
                 button.setAttribute('aria-expanded', 'false')
+                // close the submenu
+                submenu.classList.remove(submenuOpenClass)
             }
         })
     }
-
 
     /**
      *
@@ -132,7 +138,7 @@ class Navigation {
     clearSubmenuClass(target) {
         const menuArray = Array.from(document.querySelectorAll('.am-submenu-list-open'))
         if (!target.closest('.am-submenu-toggle')) {
-            menuArray.map(menu => menu.classList.toggle('am-submenu-list-open'))
+            menuArray.map(menu => menu.classList.remove('am-submenu-list-open'))
         }
     }
 
@@ -203,6 +209,7 @@ class Navigation {
     setDocumentEventListeners(target) {
         if (target.getAttribute('aria-expanded') === 'true') {
             this.clearAll = this.clearAll.bind(this)
+
             document.addEventListener('click', this.clearAll)
 
             document.addEventListener('focusin', (evt) => {
@@ -259,9 +266,9 @@ class Navigation {
      * @memberof Navigation
      */
     mouseDownHandler({ target }) {
+        if (target.localName !== 'button') return
         this.toggleCurrentTopLevelItemClass(target)
-        this.toggleSubmenuClass(target)
-        this.toggleAriaState(target) 
+        this.manageSubmenuState(target)
         this.setDocumentEventListeners(target)
     }
 
