@@ -7,6 +7,8 @@ class Navigation {
         this.menuId = menuId
         this.click = click
         this.currentItem = null
+        this.allA11YMenus = document.querySelectorAll('ul[id^="am-"]')
+        this.multipleNavsExist = this.allA11YMenus.length > 1 ? true : false
     }
 
     /**
@@ -213,8 +215,20 @@ class Navigation {
             document.addEventListener('click', this.clearAll)
 
             document.addEventListener('focusin', (evt) => {
-                if (!this.menu.contains(evt.target)) {
+                if (!this.menu.contains(evt.target) && !this.multipleNavsExist) {
                     this.clearAll({ target: document.body })
+                } else {
+                    const isContained = []
+                    
+                    this.allA11YMenus.forEach(menu => {
+                        menu.contains(evt.target) ? isContained.push(true) : isContained.push(false)
+                    });
+
+                    const allFalse = isContained.every(element => element === false)
+                    
+                    if (allFalse) {
+                        this.clearAll({ target: document.body })
+                    }
                 }
             })
             
