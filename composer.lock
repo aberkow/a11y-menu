@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "442bca028a7e13e4d5a369505e7d105a",
+    "content-hash": "759f82000c5718d0dc452366eda05d53",
     "packages": [],
     "packages-dev": [
         {
@@ -295,22 +295,21 @@
         },
         {
             "name": "wpackagist-plugin/wordpress-importer",
-            "version": "dev-trunk",
+            "version": "0.7",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wordpress-importer/",
-                "reference": "trunk"
+                "reference": "tags/0.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wordpress-importer.zip?timestamp=1520070823"
+                "url": "https://downloads.wordpress.org/plugin/wordpress-importer.0.7.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/wordpress-importer/",
-            "time": "2018-03-03T09:53:43+00:00"
+            "homepage": "https://wordpress.org/plugins/wordpress-importer/"
         },
         {
             "name": "wpackagist-theme/twentynineteen",
@@ -335,8 +334,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "johnpbloch/wordpress": 0,
-        "wpackagist-plugin/query-monitor": 20,
-        "wpackagist-plugin/wordpress-importer": 20
+        "wpackagist-plugin/query-monitor": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
