@@ -124,6 +124,22 @@ use A11y\Menu_Walker;
           }
           ?>
         </nav>
+        <?php
+        if (has_nav_menu('secondary-header-menu')) {
+          echo '<p><strong>Secondary Navigation for testing.</strong></p>';
+          wp_nav_menu(
+            array(
+              'container'  => 'nav',
+              'container_id' => 'am-secondary-nav',
+              'menu_id' => 'am-secondary-menu',
+              'items_wrap' => '<ul id="%1$s" class="am-click-menu %2$s">%3$s</ul>',
+              'theme_location' => 'secondary-header-menu',
+              // use the custom A11Y walker menu
+              'walker' => new Menu_Walker()
+            )
+          );
+        }
+        ?>
       </div><!-- .header-navigation-wrapper -->
 
     </div><!-- .header-inner -->

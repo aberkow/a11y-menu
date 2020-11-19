@@ -4,4 +4,12 @@ document.addEventListener('DOMContentLoaded', () => {
     click: true
   })
   navigation.init()
+
+  if (document.getElementById('am-secondary-nav')) {
+    const secondaryNavigation = new Navigation({
+      menuId: 'am-secondary-menu',
+      click: true
+    })
+    secondaryNavigation.init()
+  }
 })
