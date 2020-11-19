@@ -16,3 +16,11 @@
 .header-titles-wrapper {
   margin-bottom: 2rem;
 }
+
+.am-list-item {
+  white-space: nowrap;
+}
+
+#am-main-menu {
+  flex-wrap: wrap;
+}
