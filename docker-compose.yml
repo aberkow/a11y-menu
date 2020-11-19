@@ -13,6 +13,9 @@ services:
       - "443:443"
     volumes:
       # mount files/directories necessary for wordpress
+      - ./twentytwenty-child:/var/www/html/content/themes/twentytwenty-child
+      - ./src:/var/www/html/content/themes/twentytwenty-child/a11y-menu-src
+      - ./dist:/var/www/html/content/themes/twentytwenty-child/a11y-menu-dist
       - ./www:/var/www/html
       - ./.entrypoint/server-entrypoint:/entrypoint
     depends_on:

@@ -51,6 +51,6 @@
         "johnpbloch/wordpress": "@stable",
         "wpackagist-plugin/query-monitor": "dev-trunk",
         "wpackagist-plugin/wordpress-importer": "^0.7",
-        "wpackagist-theme/twentynineteen": "^1.4"
+        "wpackagist-theme/twentytwenty": "^1.5"
     }
 }
