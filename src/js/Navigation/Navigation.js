@@ -65,6 +65,7 @@ class Navigation {
      * @memberof Navigation
      */
     manageSubmenuState(target) {
+        console.log(target);
         const buttons = Array.from(this.menu.querySelectorAll('.am-submenu-toggle'))
         
         buttons.map(button => {
@@ -182,7 +183,7 @@ class Navigation {
         let listeners = ['focusin', 'keydown'];
 
         if (this.click) {
-            listeners.push('mousedown');
+            listeners.push('click');
 
             const subMenuList = [].slice.call(this.menu.querySelectorAll('.am-submenu-list'));
 
@@ -231,7 +232,7 @@ class Navigation {
      * dispatch events to the correct functions.
      * types include: focusin, keydown, mousedown
      * 
-     * treat keydowns from the return key (13) as mousedown events
+     * treat keydowns from the return key (13) as click events
      *
      * @param {object} evt
      * @returns void
@@ -242,13 +243,13 @@ class Navigation {
             case 'focusin':
                 this.focusInHandler(evt)
                 break;
-            case 'keydown':
-                if (evt.keyCode === 13) {
-                    this.mouseDownHandler(evt)
-                } 
-                break;
-            case 'mousedown':
-                this.mouseDownHandler(evt)
+            // case 'keydown':
+            //     if (evt.keyCode === 13) {
+            //         this.clickHandler(evt)
+            //     } 
+            //     break;
+            case 'click':
+                this.clickHandler(evt)
                 break;
             default:
                 return;
@@ -265,7 +266,7 @@ class Navigation {
      * @param {object} { target } destructured from the event object
      * @memberof Navigation
      */
-    mouseDownHandler({ target }) {
+    clickHandler({ target }) {
         if (target.localName !== 'button') return
         this.toggleCurrentTopLevelItemClass(target)
         this.manageSubmenuState(target)

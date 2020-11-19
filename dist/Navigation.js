@@ -2815,6 +2815,7 @@ var Navigation = /*#__PURE__*/function () {
   }, {
     key: "manageSubmenuState",
     value: function manageSubmenuState(target) {
+      console.log(target);
       var buttons = Array.from(this.menu.querySelectorAll('.am-submenu-toggle'));
       buttons.map(function (button) {
         var prevButton = button.parentElement.parentElement.previousElementSibling;
@@ -2934,7 +2935,7 @@ var Navigation = /*#__PURE__*/function () {
       var listeners = ['focusin', 'keydown'];
 
       if (this.click) {
-        listeners.push('mousedown');
+        listeners.push('click');
         var subMenuList = [].slice.call(this.menu.querySelectorAll('.am-submenu-list'));
         subMenuList.forEach(function (menu) {
           return menu.classList.add('am-click-menu');
@@ -2987,7 +2988,7 @@ var Navigation = /*#__PURE__*/function () {
      * dispatch events to the correct functions.
      * types include: focusin, keydown, mousedown
      * 
-     * treat keydowns from the return key (13) as mousedown events
+     * treat keydowns from the return key (13) as click events
      *
      * @param {object} evt
      * @returns void
@@ -3001,16 +3002,14 @@ var Navigation = /*#__PURE__*/function () {
         case 'focusin':
           this.focusInHandler(evt);
           break;
+        // case 'keydown':
+        //     if (evt.keyCode === 13) {
+        //         this.clickHandler(evt)
+        //     } 
+        //     break;
 
-        case 'keydown':
-          if (evt.keyCode === 13) {
-            this.mouseDownHandler(evt);
-          }
-
-          break;
-
-        case 'mousedown':
-          this.mouseDownHandler(evt);
+        case 'click':
+          this.clickHandler(evt);
           break;
 
         default:
@@ -3029,8 +3028,8 @@ var Navigation = /*#__PURE__*/function () {
      */
 
   }, {
-    key: "mouseDownHandler",
-    value: function mouseDownHandler(_ref3) {
+    key: "clickHandler",
+    value: function clickHandler(_ref3) {
       var target = _ref3.target;
       if (target.localName !== 'button') return;
       this.toggleCurrentTopLevelItemClass(target);
