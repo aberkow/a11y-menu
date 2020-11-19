@@ -12,7 +12,8 @@ function twentytwenty_child_enqueue_scripts() {
 
 function twentytwenty_child_enqueue_styles() {
   $parent_handle = 'twentytwenty-style';
+  wp_enqueue_style('fontawesome', 'https://use.fontawesome.com/releases/v5.15.1/css/all.css');
   wp_enqueue_style('a11y-menu', get_stylesheet_directory_uri() . '/a11y-menu-dist/main.css');
   wp_enqueue_style($parent_handle, get_template_directory_uri() . '/style.css', []);
-  wp_enqueue_style('twentytwenty-child', get_stylesheet_uri(), [$parent_handle, 'a11y-menu']);
+  wp_enqueue_style('twentytwenty-child', get_stylesheet_uri(), [$parent_handle, 'fontawesome','a11y-menu']);
 }
