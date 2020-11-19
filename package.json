@@ -29,26 +29,26 @@
     "src/scss/"
   ],
   "dependencies": {
-    "core-js": "^3.2.1"
+    "core-js": "^3.7.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.2",
-    "@babel/preset-env": "^7.6.2",
-    "babel-loader": "^8.0.6",
-    "browser-sync": "^2.26.7",
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "babel-loader": "^8.2.1",
+    "browser-sync": "^2.26.13",
     "cross-env": "^5.2.1",
     "del": "^5.1.0",
     "gulp": "^4.0.2",
-    "gulp-autoprefixer": "^7.0.0",
+    "gulp-autoprefixer": "^7.0.1",
     "gulp-concat": "^2.6.1",
     "gulp-env": "^0.4.0",
-    "gulp-load-plugins": "^2.0.1",
+    "gulp-load-plugins": "^2.0.5",
     "gulp-plumber": "^1.2.1",
-    "gulp-sass": "^4.0.2",
-    "gulp-sourcemaps": "^2.6.5",
+    "gulp-sass": "^4.1.0",
+    "gulp-sourcemaps": "^3.0.0",
     "gulp-strip-code": "^0.1.4",
     "gulp-uglify-es": "^1.0.4",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.14.1",
     "webpack-merge": "^4.2.2",
     "webpack-stream": "^5.2.1"
   }
