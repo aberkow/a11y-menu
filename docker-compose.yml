@@ -1,7 +1,7 @@
 version: "3"
 services:
   web:
-    image: uconn/php72-official:latest
+    image: uconn/php74-official:latest
     environment:
       SITE_ENV: local
       WORDPRESS_DB_HOST: db:3306

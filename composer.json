@@ -49,6 +49,7 @@
     },
     "require-dev": {
         "johnpbloch/wordpress": "@stable",
+        "wpackagist-plugin/query-monitor": "dev-trunk",
         "wpackagist-plugin/wordpress-importer": "dev-trunk",
         "wpackagist-theme/twentynineteen": "^1.4"
     }
