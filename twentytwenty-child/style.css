@@ -1,0 +1,26 @@
+/*
+ Theme Name:   TwentyTwenty Child
+ Description:  Twenty Fifteen Child Theme
+ Author:       Adam Berkowitz
+ Template:     twentytwenty
+ Version:      0.0.1
+ Text Domain:  twentytwentychild
+*/
+
+.header-inner,
+.header-titles-wrapper,
+.header-navigation-wrapper {
+  display: block;
+}
+
+.header-titles-wrapper {
+  margin-bottom: 2rem;
+}
+
+.am-list-item {
+  white-space: nowrap;
+}
+
+#am-main-menu {
+  flex-wrap: wrap;
+}

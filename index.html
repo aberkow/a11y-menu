@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Accessibility Menu</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
+  crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism-okaidia.min.css">
+  <link rel="stylesheet" href="dist/main.css">
+  <link rel="stylesheet" href="public/css/style.css">
+</head>
+
+<body>
+    <div class="content-wrapper">
+        <h1><abbr title="accessibility">A11Y</abbr> Menu</h1>
+        <div>
+            <h2>Intro</h2>
+            <div>
+                <a href="https://github.com/aberkow/a11y-menu">
+                    <span class="screen-reader">project repo on github</span>
+                    <i aria-hidden="true" class="fab fa-2x fa-github"></i>
+                </a>
+            </div>
+            <p>This project was started because I believe that it's important for websites to be accessible. One area where I thought I could help was in site navigation. To me, that means:</p>
+            <ul>
+                <li>accessible to people visiting the site</li>
+                <li>accessible whether or not people are using javascript in their browsers</li>
+                <li>accessible to people regardless of how they interact with their computers</li>
+                <li>accessible for web developers with a variety of skill levels</li>
+            </ul>
+            <p>Below, there are two demo menus. The first is an example of a "clicky" menu. Dropdowns are reached by clicking on button elements with the mouse or keyboard (enter key). The second is a "hover" menu.</p>
+            <h2>Getting started</h2>
+            <p><a href="https://github.com/aberkow/a11y-menu#a11y-menu">For full implementation details, please see the README</a>.</p>
+            <h3>javascript</h3>
+            <p>The short version is that currently this package is available as an <a href="https://www.npmjs.com/package/a11y-menu">npm</a>
+                or <a href="https://packagist.org/packages/ucomm/a11y-menu">composer</a> package (NB - the PHP version is currently
+                wordpress only. More versions are planned for the future).</p>
+            <p>In either case, the a11y-menu should be brought in as a dependency</p>
+
+<pre class="language-bash"><code class="language-bash">npm install a11y-menu</code></pre>
+
+            <p>Then using a bundler (webpack, parcel, etc...), you can quickly create a menu from a formatted <code class="language-bash">json</code> file.</p>
+            <!-- yes... I know this is a little messy... -->
+            
+<pre class="language-javascript"><code class="language-javascript">// to create a clickable menu
+
+import Navigation, { displayMenu } from 'a11y-menu';
+
+// test-data is an arbitrary json file.
+import { menuData } from './test-data.json';
+
+const mainMenu = document.getElementById('main-menu');
+
+mainMenu.classList.add('am-click-menu');
+
+displayMenu(mainMenu, menuData);
+
+const navigation = new Navigation({ click: true });
+
+document.addEventListener('DOMContentLoaded', () => {
+    navigation.init();
+});</code></pre>
+
+            <h3>composer</h3>
+
+<pre class="language-bash"><code class="language-bash">composer require ucomm/a11y-menu</code></pre>
+
+            <p>Bringing it into a wordpress project is also easy. After requiring the <code class="language-bash">vendor/autoload.php</code> file and enqueueing the stylesheets and javascript (see the readme), you can use the custom nav walker.</p>
+
+<pre class="language-php"><code class="language-php">$args = array(
+    'container' => 'nav',
+    'menu_id' => 'am-main-menu',
+    'theme_location' => 'menu-name',
+    'walker' => new A11y\Menu_Walker()
+);
+
+wp_nav_menu($args);</code></pre>
+            <h3>Styles</h3>
+            <p>The menu comes with a minimal set of styles which can be easily overridden. The base styles are just a starting point and should not be used "as is". The menus below represent the base styles plus additional styles for:</p>
+
+            <ul>
+                <li>icons</li>
+                <li>focus and hover states</li>
+                <li>alignment</li>
+                <li>margin and padding</li>
+                <li>etc...</li>
+            </ul>
+            <p>Just turn off the <code class="language-bash">css/style.css</code></p>
+        </div>
+    </div>
+    <div class="content-wrapper">
+        <h2>JS based menu</h2>
+        <p>The version below is built in javascript using a json file. If you turn off javascript it will disappear...</p>
+    </div>
+    <nav id="am-navigation" role="navigation">
+        <ul id="am-main-menu" class="am-click-menu"></ul>
+    </nav>
+    <div class="content-wrapper">
+        <p>If you tab onto <a href="#">this link</a>, you can see that the menus above will close.</p>
+        <hr />
+        <p>The version below will keep working even if javascript is off. This emulates server-side rendering. If you're using a recent version of chrome, firefox, or safari, you will still be able to tab through the menu even without js. <a href="https://caniuse.com/#search=focus-within">Check out <abbr title="can I use">caniuse</abbr> for details</a>.</p>
+    </div>
+    <nav id="am-nav" role="navigation">
+        <ul id="am-menu">
+            <li class="no-js">
+                <a href="/">Basic Link</a>
+            </li>
+            <li class="test-class another-class last-class">
+                <a href="/item-with-classes">Item with classes</a>
+            </li>
+            <li class="no-js" data-count="2" data-has-children="true">
+                <a class="am-submenu-link" aria-label="Link with complete submenu, tab to the next button to expand the sub-menu" href="/link-with-complete-submenu">Link with complete submenu</a>
+                <button class="submenu-button submenu-toggle" aria-haspopup="true" aria-expanded="false" aria-label="show submenu">
+                    <span class="am-submenu-icon" aria-hidden="true" data-before="∨"></span>
+                </button>
+                <ul id="submenu-1" class="am-submenu-list">
+                    <li class="no-js" data-count="0" data-has-children="true">
+                        <a class="am-submenu-link" aria-label="Submenu Item 1, tab to the next button to expand the sub-menu" href="/submenu-item-1">Submenu Item 1</a>
+                        <button class="submenu-button submenu-toggle" aria-haspopup="true" aria-expanded="false" aria-label="show submenu">
+                            <span class="am-submenu-icon" aria-hidden="true" data-before="∨"></span>
+                        </button>
+                        <ul id="sub-submenu-1">
+                            <li class="no-js">
+                                <a href="/submenu-item-1/grandchild-1">Grandchild 1</a>
+                            </li>
+                            <li class="no-js">
+                                <a href="/submenu-item-1/grandchild-2">Grandchild 2</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="no-js">
+                        <a href="/submenu-item-2">Submenu Item 2</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="no-js">
+                <a href="/link-with-non-null-submenu">Link with non-null submenu</a>
+            </li>
+            <li class="no-js">
+                <button aria-haspopup="true" aria-expanded="false" class="submenu-toggle">Non-linked Item
+                    <span class="am-submenu-icon" aria-hidden="true" data-before="∨"></span>
+                </button>
+            </li>
+            <li class="no-js">
+                <button aria-haspopup="true" aria-expanded="false" class="submenu-toggle">Non-linked Item with empty link
+                    <span class="am-submenu-icon" aria-hidden="true" data-before="∨"></span>
+                </button>
+            </li>
+            <li class="no-js" data-count="6" data-has-children="true">
+                <button aria-haspopup="true" aria-expanded="false" class="submenu-toggle">Non-linked Item with Submenu
+                    <span class="am-submenu-icon" aria-hidden="true" data-before="∨"></span>
+                </button>
+                <ul id="submenu-2" class="am-submenu-list">
+                    <li class="no-js">
+                        <a href="/child-1">Child 1</a>
+                    </li>
+                    <li class="no-js">
+                        <a href="/child-2">Child 2</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+  </nav>
+
+  <!-- All this is needed for the cool syntax highlighting -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-clike.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-markup-templating.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-markup.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-php.min.js"></script>
+
+  <script src="public/js/index.js" type="text/javascript"></script>
+</body>
+
+</html>

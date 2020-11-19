@@ -2,7 +2,8 @@
 .DS_Store
 .sass-cache/
 node_modules
-public/build
+dist/index.js
+dist/index.js.map
 /vendor/
 /www/*
 !/www/wp-config.php

@@ -1,38 +1,66 @@
-const gulp = require('gulp');
-const browserSync = require('browser-sync');
-const jshint = require('jshint');
-const stylish = require('jshint-stylish');
+const del = require('del')
+const gulp = require('gulp')
+const webpack = require('webpack-stream')
+const path = require('path')
+
 const pluginOptions = {
   DEBUG: true,
   camelize: true,
   lazy: true
 }
 
-const plugins = require('gulp-load-plugins')(pluginOptions);
+const plugins = require('gulp-load-plugins')(pluginOptions)
 
-const onError = err => { console.log(`Error -> ${err}`); };
+const paths = {
+  js: {
+    navSrc: 'src/js/Navigation/Navigation.js',
+    indexJsSrc: 'src/js/index.js'
+  },
+  styles: {
+    main: 'src/scss/main.scss',
+  }
+}
 
-gulp.task('js:navigation', () => {
-  return gulp.src('./src/js/Navigation/Navigation.js')
+const webpackConfig = process.env.NODE_ENV !== 'production' ? 
+  require('./webpack.dev') : 
+  require('./webpack.prod')
+
+const onError = err => console.log(`Error -> ${err}`)
+
+const clean = () => del([ 'build', 'dist' ])
+
+const navJs = () => {
+  return gulp.src(paths.js.navSrc)
     .pipe(plugins.plumber({
       errorHandler: onError
     }))
     .pipe(plugins.sourcemaps.init())
       .pipe(plugins.stripCode({
-        start_comment: "start-remove",
-        end_comment: "end-remove"
+        start_comment: 'strip-code',
+        end_comment: 'end-strip-code'
       }))
-      .pipe(plugins.babel())
-      .pipe(plugins.uglifyEs.default())
+      .pipe(webpack(webpackConfig))
     .pipe(plugins.sourcemaps.write('.'))
-    .pipe(gulp.dest('dist'), {
-      overwrite: true
-    })
-    .pipe(browserSync.stream());
-});
+    .pipe(gulp.dest('dist'))
+}
 
-gulp.task('sass:main', () => {
-  return gulp.src('./src/scss/main.scss')
+const indexJs = () => {
+  return gulp.src(paths.js.indexJsSrc)
+    .pipe(plugins.plumber({
+      errorHandler: onError
+    }))
+    .pipe(webpack({
+      mode: process.env.NODE_ENV,
+      output: {
+        filename: 'index.js',
+        path: path.resolve(__dirname, 'public', 'js')
+      }
+    }))
+    .pipe(gulp.dest('public/js'))
+}
+
+const sassMain = () => {
+  return gulp.src(paths.styles.main)
     .pipe(plugins.plumber({
       errorHandler: onError
     }))
@@ -41,39 +69,34 @@ gulp.task('sass:main', () => {
         outputStyle: 'compressed'
       }))
       .pipe(plugins.autoprefixer({
-        browsers: ['last 2 versions']
+        grid: "autoplace"
       }))
     .pipe(plugins.sourcemaps.write('.'))
-    .pipe(gulp.dest('dist', {
-      overwrite: true
-    }))
-    .pipe(browserSync.stream());
-});
+    .pipe(gulp.dest('dist'))
+}
 
-gulp.task('sass:other', () => {
-  return gulp.src('./src/scss/styles.scss')
-    .pipe(plugins.plumber({
-      errorHandler: onError
-    }))
-    .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.sass({
-      outputStyle: 'compressed'
-    }))
-    .pipe(plugins.autoprefixer({
-      browsers: ['last 2 versions']
-    }))
-    .pipe(plugins.sourcemaps.write('.'))
-    .pipe(gulp.dest('public/build', {
-      overwrite: true
-    }))
-    .pipe(browserSync.stream());
-});
+gulp.task('clean', gulp.series(clean))
 
-gulp.task('watch', ['js:navigation', 'sass:main', 'sass:other'], () => {
-  console.log('watching files');
-  gulp.watch(['./src/js/Navigation/Navigation.js'], ['js:navigation']);
-  gulp.watch(['./src/scss/main.scss'], ['sass:main']);
-  gulp.watch(['!./src/scss/main.scss', './src/scss/**/*.scss'], ['sass:other']);
-});
+gulp.task('watch', () => {
 
-// gulp.task('default')
+  const files = [
+    paths.js.navSrc,
+    paths.js.indexJsSrc,
+    paths.styles.main
+  ]
+
+  gulp.watch(
+    files,
+    { ignoreInitial: false },
+    gulp.parallel(navJs, indexJs, sassMain)
+  )
+})
+
+gulp.task('build', gulp.parallel(navJs, sassMain))
+
+gulp.task('default', 
+  gulp.series(
+    clean, 
+    gulp.parallel(navJs, indexJs, sassMain)
+  )
+)

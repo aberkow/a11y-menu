@@ -1,16 +1,12 @@
 {
   "presets": [
     [
-      "env", {
-        "targets": {
-          "browsers": ["last 3 versions"]
-        }
+      "@babel/preset-env",
+      {
+        "debug": true,
+        "useBuiltIns": "usage",
+        "corejs": 3
       }
     ]
-  ],
-  "env": {
-    "production": {
-      "presets": ["minify"]
-    }
-  }
+  ]
 }

@@ -1,7 +1,7 @@
 version: "3"
 services:
   web:
-    image: uconn/php72-official:latest
+    image: uconn/php74-official:latest
     environment:
       SITE_ENV: local
       WORDPRESS_DB_HOST: db:3306
@@ -13,12 +13,11 @@ services:
       - "443:443"
     volumes:
       # mount files/directories necessary for wordpress
+      - ./twentytwenty-child:/var/www/html/content/themes/twentytwenty-child
+      - ./src:/var/www/html/content/themes/twentytwenty-child/a11y-menu-src
+      - ./dist:/var/www/html/content/themes/twentytwenty-child/a11y-menu-dist
       - ./www:/var/www/html
       - ./.entrypoint/server-entrypoint:/entrypoint
-      - ./:/var/www/html/content/plugins/a11y-menu-plugin
-      - build:/var/www/html/content/plugins/a11y-menu-plugin/build
-      - ./vendor:/var/www/html/content/themes/lobo/vendor
-      - ./vendor:/var/www/html/content/plugins/castor/vendor
     depends_on:
       - mysql
     restart: always
@@ -32,29 +31,28 @@ services:
       MYSQL_USER: wordpress
       MYSQL_PASSWORD: wordpress
       MYSQL_DATABASE: wordpress
-  local:
-    image: uconn/local:latest
-    ports:
-      - "3000:3000"
-      - "3001:3001"
-    restart: always
-    volumes:
-      # the working directory inside the container is /project.
-      # anything you want inside that container (except the entrypoint script) should be mounted to that directory.
-      - ./package.json:/project/package.json
-      - ./gulpfile.js:/project/gulpfile.js
-      - ./dist:/project/dist
-      # - ./webpack.config.js:/project/webpack.config.js
-      # mount the source files
-      - ./src:/project/src
-      # this entrypoint file will override the container's default entrypoint command.
-      # make sure to run chmod +x on the host's entrypoint file.
-      - ./.entrypoint/local-dev-entrypoint.sh:/entrypoint.sh
-      # explicitly connect the shared volume so the web server can share it.
-      - build:/project/build
+  # local:
+  #   image: uconn/local:latest
+  #   ports:
+  #     - "3000:3000"
+  #     - "3001:3001"
+  #   restart: always
+  #   volumes:
+  #     # the working directory inside the container is /project.
+  #     # anything you want inside that container (except the entrypoint script) should be mounted to that directory.
+  #     - ./package.json:/project/package.json
+  #     - ./gulpfile.js:/project/gulpfile.js
+  #     - ./dist:/project/dist
+  #     # mount the source files
+  #     - ./src:/project/src
+  #     # this entrypoint file will override the container's default entrypoint command.
+  #     # make sure to run chmod +x on the host's entrypoint file.
+  #     - ./.entrypoint/local-dev-entrypoint.sh:/entrypoint.sh
+  #     # explicitly connect the shared volume so the web server can share it.
+  #     - build:/project/build
 
 
 # define a volume to be shared between the local and server containers
 # changes made in the local dev container will be passed to the matching directory on the server.
-volumes:
-  build:
+# volumes:
+#   build:

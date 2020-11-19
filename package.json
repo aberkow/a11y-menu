@@ -1,6 +1,6 @@
 {
   "name": "a11y-menu",
-  "version": "0.0.9",
+  "version": "1.0.1",
   "description": "Assets to build an accessible navigation menu",
   "keywords": [
     "a11y",
@@ -8,7 +8,7 @@
     "menu",
     "navigation"
   ],
-  "main": "./src/js/Navigation/Navigation.js",
+  "main": "./src/js/exports.js",
   "sass": "src/scss/style.scss",
   "author": "Adam Berkowitz <adam@adamjberkowitz.com> (https://www.adamjberkowitz.com)",
   "license": "MIT",
@@ -17,37 +17,39 @@
     "url": "https://github.com/aberkow/a11y-menu"
   },
   "scripts": {
-    "develop": "webpack --watch",
-    "build:public": "webpack "
+    "clean": "gulp clean",
+    "develop": "cross-env NODE_ENV=development gulp watch",
+    "build": "cross-env NODE_ENV=production gulp"
+  },
+  "files": [
+    "src/js/exports.js",
+    "src/js/Navigation/",
+    "src/js/utils/",
+    "src/mock-data/",
+    "src/scss/"
+  ],
+  "dependencies": {
+    "core-js": "^3.7.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.4",
-    "babel-preset-env": "^1.6.1",
-    "browser-sync": "^2.24.4",
-    "css-loader": "^0.28.10",
-    "del": "^3.0.0",
-    "extract-text-webpack-plugin": "^4.0.0-beta.0",
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^5.0.0",
-    "gulp-babel": "^7.0.1",
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "babel-loader": "^8.2.1",
+    "browser-sync": "^2.26.13",
+    "cross-env": "^5.2.1",
+    "del": "^5.1.0",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
     "gulp-concat": "^2.6.1",
-    "gulp-jshint": "^2.1.0",
-    "gulp-load-plugins": "^1.5.0",
-    "gulp-plumber": "^1.2.0",
-    "gulp-sass": "^4.0.1",
-    "gulp-size": "^3.0.0",
-    "gulp-sourcemaps": "^2.6.4",
+    "gulp-env": "^0.4.0",
+    "gulp-load-plugins": "^2.0.5",
+    "gulp-plumber": "^1.2.1",
+    "gulp-sass": "^4.1.0",
+    "gulp-sourcemaps": "^3.0.0",
     "gulp-strip-code": "^0.1.4",
     "gulp-uglify-es": "^1.0.4",
-    "jshint": "^2.9.5",
-    "jshint-stylish": "^2.2.1",
-    "node-sass": "^4.7.2",
-    "sass-loader": "^6.0.7",
-    "style-loader": "^0.20.3",
-    "webpack": "^4.1.1",
-    "webpack-cli": "^2.0.12",
-    "webpack-stream": "^4.0.3"
+    "node-sass": "^4.14.1",
+    "webpack-merge": "^4.2.2",
+    "webpack-stream": "^5.2.1"
   }
 }
