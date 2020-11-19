@@ -65,7 +65,6 @@ class Navigation {
      * @memberof Navigation
      */
     manageSubmenuState(target) {
-        console.log(target);
         const buttons = Array.from(this.menu.querySelectorAll('.am-submenu-toggle'))
         
         buttons.map(button => {
@@ -243,11 +242,6 @@ class Navigation {
             case 'focusin':
                 this.focusInHandler(evt)
                 break;
-            // case 'keydown':
-            //     if (evt.keyCode === 13) {
-            //         this.clickHandler(evt)
-            //     } 
-            //     break;
             case 'click':
                 this.clickHandler(evt)
                 break;

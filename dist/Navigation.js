@@ -2815,7 +2815,6 @@ var Navigation = /*#__PURE__*/function () {
   }, {
     key: "manageSubmenuState",
     value: function manageSubmenuState(target) {
-      console.log(target);
       var buttons = Array.from(this.menu.querySelectorAll('.am-submenu-toggle'));
       buttons.map(function (button) {
         var prevButton = button.parentElement.parentElement.previousElementSibling;
@@ -3002,11 +3001,6 @@ var Navigation = /*#__PURE__*/function () {
         case 'focusin':
           this.focusInHandler(evt);
           break;
-        // case 'keydown':
-        //     if (evt.keyCode === 13) {
-        //         this.clickHandler(evt)
-        //     } 
-        //     break;
 
         case 'click':
           this.clickHandler(evt);
