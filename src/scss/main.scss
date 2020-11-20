@@ -50,6 +50,13 @@ nav[id^='am-'] {
                         color: #ffffff;
                     }
                 }
+                // if the button is reciving focus directly, flip the caret
+                &:focus {
+                    >span {
+                        content: '∧';
+                        font-weight: bold;
+                    }
+                }
             }
         }
     }
@@ -140,6 +147,11 @@ nav[id^='am-'] {
                     >span {
                         background-color: #000000;
                         color: #ffffff;
+                        // if the button is reciving focus directly, flip the caret
+                        &:before {
+                            content: '∧';
+                            font-weight: bold;
+                        }
                     }
                 }
             }
