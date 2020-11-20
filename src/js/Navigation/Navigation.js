@@ -1,14 +1,15 @@
 class Navigation {
     constructor({
+        menus = [],
         menuId = 'am-main-menu',
         click = false
     } = {}) {
+        this.menus = menus
         this.menu = null
+        this.menuElements = []
         this.menuId = menuId
         this.click = click
         this.currentItem = null
-        this.allA11YMenus = document.querySelectorAll('ul[id^="am-"]')
-        this.multipleNavsExist = this.allA11YMenus.length > 1 ? true : false
     }
 
     /**
@@ -18,8 +19,12 @@ class Navigation {
      * 
      */
     removeNoJs() {
-        const listItems = Array.from(this.menu.querySelectorAll('.no-js'))
-        listItems.map(item => item.classList.remove('no-js'))
+        this.menuElements.map(menu => {
+            // console.log(menu);
+            const listItems = Array.from(menu.querySelectorAll('.no-js'))
+            // console.log({listItems});
+            listItems.map(item => item.classList.remove('no-js'))
+        })
     }
 
     /**
@@ -44,7 +49,10 @@ class Navigation {
      * @memberof Navigation
      */
     toggleCurrentTopLevelItemClass(target) {
-        const topLevelItems = Array.from(document.querySelectorAll(`#${this.menuId} > li`))
+        const topLevelItems = this.menuElements.map(el => {
+            return Array.from(document.querySelectorAll(`#${el.id} > li`))
+        }).flat()
+
         return topLevelItems.map(item => {
             item.classList.remove('am-current-item')
             if (item.contains(target)) {
@@ -181,21 +189,42 @@ class Navigation {
      * @memberof Navigation
      */
     setMenuEventListeners() {
-        let listeners = ['focusin', 'keydown'];
 
-        if (this.click) {
-            listeners.push('click');
+        this.menus.map(menu => {
+            const listeners = ['focusin', 'keydown']
+            const menuEl = document.getElementById(menu.menuId)
 
-            const subMenuList = [].slice.call(this.menu.querySelectorAll('.am-submenu-list'));
+            if (menu.click) {
+                listeners.push('click')
+                const subMenuList = Array.from(menuEl.querySelectorAll('.am-submenu-list'))
+                subMenuList.forEach(menu => menu.classList.add('am-click-menu'))
+            }
 
-            subMenuList.forEach(menu => menu.classList.add('am-click-menu'));
-        }
+            for (let i = 0; i < listeners.length; i++) {
+                menuEl.addEventListener(listeners[i], (evt) => {
+                    this.eventDispatcher(evt);
+                });
+            }
+        })
 
-        for (let i = 0; i < listeners.length; i++) {
-            this.menu.addEventListener(listeners[i], (evt) => {
-                this.eventDispatcher(evt);
-            });
-        }
+
+
+
+        // let listeners = ['focusin', 'keydown'];
+
+        // if (this.click) {
+        //     listeners.push('click');
+
+        //     const subMenuList = [].slice.call(this.menu.querySelectorAll('.am-submenu-list'));
+
+        //     subMenuList.forEach(menu => menu.classList.add('am-click-menu'));
+        // }
+
+        // for (let i = 0; i < listeners.length; i++) {
+        //     this.menu.addEventListener(listeners[i], (evt) => {
+        //         this.eventDispatcher(evt);
+        //     });
+        // }
     }
 
     /**
@@ -297,8 +326,22 @@ class Navigation {
 
     init() {
         this.menu = document.getElementById(this.menuId)
+        
+        if (this.menus.length === 0) {
+            // fallback so the current API doesn't break
+            this.menus = [
+                {
+                    menuId: this.menuId,
+                    click: this.click
+                }
+            ]
+        }
+
+        this.menuElements = this.menus.map(({ menuId }) => document.getElementById(menuId))
         this.removeNoJs()
         this.setMenuEventListeners()
+
+
     }
 }
 
