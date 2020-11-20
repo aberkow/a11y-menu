@@ -18,6 +18,7 @@ const paths = {
   },
   styles: {
     main: 'src/scss/main.scss',
+    iconStyles: 'src/scss/icon-styles.scss',
   }
 }
 
@@ -82,7 +83,8 @@ gulp.task('watch', () => {
   const files = [
     paths.js.navSrc,
     paths.js.indexJsSrc,
-    paths.styles.main
+    paths.styles.main,
+    paths.styles.iconStyles
   ]
 
   gulp.watch(

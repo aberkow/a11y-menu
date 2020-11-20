@@ -18,7 +18,7 @@ ul[id^='am-'] {
 ul[id^='am-'].am-click-menu li > button[aria-expanded="true"] span::before,
 ul[id^='am-']:not(.am-click-menu) li:hover > button .am-submenu-icon::before,
 ul[id^='am-'] li:focus > button span::before,
-ul[id^='am-'] li > button:focus span::before { 
+nav[id^='am-'] ul[id^='am-'] li button:focus > span:before { 
   content: '\f077';
   font-family: 'Font Awesome 5 Free';
   font-weight: bold;

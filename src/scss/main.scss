@@ -131,6 +131,13 @@ nav[id^='am-'] {
                 &:hover,
                 &:focus {
                     color: inherit;
+                    // if the button is reciving focus directly, flip the caret
+                    >span {
+                        &:before {
+                            content: '∧';
+                            font-weight: bold;
+                        }
+                    }
                 }
             }
             a+button {
@@ -147,11 +154,6 @@ nav[id^='am-'] {
                     >span {
                         background-color: #000000;
                         color: #ffffff;
-                        // if the button is reciving focus directly, flip the caret
-                        &:before {
-                            content: '∧';
-                            font-weight: bold;
-                        }
                     }
                 }
             }
