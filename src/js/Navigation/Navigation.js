@@ -75,7 +75,10 @@ class Navigation {
      * @memberof Navigation
      */
     manageSubmenuState(target) {
-        const buttons = Array.from(this.menu.querySelectorAll('.am-submenu-toggle'))
+
+        const buttons = this.menuElements.map(el => {
+            return Array.from(el.querySelectorAll('.am-submenu-toggle'))
+        }).flat()
         
         buttons.map(button => {
             const prevButton = button.parentElement.parentElement.previousElementSibling;
@@ -206,25 +209,6 @@ class Navigation {
                 });
             }
         })
-
-
-
-
-        // let listeners = ['focusin', 'keydown'];
-
-        // if (this.click) {
-        //     listeners.push('click');
-
-        //     const subMenuList = [].slice.call(this.menu.querySelectorAll('.am-submenu-list'));
-
-        //     subMenuList.forEach(menu => menu.classList.add('am-click-menu'));
-        // }
-
-        // for (let i = 0; i < listeners.length; i++) {
-        //     this.menu.addEventListener(listeners[i], (evt) => {
-        //         this.eventDispatcher(evt);
-        //     });
-        // }
     }
 
     /**
@@ -243,22 +227,12 @@ class Navigation {
 
             document.addEventListener('click', this.clearAll)
 
-            document.addEventListener('focusin', (evt) => {
-                if (!this.menu.contains(evt.target) && !this.multipleNavsExist) {
-                    this.clearAll({ target: document.body })
-                } else {
-                    const isContained = []
-                    
-                    this.allA11YMenus.forEach(menu => {
-                        menu.contains(evt.target) ? isContained.push(true) : isContained.push(false)
-                    });
-
-                    const allFalse = isContained.every(element => element === false)
-                    
-                    if (allFalse) {
+            document.addEventListener('focusin', ({ target }) => {
+                this.menuElements.map(el => {
+                    if (!el.contains(target)) {
                         this.clearAll({ target: document.body })
                     }
-                }
+                })
             })
             
             document.addEventListener('keydown', (evt) => {
@@ -319,9 +293,18 @@ class Navigation {
      */
     focusInHandler({ target, relatedTarget }) {
         const topItem = this.toggleCurrentTopLevelItemClass(target)
-        if (this.menu.contains(relatedTarget) && !topItem.contains(relatedTarget)) {
-            this.clearAll({ target: document.body })
-        }
+
+        this.menuElements.map(el => {
+            console.log({ elContains: el.contains(relatedTarget), topContains: topItem.contains(relatedTarget)});
+            if (el.contains(relatedTarget) && !topItem.contains(relatedTarget)) {
+                this.clearAll({ target: document.body })
+            }
+        })
+
+
+        // if (this.menu.contains(relatedTarget) && !topItem.contains(relatedTarget)) {
+        //     this.clearAll({ target: document.body })
+        // }
     }
 
     init() {
