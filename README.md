@@ -173,7 +173,7 @@ const menuOpts = {
 }
 const navigation = new Navigation(menuOpts);
 ```
-This will create a nav menu with an id of `main-nav` and it will use the `click` functionality instead of hover.
+This will create a nav menu with an id of `main-nav` and it will use the `click` functionality instead of hover. When setting up a click menu, be sure to add the `am-click-menu` class to the `'items_wrap'` argument.
 
 ## Sass defaults
 The stylesheet provided is meant to provide a skeleton on which to add additional styles (e.g. colors, padding, etc...). An example of adding icons is provided in `src/scss/icon-styles.scss`. These styles will override the baseline text icons in favor of Font Awesome icons.
