@@ -1,0 +1,23 @@
+name: main
+on: [push]
+jobs:
+  build-assets:
+    runs-on: ubuntu-16.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Commit changes
+        uses: Endbug/add-and-commit@v6
+        with:
+          author_name: Adam Berkowitz
+          author_email: berkowitz.clarinet@gmail.com
+          message: 'Commit message'
+          add: '*.js'
