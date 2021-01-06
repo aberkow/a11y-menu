@@ -19,7 +19,7 @@
   "scripts": {
     "clean": "gulp clean",
     "develop": "cross-env NODE_ENV=development gulp watch",
-    "build": "cross-env NODE_ENV=production gulp"
+    "build": "cross-env NODE_ENV=production gulp build"
   },
   "files": [
     "src/js/exports.js",

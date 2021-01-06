@@ -92,7 +92,7 @@ gulp.task('watch', () => {
   )
 })
 
-gulp.task('build', gulp.parallel(navJs, sassMain))
+gulp.task('build', gulp.parallel(navJs, indexJs, sassMain))
 
 gulp.task('default', 
   gulp.series(
