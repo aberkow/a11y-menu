@@ -8,7 +8,9 @@ class Navigation {
         this.click = click
         this.currentItem = null
     }
-
+    helloWorld() {
+        console.log('hello world!')
+    }
     /**
      * 
      * js is available
