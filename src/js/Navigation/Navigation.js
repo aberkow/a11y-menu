@@ -8,7 +8,7 @@ class Navigation {
         this.click = click
         this.currentItem = null
     }
-
+    
     /**
      * 
      * js is available
