@@ -16,7 +16,7 @@ class Navigation {
      * 
      */
     removeNoJs() {
-        const listItems = Array.from(this.menu.querySelectorAll('.no-js'))
+        const listItems = Array.from(this.menu.querySelectorAll('#' + this.menuId + ' .no-js'))
         listItems.map(item => item.classList.remove('no-js'))
     }
 
