@@ -48,7 +48,7 @@
     "gulp-sourcemaps": "^3.0.0",
     "gulp-strip-code": "^0.1.4",
     "gulp-uglify-es": "^1.0.4",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "webpack-merge": "^4.2.2",
     "webpack-stream": "^5.2.1"
   }
